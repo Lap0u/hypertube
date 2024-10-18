@@ -1,0 +1,49 @@
+name: red-tetris
+
+services:
+  react:
+    container_name: react
+    build:
+      context: ./hypertube-front
+      dockerfile: Dockerfile
+    image: react
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./hypertube-front:/app
+      - /app/node_modules
+    networks:
+      - main
+
+  # back:
+
+  postgres:
+    image: postgres:17.0-alpine3.20
+    container_name: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - main
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - main
+
+volumes:
+  postgres:
+    name: postgres-volume
+
+networks:
+  main:
