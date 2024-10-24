@@ -15,16 +15,16 @@ datasource db {
 
 model User {
   id                Int @id @default(autoincrement())
-  usename           String
+  username          String  @unique()
   email             String  @unique()
   lastName          String
   firstName         String
+  password          String
   preferredLanguage String
   profilePictureUrl String
   refreshToken      String
   comments          Comment[]
   createdAt         DateTime @default(now())
-
 }
 
 model Comment {
