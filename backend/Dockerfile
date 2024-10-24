@@ -8,4 +8,4 @@ COPY package*.json ./
 
 RUN	npm install
 
-CMD ["sh", "-c", "npm run start:dev  & npx prisma studio"]
+ENTRYPOINT ["sh", "-c", "npm run start:migrate:dev & npx prisma studio"]

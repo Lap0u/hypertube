@@ -12,3 +12,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                Int @id @default(autoincrement())
+  usename           String
+  email             String  @unique()
+  lastName          String
+  firstName         String
+  preferredLanguage String
+  profilePictureUrl String
+  refreshToken      String
+  comments          Comment[]
+  createdAt         DateTime @default(now())
+
+}
+
+model Comment {
+  id        Int @id @default(autoincrement())
+  author    User @relation(fields: [authorId], references: [id])
+  authorId  Int
+  content   String
+  movie     Movie @relation(fields: [movieId], references: [id])
+  movieId   Int
+  createAt  DateTime @default(now())
+}
+
+model Movie {
+  id        Int @id @default(autoincrement())
+  title     String
+  imdb_id   Int
+  comments  Comment[]
+}
