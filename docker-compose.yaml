@@ -33,6 +33,8 @@ services:
       - /app/node_modules
     networks:
       - main
+    depends_on:
+      - postgres
     
 
   postgres:
