@@ -5,31 +5,45 @@
 @font-face {
   font-family: "Broadway";
   src: local("broadway"),
-    url("../public/fonts/broadway.gradient-3d-regular.ttf") format("truetype");
+    url("../fonts/broadway.gradient-3d-regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Broadway2";
   src: local("broadway2"),
-    url("../public/fonts/broadway.3d-regular.ttf") format("truetype");
+    url("../fonts/broadway.3d-regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Broadway3";
   src: local("broadway3"),
-    url("../public/fonts/broadway.regular.ttf") format("truetype");
+    url("../fonts/broadway.regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Broadway4";
   src: local("broadway4"),
-    url("../public/fonts/broadway.gradient-3d-italic.ttf") format("truetype");
+    url("../fonts/broadway.gradient-3d-italic.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Antipasto";
   src: local("antipasto"),
-    url("../public/fonts/antipasto.regular.ttf") format("opentype");
+    url("../fonts/antipasto.regular.ttf") format("opentype");
+
+}
+
+@font-face {
+  font-family: "Oliver";
+  src: local("oliver"),
+    url("../fonts/oliver.a.ttf") format("opentype");
+
+}
+
+@font-face {
+  font-family: "Gumela";
+  src: local("Gumela"),
+    url("../fonts/gumela-arabic-demo.light.ttf") format("opentype");
 
 }
 
@@ -38,5 +52,5 @@
 }
 
 * {
-  font-family: "Antipasto";
+  font-family: "Gumela";
 }

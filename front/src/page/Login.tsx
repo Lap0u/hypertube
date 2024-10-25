@@ -20,14 +20,18 @@ const Login = () => {
           <div className="flex justify-center items-center flex-col gap-8">
             <LoginForm />
             <p onClick={() => setToLogin((prev) => !prev)}>
-              No account yet? Sign-in.
+              No account yet?{' '}
+              <span className="hover:text-red-600 cursor-pointer">
+                Sign-up.
+              </span>
             </p>
           </div>
         ) : (
           <div className="flex justify-center items-center flex-col gap-8">
             <SigninForm />
             <p onClick={() => setToLogin((prev) => !prev)}>
-              Already have an account? Login.
+              Already have an account?{' '}
+              <span className="hover:text-red-600 cursor-pointer">Login.</span>
             </p>
           </div>
         )}
