@@ -19,7 +19,7 @@ const LoginForm = () => {
       className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center"
       onSubmit={handleSubmit(onSubmit)}>
       <input
-        className="px-4 py-2 text-black rounded-sm"
+        className="px-4 py-2 text-mainYellow rounded-sm"
         placeholder="john"
         {...register('login')}
       />
@@ -31,7 +31,7 @@ const LoginForm = () => {
 
       <input
         type="password"
-        className="px-4 py-2 text-black rounded-sm"
+        className="px-4 py-2 text-mainYellow rounded-sm"
         placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
         {...register('password', { required: true })}
       />

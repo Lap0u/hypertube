@@ -1,15 +1,21 @@
-import React from 'react';
-
 type Buttonprops = {
   text: string;
   onClick: () => void;
+  secondary?: boolean;
 };
 
-const Button = ({ text, onClick }: Buttonprops) => {
+const Button = ({ text, onClick, secondary }: Buttonprops) => {
+  let styles = '';
+  if (secondary == true) {
+    styles =
+      ' bg-white hover:bg-secYellow hover:text-secMarine border-2 border-secMarine';
+  } else {
+    styles = 'bg-secYellow hover:bg-secMarine hover:text-secYellow';
+  }
   return (
     <button
       onClick={onClick}
-      className="bg-red-600 text-white px-8 py-4 rounded-md transition-all delay-75 ease-out hover:bg-black hover:text-red-600">
+      className={` px-8 py-4 text-secMarine rounded-md transition-all delay-75 ease-out ${styles}`}>
       {text}
     </button>
   );

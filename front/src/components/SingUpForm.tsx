@@ -5,7 +5,7 @@ import Avatar from './Avatar';
 import { SignUpData } from '../dtos/SignupData';
 import { signUp } from '../api/signup';
 
-const SigninForm = () => {
+const SignUpForm = () => {
   const {
     register,
     handleSubmit,
@@ -52,7 +52,7 @@ const SigninForm = () => {
         <div className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center">
           <input
             type="text"
-            className="px-4 py-2 text-black rounded-sm"
+            className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="username"
             {...register('username', { required: true })}
           />
@@ -63,7 +63,7 @@ const SigninForm = () => {
           )}
           <input
             type="text"
-            className="px-4 py-2 text-black rounded-sm"
+            className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="firstName"
             {...register('firstName', { required: true })}
           />
@@ -74,7 +74,7 @@ const SigninForm = () => {
           )}
           <input
             type="text"
-            className="px-4 py-2 text-black rounded-sm"
+            className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="lastName"
             {...register('lastName', { required: true })}
           />
@@ -87,7 +87,7 @@ const SigninForm = () => {
         <div className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center">
           <input
             type="email"
-            className="px-4 py-2 text-black rounded-sm"
+            className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="email"
             {...register('email', { required: true })}
           />
@@ -98,7 +98,7 @@ const SigninForm = () => {
           )}
           <input
             type="password"
-            className="px-4 py-2 text-black rounded-sm"
+            className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
             {...register('password', { required: true })}
           />
@@ -119,7 +119,7 @@ const SigninForm = () => {
           <Avatar preview={preview} />
         </div>
       </div>
-      <Button text="Upload image" onClick={uploadImage} />
+      <Button secondary={true} text="Upload image" onClick={uploadImage} />
       {errors.profilePicture && (
         <span className="text-xl mt-[-12px] text-red-600">
           This field is required
@@ -130,4 +130,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default SignUpForm;
