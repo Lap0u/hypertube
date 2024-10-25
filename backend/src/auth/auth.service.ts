@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -20,23 +16,33 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async signIn(loginDto: LoginDto) {
+  async validateUser(loginDto: LoginDto) {
     const { email, username, password } = loginDto;
-    let user;
+    let user = null;
     if (email) {
       user = await this.usersService.findUserByEmail(email);
-    } else if (username) {
+    }
+    if (username) {
       user = await this.usersService.findUserByUsername(username);
     }
-    if (!user || (!email && !username)) {
-      throw new NotFoundException();
-    }
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.userId, username: user.username };
+    return user;
+  }
+
+  async signIn(loginDto: LoginDto) {
+    let user = await this.validateUser(loginDto);
+
+    const payload = { sub: user.id, username: user.username };
+
+    const accessToken = await this.createAccessToken(payload);
+    const refreshToken = await this.createRefreshToken(payload);
+    this.usersService.updateRefreshToken(user.id, refreshToken);
+
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 
@@ -53,5 +59,51 @@ export class AuthService {
 
     const user = await this.usersService.createUser(data);
     return user;
+  }
+
+  async createAccessToken(payload: { sub: number; username: string }) {
+    const date = Date.now();
+    return this.jwtService.sign(
+      { ...payload, date: date },
+      // payload,
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '15m',
+      },
+    );
+  }
+
+  async createRefreshToken(payload: { sub: number; username: string }) {
+    const date = Date.now();
+    return this.jwtService.sign(
+      { ...payload, date: date },
+      // payload,
+      {
+        secret: process.env.JWT_REFRESH_SECRET,
+        expiresIn: '7d',
+      },
+    );
+  }
+
+  async verifyRefreshToken(userId: number, refreshToken: string) {
+    const user = this.prisma.user.findFirst({
+      where: {
+        AND: [{ id: userId }, { refreshToken: refreshToken }],
+      },
+    });
+    return user;
+  }
+
+  async refreshTokens(user) {
+    const payload = { sub: user.sub, username: user.username };
+
+    const accessToken = await this.createAccessToken(payload);
+    const refreshToken = await this.createRefreshToken(payload);
+    this.usersService.updateRefreshToken(user.sub, refreshToken);
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
   }
 }
