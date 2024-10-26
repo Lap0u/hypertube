@@ -9,6 +9,12 @@
 }
 
 @font-face {
+  font-family: "UniSans";
+  src: local("UniSans"),
+    url("../fonts/uni-sans.heavy-caps.otf") format("truetype");
+}
+
+@font-face {
   font-family: "Broadway2";
   src: local("broadway2"),
     url("../fonts/broadway.3d-regular.ttf") format("truetype");
@@ -53,4 +59,8 @@
 
 * {
   font-family: "Gumela";
+}
+
+.title-font {
+  font-family: "UniSans";
 }

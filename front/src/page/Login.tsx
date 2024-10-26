@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SingUpForm';
@@ -7,18 +7,18 @@ import { Si42 } from 'react-icons/si';
 
 const Login = () => {
   const location = useLocation();
-  let toSignin = true;
-  if (location.state !== undefined && location.state.toSignin !== undefined) {
-    toSignin = location.state.toSignin;
-  }
-  const [toLogin, setToLogin] = useState<boolean>(toSignin);
+  useEffect(() => {
+    if (location.state?.toSignin !== undefined) {
+      setToLogin(location.state.toSignin);
+    }
+  }, [location.state?.toSignin]);
+
+  const [toLogin, setToLogin] = useState<boolean>(true);
   return (
     <div
       className="w-100 bg-mainBlack bg-cover py-8 min-h-screen
      text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
-      <h1 className="text-[7rem] custom-font text-secYellow p-12 ">
-        Hypratube
-      </h1>
+      <h1 className="text-[9rem] custom-font text-red-600 p-12 ">Hypratube</h1>
       <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
         {toLogin ? (
           <div className="flex justify-center items-center flex-col gap-8">
