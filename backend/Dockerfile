@@ -8,4 +8,4 @@ COPY package*.json ./
 
 RUN	npm install
 
-ENTRYPOINT ["sh", "-c", "npx prisma generate && npm run start:dev & npx prisma studio"]
+ENTRYPOINT ["sh", "-c", "npx prisma generate && npm run start:migrate:dev & npx prisma studio"]
