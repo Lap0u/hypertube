@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
 import { UsersService } from 'src/users/users.service';
+import { jwtConstants } from './jwt.constant';
 
 @Injectable()
 export class AuthService {
@@ -65,9 +66,8 @@ export class AuthService {
     const date = Date.now();
     return this.jwtService.sign(
       { ...payload, date: date },
-      // payload,
       {
-        secret: process.env.JWT_SECRET,
+        secret: jwtConstants().accessTokenSecret,
         expiresIn: '15m',
       },
     );
@@ -77,9 +77,8 @@ export class AuthService {
     const date = Date.now();
     return this.jwtService.sign(
       { ...payload, date: date },
-      // payload,
       {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: jwtConstants().refreshTokenSecret,
         expiresIn: '7d',
       },
     );
