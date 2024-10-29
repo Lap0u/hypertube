@@ -15,8 +15,8 @@ export class YtsService {
 
       const movies = response.data.data.movies.map((movie) => {
         return {
-          imdb_id: movie.imdb_code,
-          imdb_rating: movie.rating,
+          imdbId: movie.imdb_code,
+          imdbRating: movie.rating,
           torrents: movie.torrents.map((torrent) => {
             return { hash: torrent.hash };
           }),
