@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { SignUpData } from '../dtos/SignupData';
 import { API_URL } from '../../shared/constants';
 
-export const signUp = async (formData: FormData) => {
+export const signUp = async (formData: SignUpData) => {
+  console.log('signup data', formData);
   axios
-    .post(`${API_URL}/signup`, formData)
+    .post(`${API_URL}/auth/signUp`, formData)
     .then((response) => {
       console.log(response);
     })

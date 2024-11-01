@@ -17,18 +17,15 @@ const SignUpForm = () => {
   const [preview, setPreview] = useState<string>();
 
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
-    const formData = new FormData();
-    formData.append('username', data.username);
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
-    formData.append('email', data.email);
-    formData.append('password', data.password);
+    data.preferredLanguage = 'fr';
     if (file) {
-      formData.append('profilePicture', file);
+      data.profilePictureUrl = file.name;
     }
 
     // Send the form data to your API endpoint
-    signUp(formData);
+    console.log('first data', data);
+
+    signUp(data);
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {

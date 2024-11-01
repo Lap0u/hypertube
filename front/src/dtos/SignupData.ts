@@ -4,5 +4,6 @@ export type SignUpData = {
   lastName: string;
   email: string;
   password: string;
-  profilePicture: File | undefined; // Change to File for uploading
+  preferredLanguage: string;
+  profilePictureUrl: string | undefined; // Change to File for uploading
 };
