@@ -10,7 +10,7 @@ const Button = ({ text, onClick, secondary }: Buttonprops) => {
     styles =
       ' bg-white hover:bg-secYellow hover:text-secMarine border-2 border-secMarine';
   } else {
-    styles = 'bg-secYellow hover:bg-secMarine hover:text-secYellow';
+    styles = 'text-5xl bg-secYellow hover:bg-secMarine hover:text-secYellow';
   }
   return (
     <button

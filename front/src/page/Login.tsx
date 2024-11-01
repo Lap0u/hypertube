@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
-import SignUpForm from '../components/SingUpForm';
+import SignUpForm from '../components/SignUpForm';
 import { FaGoogle } from 'react-icons/fa';
 import { Si42 } from 'react-icons/si';
 
 const Login = () => {
   const location = useLocation();
   useEffect(() => {
-    if (location.state?.toSignin !== undefined) {
-      setToLogin(location.state.toSignin);
+    if (location.state?.toLogin !== undefined) {
+      setToLogin(location.state.toLogin);
     }
-  }, [location.state?.toSignin]);
+  }, [location.state?.toLogin]);
 
   const [toLogin, setToLogin] = useState<boolean>(true);
   return (

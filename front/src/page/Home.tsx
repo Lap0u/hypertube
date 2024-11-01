@@ -23,14 +23,14 @@ const Home = () => {
         </h2>
         <div className="flex gap-24 justify-center">
           <Button
-            text="Log in"
+            text="LOGIN"
             onClick={() =>
-              nav('/login', { state: { toSignin: false } })
+              nav('/login', { state: { toLogin: true } })
             }></Button>
           <Button
-            text="Sign up"
+            text="SIGN UP"
             onClick={() =>
-              nav('/login', { state: { toSignin: true } })
+              nav('/login', { state: { toLogin: false } })
             }></Button>
         </div>
       </div>

@@ -125,7 +125,7 @@ const SignUpForm = () => {
           This field is required
         </span>
       )}
-      <Button text="Sign-in" onClick={() => handleSubmit(onSubmit)} />
+      <Button text="Sign-up" onClick={() => handleSubmit(onSubmit)} />
     </form>
   );
 };

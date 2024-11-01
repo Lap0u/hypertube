@@ -1,5 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from './Button';
+import { login } from '../api/login';
 
 type Inputs = {
   login: string;
@@ -12,7 +13,12 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const formData = new FormData();
+    formData.append('login', data.login);
+    formData.append('password', data.password);
+    login(formData);
+  };
 
   return (
     <form
