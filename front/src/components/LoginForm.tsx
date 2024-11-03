@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from './Button';
-import { login } from '../api/login';
+import { signIn } from '../api/login';
 
 type Inputs = {
   login: string;
@@ -14,10 +14,13 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const formData = new FormData();
-    formData.append('login', data.login);
-    formData.append('password', data.password);
-    login(formData);
+    const { login, password } = data;
+    const formData = {
+      username: login.includes('@') ? '' : login,
+      email: login.includes('@') ? login : '',
+      password,
+    };
+    signIn(formData);
   };
 
   return (

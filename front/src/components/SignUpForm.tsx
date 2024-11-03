@@ -23,7 +23,6 @@ const SignUpForm = () => {
     }
 
     // Send the form data to your API endpoint
-    console.log('first data', data);
 
     signUp(data);
   };
