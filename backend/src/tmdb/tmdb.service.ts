@@ -8,9 +8,9 @@ export class TmdbService {
     headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
   });
 
-  async getMovieDetails(tmdb_id: number) {
+  async getMovieDetails(tmdb_id: number, language?: string) {
     const response = await this.tmdbClient.get(
-      `/movie/${tmdb_id}?append_to_response=credits`,
+      `/movie/${tmdb_id}?append_to_response=credits${language ? '&language=' + language : ''}`,
     );
     const data = response.data;
     const details = {

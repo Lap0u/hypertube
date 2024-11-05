@@ -19,7 +19,7 @@ export class MoviesService {
     return movies;
   }
 
-  async getMovieDetails(imdbId: string) {
+  async getMovieDetails(imdbId: string, language?: string) {
     const movie = await this.ytsService.findMovie(imdbId);
 
     if (!movie) {
@@ -27,14 +27,17 @@ export class MoviesService {
     }
 
     const tmdbInfo = await this.tmdbService.findMovie(imdbId);
-    const details = await this.tmdbService.getMovieDetails(tmdbInfo.tmdbId);
+    const details = await this.tmdbService.getMovieDetails(
+      tmdbInfo.tmdbId,
+      language,
+    );
     return { imdbRating: movie.rating, ...details };
   }
 
-  async getMovie(imdbId: string) {
+  async getMovie(imdbId: string, language?: string) {
     const ytsMovieTorrents = await this.ytsService.findTorrents(imdbId);
     const apibayTorrents = await this.apibayService.findTorrents(imdbId);
-    const details = await this.getMovieDetails(imdbId);
+    const details = await this.getMovieDetails(imdbId, language);
     const torrents = [...ytsMovieTorrents, ...apibayTorrents];
     return { ...details, torrents };
   }
