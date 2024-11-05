@@ -1,5 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  GenreField,
+  MinRatingField,
+  OrderByField,
+  SortMovieField,
+} from './enums';
 
 export class GetMoviesDto {
   @ApiPropertyOptional({ description: 'Page number', default: 1, minimum: 1 })
@@ -23,22 +29,31 @@ export class GetMoviesDto {
   @IsString()
   query_term?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by genre' })
+  @ApiPropertyOptional({ description: 'Filter by genre', enum: GenreField })
   @IsOptional()
   @IsString()
   genre?: string;
 
-  @ApiPropertyOptional({ description: 'Minimum rating for movies' })
+  @ApiPropertyOptional({
+    description: 'Minimum rating for movies',
+    enum: MinRatingField,
+  })
   @IsOptional()
   @IsString()
   minimum_rating?: string;
 
-  @ApiPropertyOptional({ description: 'Sort by specific field' })
+  @ApiPropertyOptional({
+    description: 'Sort by specific field',
+    enum: SortMovieField,
+  })
   @IsOptional()
   @IsString()
   sort_by?: string;
 
-  @ApiPropertyOptional({ description: 'Order by ascending or descending' })
+  @ApiPropertyOptional({
+    description: 'Order by ascending or descending',
+    enum: OrderByField,
+  })
   @IsOptional()
   @IsString()
   order_by?: string;

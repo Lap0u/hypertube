@@ -15,6 +15,9 @@ export class ApibayService {
           q: imdbId,
         },
       });
+      if (response.data[0].name === 'No results returned') {
+        return [];
+      }
       const torrents = response.data.map((torrent) => {
         const { quality, type } = extractVideoDetails(torrent.name);
         const humanReadableSize = humanFileSize(Number(torrent.size));
