@@ -59,7 +59,7 @@ export class YtsService {
     } catch (error) {
       console.log(error);
       throw new HttpException(
-        'Failed to fetch movie hashes',
+        'Failed to fetch movie torrents from yts',
         HttpStatus.BAD_REQUEST,
       );
     }
