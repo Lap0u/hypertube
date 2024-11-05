@@ -8,6 +8,7 @@ import { TmdbModule } from './tmdb/tmdb.module';
 import { UsersModule } from './users/users.module';
 import { YtsModule } from './yts/yts.module';
 import { YtsService } from './yts/yts.service';
+import { ApibayModule } from './apibay/apibay.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { YtsService } from './yts/yts.service';
     MoviesModule,
     YtsModule,
     TmdbModule,
+    ApibayModule,
   ],
   controllers: [AppController],
   providers: [AppService, YtsService],
