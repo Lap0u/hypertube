@@ -12,11 +12,11 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signUp')
-  signUp(
+  async signUp(
     @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    this.authService.signUp(createUserDto);
+    await this.authService.signUp(createUserDto);
     return 'User successfully created !';
   }
 
