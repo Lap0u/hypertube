@@ -6,6 +6,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { TmdbService } from 'src/tmdb/tmdb.service';
+import { GetMoviesDto } from './dto/getMovies.dto';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
@@ -16,12 +17,11 @@ export class MoviesController {
   ) {}
 
   @Get()
-  // getMovies(): Promise<Movie[]> {
-  getMovies() {
-    return this.movieService.getMovies();
+  getMovies(@Query() params: GetMoviesDto) {
+    return this.movieService.getMovies(params);
   }
 
-  @Get(`/details/:id`)
+  @Get(`/:id`)
   getDetails(
     @Param('id') id: string,
     @Query('source') source: 'tmdb' | 'imdb',
@@ -32,7 +32,8 @@ export class MoviesController {
     if (!source) {
       return {};
     } else if (source == 'imdb') {
-      return this.tmdbService.findMovie(id);
+      // return this.tmdbService.findMovie(id);
+      return this.movieService.getDetails(id);
     } else if (source == 'tmdb') {
       return this.tmdbService.getMovieDetails(Number(id));
     }
