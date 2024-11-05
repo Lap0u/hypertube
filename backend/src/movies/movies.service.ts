@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TmdbService } from 'src/tmdb/tmdb.service';
 import { YtsService } from 'src/yts/yts.service';
+import { GetMoviesDto } from './dto/getMovies.dto';
 
 @Injectable()
 export class MoviesService {
@@ -11,15 +12,12 @@ export class MoviesService {
     private tmdbService: TmdbService,
   ) {}
 
-  async getMovies(page: number = 1, limit: number = 20) {
-    const movies = await this.ytsService.getMovies(page, limit);
-    const result = [];
-    for (const movie of movies) {
-      const movieDetails = await this.tmdbService.findMovie(movie.imdbId);
-      result.push({ ...movie, ...movieDetails });
-    }
-    return result;
+  async getMovies(params: GetMoviesDto) {
+    const movies = await this.ytsService.getMovies(params);
+    return movies;
   }
 
-  async getDetails(tmdb_id: number) {}
+  async getDetails(imdbId: string) {
+    return await this.ytsService.getMovieHashes(imdbId);
+  }
 }
