@@ -18,11 +18,8 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto) {
-    const { email, username, password } = loginDto;
+    const { username, password } = loginDto;
     let user = null;
-    if (email) {
-      user = await this.usersService.findUserByEmail(email);
-    }
     if (username) {
       user = await this.usersService.findUserByUsername(username);
     }
