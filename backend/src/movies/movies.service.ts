@@ -17,7 +17,22 @@ export class MoviesService {
     return movies;
   }
 
-  async getDetails(imdbId: string) {
-    return await this.ytsService.getMovieHashes(imdbId);
+  async getMovieDetails(imdbId: string) {
+    const movie = await this.ytsService.findMovie(imdbId);
+
+    if (!movie) {
+      return {};
+    }
+
+    const tmdbInfo = await this.tmdbService.findMovie(imdbId);
+    const details = await this.tmdbService.getMovieDetails(tmdbInfo.tmdbId);
+    return { imdbRating: movie.rating, ...details };
+  }
+
+  async getMovie(imdbId: string) {
+    const ytsMovieTorrents = await this.ytsService.getMovieTorrents(imdbId);
+    const details = await this.getMovieDetails(imdbId);
+    const torrents = ytsMovieTorrents;
+    return { ...details, torrents };
   }
 }
