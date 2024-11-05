@@ -39,7 +39,7 @@ export class YtsService {
     return movie[0];
   }
 
-  async getMovieTorrents(imdbId: string) {
+  async findTorrents(imdbId: string) {
     try {
       const response = await this.ytsClient.get('/list_movies.json', {
         params: { query_term: imdbId },
