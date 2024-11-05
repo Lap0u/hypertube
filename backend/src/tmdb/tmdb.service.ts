@@ -14,7 +14,7 @@ export class TmdbService {
     );
     const data = response.data;
     const details = {
-      tmdbId: data.tmdb_id,
+      tmdbId: data.id,
       imdbId: data.imdb_id,
       title: data.title,
       posterUrl: `${process.env.TMDB_IMAGE_URL}${data.poster_path}`,

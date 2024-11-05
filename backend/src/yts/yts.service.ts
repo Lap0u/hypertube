@@ -29,13 +29,24 @@ export class YtsService {
     }
   }
 
-  async getMovieHashes(imdbId: string) {
+  async findMovie(imdbId: string) {
+    const movie = await this.getMovies({
+      limit: 1,
+      page: 1,
+      query_term: imdbId,
+    });
+
+    return movie[0];
+  }
+
+  async getMovieTorrents(imdbId: string) {
     try {
       const response = await this.ytsClient.get('/list_movies.json', {
         params: { query_term: imdbId },
       });
-      const hashes = response.data.data.movies[0].torrents.map((torrent) => {
+      const torrents = response.data.data.movies[0].torrents.map((torrent) => {
         return {
+          source: 'YTS',
           hash: torrent.hash,
           quality: torrent.quality,
           seeds: torrent.seeds,
@@ -44,10 +55,13 @@ export class YtsService {
           type: torrent.type,
         };
       });
-      return hashes;
+      return torrents;
     } catch (error) {
       console.log(error);
-      throw new HttpException('Failed to fetch movies', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to fetch movie hashes',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  Param,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TmdbService } from 'src/tmdb/tmdb.service';
 import { GetMoviesDto } from './dto/getMovies.dto';
 import { MoviesService } from './movies.service';
@@ -21,21 +15,8 @@ export class MoviesController {
     return this.movieService.getMovies(params);
   }
 
-  @Get(`/:id`)
-  getDetails(
-    @Param('id') id: string,
-    @Query('source') source: 'tmdb' | 'imdb',
-  ) {
-    if (source != 'tmdb' && source != 'imdb') {
-      throw new BadRequestException('Provide a valid source');
-    }
-    if (!source) {
-      return {};
-    } else if (source == 'imdb') {
-      // return this.tmdbService.findMovie(id);
-      return this.movieService.getDetails(id);
-    } else if (source == 'tmdb') {
-      return this.tmdbService.getMovieDetails(Number(id));
-    }
+  @Get(`/:imdb_id`)
+  getDetails(@Param('imdb_id') imdb_id: string) {
+    return this.movieService.getMovie(imdb_id);
   }
 }
