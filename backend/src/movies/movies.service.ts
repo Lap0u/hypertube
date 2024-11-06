@@ -31,6 +31,10 @@ export class MoviesService {
       language,
     );
 
+    if (!tmdbMovieDetails) {
+      return ytsMovieDetails;
+    }
+
     for (const details in ytsMovieDetails) {
       if (!tmdbMovieDetails[details]) {
         tmdbMovieDetails[details] = ytsMovieDetails[details];
