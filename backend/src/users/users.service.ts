@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,7 +35,7 @@ export class UsersService {
     return await this.prisma.user.findMany();
   }
 
-  async createUser(userInfos: CreateUserDto) {
+  async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
     const userExists = await this.prisma.user.findFirst({
       where: {
         OR: [
@@ -55,6 +56,7 @@ export class UsersService {
       data: {
         ...userInfos,
         refreshToken: '',
+        profilePictureUrl: profilePictureUrl,
       },
     });
   }
@@ -66,6 +68,22 @@ export class UsersService {
       },
       data: {
         refreshToken: refreshToken,
+      },
+    });
+  }
+
+  async updateUser(
+    id: number,
+    dto: UpdateUserDto,
+    profilePictureUrl: string | null,
+  ) {
+    return await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...dto,
+        profilePictureUrl: profilePictureUrl,
       },
     });
   }

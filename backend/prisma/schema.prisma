@@ -17,12 +17,12 @@ model User {
   id                Int @id @default(autoincrement())
   username          String  @unique()
   email             String  @unique()
-  lastName          String
-  firstName         String
   password          String
-  preferredLanguage String
-  profilePictureUrl String
-  refreshToken      String
+  lastName          String  @default("")
+  firstName         String  @default("")
+  preferredLanguage String  @default("")
+  profilePictureUrl String  @default("")
+  refreshToken      String  @default("")
   comments          Comment[]
   createdAt         DateTime @default(now())
 }
