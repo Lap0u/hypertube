@@ -44,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async signUp(payload: CreateUserDto) {
+  async signUp(payload: CreateUserDto, profilePictureUrl: string | null) {
     const hashPass: string = await bcrypt.hash(
       payload.password,
       this.saltOrRounds,
@@ -55,7 +55,7 @@ export class AuthService {
       password: hashPass,
     };
 
-    const user = await this.usersService.createUser(data);
+    const user = await this.usersService.createUser(data, profilePictureUrl);
     return user;
   }
 
