@@ -13,6 +13,11 @@ export class TmdbService {
       `/movie/${tmdb_id}?append_to_response=credits${language ? '&language=' + language : ''}`,
     );
     const data = response.data;
+
+    if (data.success === false) {
+      return null;
+    }
+
     const details = {
       tmdbId: data.id,
       imdbId: data.imdb_id,

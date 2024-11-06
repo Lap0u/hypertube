@@ -36,6 +36,9 @@ export class YtsService {
       });
 
       const movie = response.data.data.movie;
+      if (movie.id == 0) {
+        return null;
+      }
       const details = {
         imdbId: movie.imdb_code,
         title: movie.title,
