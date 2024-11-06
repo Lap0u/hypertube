@@ -20,18 +20,27 @@ export class MoviesService {
   }
 
   async getMovieDetails(imdbId: string, language?: string) {
-    const movie = await this.ytsService.findMovie(imdbId);
+    const ytsMovieDetails = await this.ytsService.getMovieDetails(imdbId);
 
-    if (!movie) {
+    if (!ytsMovieDetails) {
       return {};
     }
 
-    const tmdbInfo = await this.tmdbService.findMovie(imdbId);
-    const details = await this.tmdbService.getMovieDetails(
-      tmdbInfo.tmdbId,
+    const tmdbMovieDetails = await this.tmdbService.getMovieDetailsFromImdb(
+      imdbId,
       language,
     );
-    return { imdbRating: movie.rating, ...details };
+
+    if (!tmdbMovieDetails) {
+      return ytsMovieDetails;
+    }
+
+    for (const details in ytsMovieDetails) {
+      if (!tmdbMovieDetails[details]) {
+        tmdbMovieDetails[details] = ytsMovieDetails[details];
+      }
+    }
+    return tmdbMovieDetails;
   }
 
   async getMovie(imdbId: string, language?: string) {

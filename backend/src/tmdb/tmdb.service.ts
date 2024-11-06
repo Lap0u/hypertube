@@ -13,12 +13,17 @@ export class TmdbService {
       `/movie/${tmdb_id}?append_to_response=credits${language ? '&language=' + language : ''}`,
     );
     const data = response.data;
+
+    if (data.success === false) {
+      return null;
+    }
+
     const details = {
       tmdbId: data.id,
       imdbId: data.imdb_id,
       title: data.title,
       posterUrl: `${process.env.TMDB_IMAGE_URL}${data.poster_path}`,
-      releasedDate: data.release_date,
+      releaseDate: data.release_date,
       summary: data.overview,
       cast: data.credits.cast.map((actor) => {
         return {
@@ -56,5 +61,14 @@ export class TmdbService {
       releaseDate: result.release_date,
     };
     return movie;
+  }
+
+  async getMovieDetailsFromImdb(imdbId: string, language?: string) {
+    const tmdbInfo = await this.findMovie(imdbId);
+    let tmdbDetails = {};
+    if (tmdbInfo) {
+      tmdbDetails = await this.getMovieDetails(tmdbInfo.tmdbId, language);
+    }
+    return tmdbDetails;
   }
 }
