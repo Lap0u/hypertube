@@ -1,6 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { GetMoviesDto } from 'src/movies/dto/getMovies.dto';
+import {
+  transformYtsFindTorrentsResponse,
+  transformYtsGetMovieDetailsResponse,
+  transformYtsGetMovieResponse,
+} from './transform.utils';
 
 @Injectable()
 export class YtsService {
@@ -14,15 +19,7 @@ export class YtsService {
         params,
       });
 
-      const movies = response.data.data.movies.map((movie) => {
-        return {
-          imdbId: movie.imdb_code,
-          title: movie.title,
-          posterUrl: movie.medium_cover_image,
-          releaseDate: String(movie.year),
-          imdbRating: movie.rating,
-        };
-      });
+      const movies = transformYtsGetMovieResponse(response);
       return movies;
     } catch (error) {
       throw new HttpException('Failed to fetch movies', HttpStatus.BAD_REQUEST);
@@ -35,32 +32,13 @@ export class YtsService {
         params: { imdb_id: imdbId, with_cast: true },
       });
 
-      const movie = response.data.data.movie;
-      if (movie.id == 0) {
-        return null;
-      }
-      const details = {
-        imdbId: movie.imdb_code,
-        title: movie.title,
-        posterUrl: movie.large_cover_image,
-        releaseDate: String(movie.year),
-        summary:
-          movie.description_full.length != 0 ? movie.description_full : null,
-        cast: movie.cast
-          ? movie.cast.map((actor) => {
-              return {
-                name: actor.name,
-                character: actor.character_name,
-                pictureUrl: actor.url_small_image,
-              };
-            })
-          : null,
-        crew: null,
-        imdbRating: movie.rating,
-      };
+      const details = transformYtsGetMovieDetailsResponse(response);
       return details;
     } catch (error) {
-      throw new HttpException('Failed to fetch movies', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to fetch movie details',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -79,17 +57,7 @@ export class YtsService {
       const response = await this.ytsClient.get('/list_movies.json', {
         params: { query_term: imdbId },
       });
-      const torrents = response.data.data.movies[0].torrents.map((torrent) => {
-        return {
-          source: 'YTS',
-          hash: torrent.hash,
-          quality: torrent.quality,
-          seeds: torrent.seeds,
-          peers: torrent.peers,
-          size: torrent.size,
-          type: torrent.type,
-        };
-      });
+      const torrents = transformYtsFindTorrentsResponse(response);
       return torrents;
     } catch (error) {
       console.log(error);

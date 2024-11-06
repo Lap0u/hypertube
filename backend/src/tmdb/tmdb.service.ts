@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import {
+  transformTmdbFindMovieResponse,
+  transformTmdbGetMovieResponse,
+} from './transform.utils';
 
 @Injectable()
 export class TmdbService {
@@ -9,66 +13,43 @@ export class TmdbService {
   });
 
   async getMovieDetails(tmdb_id: number, language?: string) {
-    const response = await this.tmdbClient.get(
-      `/movie/${tmdb_id}?append_to_response=credits${language ? '&language=' + language : ''}`,
-    );
-    const data = response.data;
+    try {
+      const response = await this.tmdbClient.get(
+        `/movie/${tmdb_id}?append_to_response=credits${language ? '&language=' + language : ''}`,
+      );
 
-    if (data.success === false) {
-      return null;
+      const details = transformTmdbGetMovieResponse(response);
+      return details;
+    } catch (error) {
+      throw new HttpException(
+        'Failed to fetch movie details from tmdb',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-
-    const details = {
-      tmdbId: data.id,
-      imdbId: data.imdb_id,
-      title: data.title,
-      posterUrl: `${process.env.TMDB_IMAGE_URL}${data.poster_path}`,
-      releaseDate: data.release_date,
-      summary: data.overview,
-      cast: data.credits.cast.map((actor) => {
-        return {
-          name: actor.name,
-          character: actor.character,
-          pictureUrl: `${process.env.TMDB_IMAGE_URL}${actor.profile_path}`,
-        };
-      }),
-      crew: data.credits.crew.map((person) => {
-        return {
-          name: person.name,
-          job: person.job,
-          pictureUrl:
-            person.profile_path == null
-              ? null
-              : `${process.env.TMDB_IMAGE_URL}${person.profile_path}`,
-        };
-      }),
-    };
-    return details;
   }
 
   async findMovie(imdb_id: string) {
-    const response = await this.tmdbClient.get(
-      `/find/${imdb_id}?external_source=imdb_id`,
-    );
-    if (response.data.movie_results.length != 1) {
-      return null;
+    try {
+      const response = await this.tmdbClient.get(
+        `/find/${imdb_id}?external_source=imdb_id`,
+      );
+
+      const movie = transformTmdbFindMovieResponse(response);
+      return movie;
+    } catch (error) {
+      throw new HttpException(
+        'Failed to find movie from tmdb',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    const result = response.data.movie_results[0];
-    const movie = {
-      tmdbId: result.id,
-      title: result.title,
-      posterUrl: `${process.env.TMDB_IMAGE_URL}${result.poster_path}`,
-      releaseDate: result.release_date,
-    };
-    return movie;
   }
 
   async getMovieDetailsFromImdb(imdbId: string, language?: string) {
     const tmdbInfo = await this.findMovie(imdbId);
-    let tmdbDetails = {};
-    if (tmdbInfo) {
-      tmdbDetails = await this.getMovieDetails(tmdbInfo.tmdbId, language);
+    if (!tmdbInfo) {
+      return null;
     }
+    const tmdbDetails = await this.getMovieDetails(tmdbInfo.tmdbId, language);
     return tmdbDetails;
   }
 }

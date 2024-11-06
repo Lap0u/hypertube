@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { extractVideoDetails, humanFileSize } from './utils';
+import { transformApibayFindTorrentsResponse } from './transform.utils';
 
 @Injectable()
 export class ApibayService {
@@ -15,22 +15,7 @@ export class ApibayService {
           q: imdbId,
         },
       });
-      if (response.data[0].name === 'No results returned') {
-        return [];
-      }
-      const torrents = response.data.map((torrent) => {
-        const { quality, type } = extractVideoDetails(torrent.name);
-        const humanReadableSize = humanFileSize(Number(torrent.size));
-        return {
-          source: 'APIBAY',
-          hash: torrent.info_hash,
-          quality: quality,
-          seeds: Number(torrent.seeders),
-          peers: Number(torrent.leechers),
-          size: humanReadableSize,
-          type: type,
-        };
-      });
+      const torrents = transformApibayFindTorrentsResponse(response);
       return torrents;
     } catch (error) {
       console.log(error);
