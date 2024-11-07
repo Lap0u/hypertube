@@ -1,9 +1,6 @@
 import {
-  BadRequestException,
   Body,
   Controller,
-  FileTypeValidator,
-  ParseFilePipe,
   Post,
   Req,
   Res,
@@ -16,6 +13,10 @@ import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
+import {
+  fileMimeTypeFilter,
+  fileValidation,
+} from 'src/utils/file-upload.utils';
 import { AuthService } from './auth.service';
 import { JwtRefreshAuthGuard } from './guards/jwt-auth.guards';
 import { jwtConstants } from './jwt.constant';
@@ -27,13 +28,7 @@ export class AuthController {
   @Post('signUp')
   @UseInterceptors(
     FileInterceptor('profilePicture', {
-      fileFilter: (req, file, callback) => {
-        // Only allow specified file types
-        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
-          return callback(new BadRequestException('Invalid file type'), false);
-        }
-        callback(null, true);
-      },
+      fileFilter: fileMimeTypeFilter,
     }),
   )
   @ApiConsumes('multipart/form-data')
@@ -42,14 +37,7 @@ export class AuthController {
     @UploadedFile()
     profilePicture: Express.Multer.File,
   ) {
-    if (profilePicture) {
-      // Apply the validation manually since we need custom logic
-      const isValidFile = new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
-      }).transform(profilePicture);
-
-      if (!isValidFile) throw new BadRequestException('Invalid file format.');
-    }
+    fileValidation(profilePicture);
 
     const profilePictureUrl = profilePicture
       ? `/uploads/${profilePicture.filename}`
