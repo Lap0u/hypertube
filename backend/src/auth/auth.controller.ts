@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
+  ParseFilePipe,
   Post,
   Req,
   Res,
@@ -26,7 +28,12 @@ export class AuthController {
   @ApiConsumes('multipart/form-data')
   async signUp(
     @Body() createUserDto: CreateUserDto,
-    @UploadedFile() profilePicture: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
+      }),
+    )
+    profilePicture: Express.Multer.File,
   ) {
     delete createUserDto.profilePicture;
     const profilePictureUrl = profilePicture
