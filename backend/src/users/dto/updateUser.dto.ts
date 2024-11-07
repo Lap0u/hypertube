@@ -31,4 +31,12 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   preferredLanguage?: string;
+
+  @ApiPropertyOptional({
+    type: 'file',
+    name: 'profilePicture',
+    format: 'binary',
+  })
+  @IsOptional()
+  profilePicture?: Express.Multer.File;
 }

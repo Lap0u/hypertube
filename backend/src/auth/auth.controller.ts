@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Post,
-  Query,
   Req,
   Res,
   UploadedFile,
@@ -10,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
@@ -25,23 +24,11 @@ export class AuthController {
   @Post('signUp')
   @UseInterceptors(FileInterceptor('profilePicture'))
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        profilePicture: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-      required: [],
-    },
-  })
   async signUp(
-    @Query() createUserDto: CreateUserDto,
+    @Body() createUserDto: CreateUserDto,
     @UploadedFile() profilePicture: Express.Multer.File,
-    @Res({ passthrough: true }) response: Response,
   ) {
+    delete createUserDto.profilePicture;
     const profilePictureUrl = profilePicture
       ? `/uploads/${profilePicture.filename}`
       : '';
