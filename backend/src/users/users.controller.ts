@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
+  ParseFilePipe,
   Patch,
   Req,
   UploadedFile,
@@ -24,7 +26,12 @@ export class UsersController {
   @UseGuards(JwtAccessAuthGuard)
   async patchUser(
     @Body() dto: UpdateUserDto,
-    @UploadedFile() profilePicture: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
+      }),
+    )
+    profilePicture: Express.Multer.File,
     @Req() req,
   ) {
     const user = req.user;
