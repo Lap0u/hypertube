@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -18,4 +19,12 @@ export class CreateUserDto {
 
   @ApiPropertyOptional()
   preferredLanguage: string;
+
+  @ApiPropertyOptional({
+    type: 'file',
+    name: 'profilePicture',
+    format: 'binary',
+  })
+  @IsOptional()
+  profilePicture: Express.Multer.File;
 }
