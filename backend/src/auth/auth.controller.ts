@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   FileTypeValidator,
@@ -24,23 +25,39 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signUp')
-  @UseInterceptors(FileInterceptor('profilePicture'))
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      fileFilter: (req, file, callback) => {
+        // Only allow specified file types
+        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+          return callback(new BadRequestException('Invalid file type'), false);
+        }
+        callback(null, true);
+      },
+    }),
+  )
   @ApiConsumes('multipart/form-data')
   async signUp(
     @Body() createUserDto: CreateUserDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
-      }),
-    )
+    @UploadedFile()
     profilePicture: Express.Multer.File,
   ) {
-    delete createUserDto.profilePicture;
+    if (profilePicture) {
+      // Apply the validation manually since we need custom logic
+      const isValidFile = new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
+      }).transform(profilePicture);
+
+      if (!isValidFile) throw new BadRequestException('Invalid file format.');
+    }
+
     const profilePictureUrl = profilePicture
       ? `/uploads/${profilePicture.filename}`
       : '';
+    delete createUserDto.profilePicture;
+
     await this.authService.signUp(createUserDto, profilePictureUrl);
-    return 'User successfully created !';
+    return 'User successfully created!';
   }
 
   @Post('signIn')
