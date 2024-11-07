@@ -39,7 +39,6 @@ export class UsersService {
   }
 
   async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
-    console.log('userInfo:', userInfos);
     const userExists = await this.prisma.user.findFirst({
       where: {
         OR: [

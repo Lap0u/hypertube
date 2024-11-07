@@ -1,8 +1,6 @@
 import {
   Body,
   Controller,
-  FileTypeValidator,
-  ParseFilePipe,
   Patch,
   Req,
   UploadedFile,
@@ -12,6 +10,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
+import {
+  fileMimeTypeFilter,
+  fileValidation,
+} from 'src/utils/file-upload.utils';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
 
@@ -21,19 +23,20 @@ export class UsersController {
 
   @Patch('')
   @ApiBearerAuth()
-  @UseInterceptors(FileInterceptor('profilePicture'))
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      fileFilter: fileMimeTypeFilter,
+    }),
+  )
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAccessAuthGuard)
   async patchUser(
     @Body() dto: UpdateUserDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
-      }),
-    )
+    @UploadedFile()
     profilePicture: Express.Multer.File,
     @Req() req,
   ) {
+    fileValidation(profilePicture);
     const user = req.user;
     delete dto.profilePicture;
     const profilePictureUrl = profilePicture
