@@ -1,11 +1,16 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Patch,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
@@ -14,6 +19,7 @@ import {
   fileMimeTypeFilter,
   fileValidation,
 } from 'src/utils/file-upload.utils';
+import { GetUserDto, GetUsersDto } from './dto/getUsers.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
 
@@ -21,7 +27,20 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Patch('')
+  @Get('')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getUsers(@Query() getUsersDto: GetUsersDto) {
+    const { limit, page } = getUsersDto;
+    return this.usersService.findAll(limit, page);
+  }
+
+  @Get(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getUser(@Param() getUserDto: GetUserDto) {
+    return this.usersService.findOne(getUserDto.id);
+  }
+
+  @Patch('me')
   @ApiBearerAuth()
   @UseInterceptors(
     FileInterceptor('profilePicture', {
