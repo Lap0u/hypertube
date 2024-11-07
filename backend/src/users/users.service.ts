@@ -34,8 +34,30 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll(limit: number, page: number) {
+    return await this.prisma.user.findMany({
+      skip: limit * (page - 1),
+      take: limit,
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    return await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        profilePictureUrl: true,
+      },
+    });
   }
 
   async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
