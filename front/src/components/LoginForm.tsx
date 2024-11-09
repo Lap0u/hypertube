@@ -1,10 +1,24 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from './Button';
 import { signIn } from '../api/login';
+import { Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Inputs = {
   login: string;
   password: string;
+};
+
+const toastConfig = {
+  position: 'top-right' as const,
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'colored' as const,
+  transition: Bounce,
 };
 
 const LoginForm = () => {
@@ -13,14 +27,20 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const { login, password } = data;
     const formData = {
       username: login.includes('@') ? '' : login,
       email: login.includes('@') ? login : '',
       password,
     };
-    signIn(formData);
+    const response = await signIn(formData);
+    console.log('login response', response);
+    if (response?.status === 201) {
+      toast.success(response.data, toastConfig);
+    } else {
+      toast.error(response.data || 'An error occurred', toastConfig);
+    }
   };
 
   return (
