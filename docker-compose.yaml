@@ -4,7 +4,7 @@ services:
   react:
     container_name: react
     build:
-      context: ./hypertube-front
+      context: ./front
       dockerfile: Dockerfile
     image: react
     env_file:
@@ -12,7 +12,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./hypertube-front:/app
+      - ./front:/app
       - /app/node_modules
     networks:
       - main
