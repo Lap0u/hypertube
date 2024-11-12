@@ -15,6 +15,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
+import { CommentsService } from 'src/comments/comments.service';
 import {
   fileMimeTypeFilter,
   fileValidation,
@@ -25,7 +26,10 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private commentsService: CommentsService,
+  ) {}
 
   @Get('')
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -38,6 +42,12 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   getUser(@Param() getUserDto: GetUserDto) {
     return this.usersService.findOne(getUserDto.id);
+  }
+
+  @Get(':id/comments')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getUserComments(@Param() getUserDto: GetUserDto) {
+    return this.commentsService.getUserComments(getUserDto.id);
   }
 
   @Patch('me')
