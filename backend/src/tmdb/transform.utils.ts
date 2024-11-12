@@ -1,6 +1,9 @@
 import { AxiosResponse } from 'axios';
+import { MovieDetails } from 'src/types/movies.types';
 
-export const transformTmdbGetMovieResponse = (response: AxiosResponse) => {
+export const transformTmdbGetMovieResponse = (
+  response: AxiosResponse,
+): MovieDetails => {
   const data = response.data;
 
   if (data.success === false) {

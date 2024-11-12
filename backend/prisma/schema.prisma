@@ -32,14 +32,14 @@ model Comment {
   author    User @relation(fields: [authorId], references: [id])
   authorId  Int
   content   String
-  movie     Movie @relation(fields: [movieId], references: [id])
-  movieId   Int
+  movie     Movie @relation(fields: [movieId], references: [imdbId])
+  movieId   String
   createAt  DateTime @default(now())
 }
 
 model Movie {
   id        Int @id @default(autoincrement())
+  imdbId    String @unique()
   title     String
-  imdb_id   Int
   comments  Comment[]
 }

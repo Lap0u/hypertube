@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { CommentsModule } from 'src/comments/comments.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -8,6 +9,7 @@ import { UsersService } from './users.service';
 @Module({
   imports: [
     PrismaModule,
+    CommentsModule,
     MulterModule.register({
       storage: diskStorage({
         destination: './public/uploads',
