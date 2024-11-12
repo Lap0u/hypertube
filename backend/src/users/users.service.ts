@@ -1,9 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
+  saltOrRounds: number = 10;
+
   constructor(private prisma: PrismaService) {}
 
   async findUserByUsername(username: string) {
@@ -30,11 +34,33 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll(limit: number, page: number) {
+    return await this.prisma.user.findMany({
+      skip: limit * (page - 1),
+      take: limit,
+      select: {
+        id: true,
+        username: true,
+      },
+    });
   }
 
-  async createUser(userInfos: CreateUserDto) {
+  async findOne(id: number) {
+    return await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        profilePictureUrl: true,
+      },
+    });
+  }
+
+  async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
     const userExists = await this.prisma.user.findFirst({
       where: {
         OR: [
@@ -55,6 +81,7 @@ export class UsersService {
       data: {
         ...userInfos,
         refreshToken: '',
+        profilePictureUrl: profilePictureUrl,
       },
     });
   }
@@ -66,6 +93,31 @@ export class UsersService {
       },
       data: {
         refreshToken: refreshToken,
+      },
+    });
+  }
+
+  async updateUser(
+    id: number,
+    dto: UpdateUserDto,
+    profilePictureUrl: string | null,
+  ) {
+    const hashPass: string = await bcrypt.hash(dto.password, this.saltOrRounds);
+
+    let updateData = {
+      ...dto,
+      password: hashPass,
+    };
+
+    if (profilePictureUrl) {
+      updateData['profilePictureUrl'] = profilePictureUrl;
+    }
+    return await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...updateData,
       },
     });
   }

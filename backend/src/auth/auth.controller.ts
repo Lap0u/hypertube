@@ -1,8 +1,22 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
+import {
+  fileMimeTypeFilter,
+  fileValidation,
+} from 'src/utils/file-upload.utils';
 import { AuthService } from './auth.service';
 import { JwtRefreshAuthGuard } from './guards/jwt-auth.guards';
 import { jwtConstants } from './jwt.constant';
@@ -12,12 +26,26 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signUp')
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      fileFilter: fileMimeTypeFilter,
+    }),
+  )
+  @ApiConsumes('multipart/form-data')
   async signUp(
     @Body() createUserDto: CreateUserDto,
-    @Res({ passthrough: true }) response: Response,
+    @UploadedFile()
+    profilePicture: Express.Multer.File,
   ) {
-    await this.authService.signUp(createUserDto);
-    return 'User successfully created !';
+    fileValidation(profilePicture);
+
+    const profilePictureUrl = profilePicture
+      ? `/uploads/${profilePicture.filename}`
+      : '';
+    delete createUserDto.profilePicture;
+
+    await this.authService.signUp(createUserDto, profilePictureUrl);
+    return 'User successfully created!';
   }
 
   @Post('signIn')

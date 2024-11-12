@@ -18,11 +18,8 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto) {
-    const { email, username, password } = loginDto;
+    const { username, password } = loginDto;
     let user = null;
-    if (email) {
-      user = await this.usersService.findUserByEmail(email);
-    }
     if (username) {
       user = await this.usersService.findUserByUsername(username);
     }
@@ -47,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async signUp(payload: CreateUserDto) {
+  async signUp(payload: CreateUserDto, profilePictureUrl: string | null) {
     const hashPass: string = await bcrypt.hash(
       payload.password,
       this.saltOrRounds,
@@ -58,7 +55,7 @@ export class AuthService {
       password: hashPass,
     };
 
-    const user = await this.usersService.createUser(data);
+    const user = await this.usersService.createUser(data, profilePictureUrl);
     return user;
   }
 
