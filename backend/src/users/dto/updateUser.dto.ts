@@ -25,11 +25,6 @@ export class UpdateUserDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  password?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
   preferredLanguage?: string;
 
   @ApiPropertyOptional({

@@ -27,7 +27,7 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
   app.enableCors({
-    origin: 'localhost:3000',
+    origin: 'http://localhost:3000',
   });
 
   await app.listen(process.env.BACKEND_PORT ?? 3000);
