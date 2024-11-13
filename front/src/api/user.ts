@@ -6,10 +6,15 @@ type ResponseType = {
   data: string;
 };
 
-export const signUp = async (formData: FormData): Promise<ResponseType> => {
-  console.log('signup data', formData);
+export const updateUser = async (formData: FormData): Promise<ResponseType> => {
+  console.log(localStorage.getItem('token'));
   return axios
-    .post(`${API_URL}/auth/signUp`, formData)
+    .patch(`${API_URL}/users/me`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
     .then((response) => {
       console.log(response);
       return { status: response.status, data: response.data };
