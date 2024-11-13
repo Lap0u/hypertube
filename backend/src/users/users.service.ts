@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -41,6 +40,7 @@ export class UsersService {
       select: {
         id: true,
         username: true,
+        profilePictureUrl: true,
       },
     });
   }
@@ -102,11 +102,8 @@ export class UsersService {
     dto: UpdateUserDto,
     profilePictureUrl: string | null,
   ) {
-    const hashPass: string = await bcrypt.hash(dto.password, this.saltOrRounds);
-
     let updateData = {
       ...dto,
-      password: hashPass,
     };
 
     if (profilePictureUrl) {

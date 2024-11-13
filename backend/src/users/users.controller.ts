@@ -38,16 +38,18 @@ export class UsersController {
     return this.usersService.findAll(limit, page);
   }
 
+  @Get('me')
+  @ApiBearerAuth()
+  @UseGuards(JwtAccessAuthGuard)
+  getMe(@Req() req) {
+    const user = req.user;
+    return this.usersService.findOne(user.id);
+  }
+
   @Get(':id')
   @UsePipes(new ValidationPipe({ transform: true }))
   getUser(@Param() getUserDto: GetUserDto) {
     return this.usersService.findOne(getUserDto.id);
-  }
-
-  @Get(':id/comments')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  getUserComments(@Param() getUserDto: GetUserDto) {
-    return this.commentsService.getUserComments(getUserDto.id);
   }
 
   @Patch('me')
@@ -73,5 +75,11 @@ export class UsersController {
       : null;
     await this.usersService.updateUser(user.id, dto, profilePictureUrl);
     return 'User successfully updated !';
+  }
+
+  @Get(':id/comments')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getUserComments(@Param() getUserDto: GetUserDto) {
+    return this.commentsService.getUserComments(getUserDto.id);
   }
 }
