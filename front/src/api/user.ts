@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API_URL } from '../../shared/constants';
+import { ACCESS_TOKEN, API_URL } from '../../shared/constants';
+import Cookies from 'js-cookie';
 
 type ResponseType = {
   status: number;
@@ -7,12 +8,14 @@ type ResponseType = {
 };
 
 export const updateUser = async (formData: FormData): Promise<ResponseType> => {
-  console.log(localStorage.getItem('token'));
+  const access_token = Cookies.get(ACCESS_TOKEN);
+  console.log('a_token', ACCESS_TOKEN, access_token);
+
   return axios
     .patch(`${API_URL}/users/me`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${localStorage.getItem('token')}`,
+        authorization: `Bearer ${access_token}`,
       },
     })
     .then((response) => {
