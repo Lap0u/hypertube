@@ -1,4 +1,4 @@
-name: red-tetris
+name: hypratube
 
 services:
   react:
@@ -35,7 +35,6 @@ services:
       - main
     depends_on:
       - postgres
-    
 
   postgres:
     image: postgres:17.0-alpine3.20

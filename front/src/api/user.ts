@@ -1,15 +1,21 @@
 import axios from 'axios';
-import { API_URL } from '../../shared/constants';
+import { ACCESS_TOKEN, API_URL } from '../../shared/constants';
+import Cookies from 'js-cookie';
 
 type ResponseType = {
   status: number;
   data: string;
 };
 
-export const signUp = async (formData: FormData): Promise<ResponseType> => {
-  console.log('signup data', formData);
+export const updateUser = async (formData: FormData): Promise<ResponseType> => {
+  const access_token = Cookies.get(ACCESS_TOKEN);
+  console.log('a_token', ACCESS_TOKEN, access_token);
+
   return axios
-    .post(`${API_URL}/auth/signUp`, formData, {
+    .patch(`${API_URL}/users/me`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       withCredentials: true,
     })
     .then((response) => {

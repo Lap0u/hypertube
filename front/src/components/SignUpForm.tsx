@@ -31,11 +31,17 @@ const SignUpForm = () => {
   const [preview, setPreview] = useState<string>();
 
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
-    data.preferredLanguage = 'fr';
+    const formData = new FormData();
+    formData.append('username', data.username);
+    formData.append('password', data.password);
+    formData.append('email', data.email);
+    formData.append('firstName', data.firstName ?? '');
+    formData.append('lastName', data.lastName ?? '');
+    formData.append('preferredLanguage', data.preferredLanguage ?? 'string');
     if (file) {
-      data.profilePictureUrl = file.name;
+      formData.append('profilePicture', file);
     }
-    const response = await signUp(data);
+    const response = await signUp(formData);
     console.log('form resp', response);
     if (response?.status === 201) {
       toast.success(response.data, toastConfig);
@@ -67,7 +73,7 @@ const SignUpForm = () => {
             <input
               type="text"
               className="px-4 py-2 text-mainYellow rounded-sm"
-              placeholder="username"
+              placeholder="username*"
               {...register('username', { required: true })}
             />
             {errors.username && (
@@ -79,7 +85,7 @@ const SignUpForm = () => {
               type="text"
               className="px-4 py-2 text-mainYellow rounded-sm"
               placeholder="firstName"
-              {...register('firstName', { required: true })}
+              {...register('firstName', { required: false })}
             />
             {errors.firstName && (
               <span className="text-xl mt-[-12px] text-red-600">
@@ -90,11 +96,11 @@ const SignUpForm = () => {
               type="text"
               className="px-4 py-2 text-mainYellow rounded-sm"
               placeholder="lastName"
-              {...register('lastName', { required: true })}
+              {...register('lastName', { required: false })}
             />
             {errors.lastName && (
               <span className="text-xl mt-[-12px] text-red-600">
-                This field is required
+                {errors.lastName.message}
               </span>
             )}
           </div>
@@ -102,7 +108,7 @@ const SignUpForm = () => {
             <input
               type="email"
               className="px-4 py-2 text-mainYellow rounded-sm"
-              placeholder="email"
+              placeholder="email*"
               {...register('email', { required: true })}
             />
             {errors.email && (
@@ -113,7 +119,7 @@ const SignUpForm = () => {
             <input
               type="password"
               className="px-4 py-2 text-mainYellow rounded-sm"
-              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
+              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;*"
               {...register('password', { required: true })}
             />
             {errors.password && (
@@ -126,7 +132,6 @@ const SignUpForm = () => {
               className="hidden"
               ref={hiddenInputRef}
               name="profilePicture"
-              required
               onChange={handleUploadFile}
               accept="image/*"
             />
@@ -136,7 +141,7 @@ const SignUpForm = () => {
         <Button secondary={true} text="Upload image" onClick={uploadImage} />
         {errors.profilePicture && (
           <span className="text-xl mt-[-12px] text-red-600">
-            This field is required
+            {errors.profilePicture.message}
           </span>
         )}
         <Button text="Sign-up" onClick={() => handleSubmit(onSubmit)} />
