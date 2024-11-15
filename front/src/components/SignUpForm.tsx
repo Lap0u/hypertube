@@ -6,6 +6,7 @@ import { SignUpData } from '../dtos/SignupData';
 import { signUp } from '../api/signup';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const toastConfig = {
   position: 'top-right' as const,
@@ -20,6 +21,8 @@ const toastConfig = {
 };
 
 const SignUpForm = () => {
+  const nav = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -42,8 +45,11 @@ const SignUpForm = () => {
       formData.append('profilePicture', file);
     }
     const response = await signUp(formData);
-    console.log('form resp', response);
     if (response?.status === 201) {
+      nav('/login', {
+        replace: true,
+        state: { toLogin: true, login: data.username },
+      });
       toast.success(response.data, toastConfig);
     } else {
       toast.error(response?.data || 'An error occurred', toastConfig);

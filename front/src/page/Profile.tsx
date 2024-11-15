@@ -53,7 +53,6 @@ const Profile = () => {
       formData.append('profilePicture', file);
     }
     const response = await updateUser(formData);
-    console.log('form resp', response);
     if (response?.status === 200) {
       toast.success(response.data, toastConfig);
     } else {
