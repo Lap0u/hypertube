@@ -60,7 +60,6 @@ export class UsersService {
     });
   }
 
-  // async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
   async createUser(userInfos: UserInfos, profilePictureUrl: string | null) {
     const userExists = await this.prisma.user.findFirst({
       where: {
