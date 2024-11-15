@@ -1,11 +1,17 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
 import { UsersService } from 'src/users/users.service';
+import { v4 as uuidv4 } from 'uuid';
 import { jwtConstants } from './jwt.constant';
+import { GoogleUser } from './strategies/types';
 
 @Injectable()
 export class AuthService {
@@ -96,6 +102,39 @@ export class AuthService {
     const accessToken = await this.createAccessToken(payload);
     const refreshToken = await this.createRefreshToken(payload);
     this.usersService.updateRefreshToken(user.sub, refreshToken);
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+  }
+
+  async googleSignIn(googleUser?: GoogleUser) {
+    if (!googleUser) {
+      throw new BadRequestException('Unauthenticated');
+    }
+
+    let user = await this.usersService.findUserByEmail(googleUser.email);
+
+    if (!user) {
+      const newUserInfos = {
+        username: googleUser.firstName + googleUser.lastName + uuidv4(),
+        email: googleUser.email,
+        firstName: googleUser.firstName,
+        lastName: googleUser.lastName,
+        preferredLanguage: 'en',
+      };
+
+      user = await this.usersService.createUser(
+        newUserInfos,
+        googleUser.picture,
+      );
+    }
+    const payload = { sub: user.id, username: user.username };
+
+    const accessToken = await this.createAccessToken(payload);
+    const refreshToken = await this.createRefreshToken(payload);
+    this.usersService.updateRefreshToken(user.id, refreshToken);
 
     return {
       accessToken: accessToken,

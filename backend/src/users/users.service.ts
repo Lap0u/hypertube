@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserInfos } from 'src/auth/strategies/types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class UsersService {
     });
   }
 
-  async createUser(userInfos: CreateUserDto, profilePictureUrl: string | null) {
+  async createUser(userInfos: UserInfos, profilePictureUrl: string | null) {
     const userExists = await this.prisma.user.findFirst({
       where: {
         OR: [
