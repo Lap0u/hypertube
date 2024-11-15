@@ -15,8 +15,8 @@ export const updateUser = async (formData: FormData): Promise<ResponseType> => {
     .patch(`${API_URL}/users/me`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${access_token}`,
       },
+      withCredentials: true,
     })
     .then((response) => {
       console.log(response);
