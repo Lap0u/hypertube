@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ApibayService } from 'src/apibay/apibay.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TmdbService } from 'src/tmdb/tmdb.service';
+import { MovieDetails } from 'src/types/movies.types';
 import { YtsService } from 'src/yts/yts.service';
 import { GetMoviesDto } from './dto/getMovies.dto';
 
@@ -19,7 +20,10 @@ export class MoviesService {
     return movies;
   }
 
-  async getMovieDetails(imdbId: string, language?: string) {
+  async getMovieDetails(
+    imdbId: string,
+    language?: string,
+  ): Promise<MovieDetails> {
     const ytsMovieDetails = await this.ytsService.getMovieDetails(imdbId);
 
     if (!ytsMovieDetails) {
@@ -53,5 +57,14 @@ export class MoviesService {
     );
     const torrents = [...ytsMovieTorrents, ...apibayTorrents];
     return { ...details, torrents };
+  }
+
+  async addMovie(imdbId: string, title: string) {
+    const newMovie = await this.prisma.movie.create({
+      data: {
+        imdbId,
+        title,
+      },
+    });
   }
 }

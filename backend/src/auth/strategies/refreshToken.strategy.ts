@@ -12,7 +12,11 @@ export class RefreshTokenStrategy extends PassportStrategy(
 ) {
   constructor(private authService: AuthService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) =>
+          req.cookies[process.env.REFRESH_TOKEN] ||
+          req.headers['authorization']?.split(' ')[1],
+      ]),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_REFRESH_SECRET,
       passReqToCallback: true, // Allows us to access the request in validate()

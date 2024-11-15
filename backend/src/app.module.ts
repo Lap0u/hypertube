@@ -11,6 +11,9 @@ import { TmdbModule } from './tmdb/tmdb.module';
 import { UsersModule } from './users/users.module';
 import { YtsModule } from './yts/yts.module';
 import { YtsService } from './yts/yts.service';
+import { CommentsService } from './comments/comments.service';
+import { CommentsController } from './comments/comments.controller';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -24,8 +27,9 @@ import { YtsService } from './yts/yts.service';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    CommentsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, YtsService],
+  controllers: [AppController, CommentsController],
+  providers: [AppService, YtsService, CommentsService],
 })
 export class AppModule {}

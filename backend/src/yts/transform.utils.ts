@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { MovieDetails } from 'src/types/movies.types';
 
 export const transformYtsGetMovieResponse = (response: AxiosResponse) => {
   const data = response.data.data;
@@ -20,7 +21,7 @@ export const transformYtsGetMovieResponse = (response: AxiosResponse) => {
 
 export const transformYtsGetMovieDetailsResponse = (
   response: AxiosResponse,
-) => {
+): MovieDetails => {
   const data = response.data;
   if (!data) {
     return null;
