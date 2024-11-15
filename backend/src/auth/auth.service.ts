@@ -11,7 +11,7 @@ import { LoginDto } from 'src/users/dto/login.dto';
 import { UsersService } from 'src/users/users.service';
 import { v4 as uuidv4 } from 'uuid';
 import { jwtConstants } from './jwt.constant';
-import { GoogleUser } from './strategies/types';
+import { FortyTwoUser, GoogleUser } from './strategies/types';
 
 @Injectable()
 export class AuthService {
@@ -128,6 +128,39 @@ export class AuthService {
       user = await this.usersService.createUser(
         newUserInfos,
         googleUser.picture,
+      );
+    }
+    const payload = { sub: user.id, username: user.username };
+
+    const accessToken = await this.createAccessToken(payload);
+    const refreshToken = await this.createRefreshToken(payload);
+    this.usersService.updateRefreshToken(user.id, refreshToken);
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+  }
+
+  async fortyTwoSignIn(fortytwoUser?: FortyTwoUser) {
+    if (!fortytwoUser) {
+      throw new BadRequestException('Unauthenticated');
+    }
+
+    let user = await this.usersService.findUserByEmail(fortytwoUser.email);
+
+    if (!user) {
+      const newUserInfos = {
+        username: fortytwoUser.username + uuidv4(),
+        email: fortytwoUser.email,
+        firstName: fortytwoUser.givenName,
+        lastName: fortytwoUser.familyName,
+        preferredLanguage: 'en',
+      };
+
+      user = await this.usersService.createUser(
+        newUserInfos,
+        fortytwoUser.image,
       );
     }
     const payload = { sub: user.id, username: user.username };
