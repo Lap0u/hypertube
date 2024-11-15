@@ -9,7 +9,9 @@ type ResponseType = {
 
 export const signIn = async (formData: UserLoginDto): Promise<ResponseType> => {
   return axios
-    .post(`${API_URL}/auth/signIn`, formData)
+    .post(`${API_URL}/auth/signIn`, formData, {
+      withCredentials: true,
+    })
     .then((response) => {
       console.log(response);
       return { status: response.status, data: response.data };

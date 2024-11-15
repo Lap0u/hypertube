@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
+import MainTitle from '../components/MainTitle';
+import Footer from '../components/Footer';
 
 const Home = () => {
   const nav = useNavigate();
   return (
-    <div className="w-100 bg-black h-screen bg-cover">
-      <h1 className="text-[9rem] custom-font text-red-600 p-12 text-center">
-        Hypratube
-      </h1>
+    <div className="w-100 bg-black min-g-screen bg-cover min-h-screen">
+      <MainTitle />
       <div
         className="
      text-white grid grid-cols-2 px-48   justify-center items-center text-3xl bg-bottom gap-24">
@@ -34,6 +34,7 @@ const Home = () => {
             }></Button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

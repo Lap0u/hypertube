@@ -139,9 +139,9 @@ const SignUpForm = () => {
           </div>
         </div>
         <Button secondary={true} text="Upload image" onClick={uploadImage} />
-        {errors.profilePictureUrl && (
+        {errors.profilePicture && (
           <span className="text-xl mt-[-12px] text-red-600">
-            {errors.profilePictureUrl.message}
+            {errors.profilePicture.message}
           </span>
         )}
         <Button text="Sign-up" onClick={() => handleSubmit(onSubmit)} />
