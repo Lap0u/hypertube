@@ -11,8 +11,7 @@ const Stream = () => {
           width="800"
           height="600"
           controls
-          // src="http://localhost:5050/stream?magnetLink=3FBFACC87CC7108B60BB64D5C3A38FBB8226B21E">
-          src="http://localhost:5050/videos/test.webm"></video>
+          src="http://localhost:5050/stream?magnetLink=3FBFACC87CC7108B60BB64D5C3A38FBB8226B21E"></video>
         <video
           className="border border-2 border-white"
           width="800"
