@@ -29,7 +29,11 @@ export class AuthService {
     if (username) {
       user = await this.usersService.findUserByUsername(username);
     }
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (
+      !user ||
+      !password ||
+      !(await bcrypt.compare(password, user.password))
+    ) {
       throw new UnauthorizedException();
     }
     return user;
