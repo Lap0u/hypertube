@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
 import { LoginDto } from 'src/auth/dto/login.dto';
+import { MailService } from 'src/mail/mail.service';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UsersService } from 'src/users/users.service';
 import {
@@ -21,6 +22,8 @@ import {
   fileValidation,
 } from 'src/utils/file-upload.utils';
 import { AuthService } from './auth.service';
+import { ForgetPasswordDto } from './dto/forgetPassword.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { UpdatePasswordDto } from './dto/updatePassword.dto';
 import { FortyTwoOAuthGuard } from './guards/fortytwo-oauth.guards';
 import { GoogleOAuthGuard } from './guards/google-oauth.guards';
@@ -35,6 +38,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private usersService: UsersService,
+    private mailService: MailService,
   ) {}
 
   @Post('signUp')
@@ -171,5 +175,20 @@ export class AuthController {
     );
 
     return response.redirect(process.env.GOOGLE_REDIRECT_URL_CLIENT);
+  }
+
+  @Post('forgetPassword')
+  async fotgetPassword(@Body() forgetPasswordDto: ForgetPasswordDto) {
+    const { email } = forgetPasswordDto;
+    const { token } = await this.authService.createResetPasswordToken(email);
+    await this.mailService.sendPasswordResetEmail(email, token);
+    return 'If your a user is linked with this email he will receive a reset password email';
+  }
+
+  @Post('resetPassword')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    const { token, newPassword } = resetPasswordDto;
+    await this.authService.resetPassword(token, newPassword);
+    return 'Password successfully changed';
   }
 }

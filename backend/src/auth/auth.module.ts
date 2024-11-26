@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { MailModule } from 'src/mail/mail.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
@@ -17,6 +18,7 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
     PrismaModule,
     UsersModule,
     PassportModule,
+    MailModule,
     JwtModule.register({}),
     MulterModule.register({
       storage: diskStorage({

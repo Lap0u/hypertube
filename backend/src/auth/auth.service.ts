@@ -229,4 +229,50 @@ export class AuthService {
       refreshToken: refreshToken,
     };
   }
+
+  async resetPassword(token: string, newPassword: string) {
+    const resetPasswordRecord = await this.prisma.resetPasswordToken.findUnique(
+      {
+        where: {
+          token: token,
+        },
+      },
+    );
+    if (!resetPasswordRecord) {
+      throw new BadRequestException();
+    }
+
+    const hashedPassword: string = await bcrypt.hash(
+      newPassword,
+      this.saltOrRounds,
+    );
+
+    await this.prisma.user.update({
+      where: {
+        id: resetPasswordRecord.userId,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+  }
+
+  async createResetPasswordToken(email: string) {
+    const user = await this.usersService.findUserByEmail(email);
+
+    if (!user) {
+      throw new BadRequestException();
+    }
+
+    const token = uuidv4();
+    const now = new Date();
+    const expirationDate = new Date(now.getTime() + 60 * 60 * 1000);
+    return await this.prisma.resetPasswordToken.create({
+      data: {
+        token: token,
+        userId: user.id,
+        expiredAt: expirationDate,
+      },
+    });
+  }
 }
