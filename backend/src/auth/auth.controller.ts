@@ -20,6 +20,7 @@ import {
   fileValidation,
 } from 'src/utils/file-upload.utils';
 import { AuthService } from './auth.service';
+import { FortyTwoOAuthGuard } from './guards/fortytwo-oauth.guards';
 import { GoogleOAuthGuard } from './guards/google-oauth.guards';
 import { JwtRefreshAuthGuard } from './guards/jwt-auth.guards';
 import { jwtConstants } from './jwt.constant';
@@ -97,7 +98,7 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOAuthGuard)
-  async auth() {}
+  async googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(GoogleOAuthGuard)
@@ -108,6 +109,34 @@ export class AuthController {
     const user = req.user;
     const { accessToken, refreshToken } =
       await this.authService.googleSignIn(user);
+
+    response.cookie(
+      jwtConstants().accessTokenCookieName,
+      accessToken,
+      jwtConstants().accessTokenCookieConfig,
+    );
+    response.cookie(
+      jwtConstants().refreshTokenCookieName,
+      refreshToken,
+      jwtConstants().refreshTokenCookieConfig,
+    );
+
+    return response.redirect(process.env.GOOGLE_REDIRECT_URL_CLIENT);
+  }
+
+  @Get('42')
+  @UseGuards(FortyTwoOAuthGuard)
+  async fortyTwoAuth() {}
+
+  @Get('42/callback')
+  @UseGuards(FortyTwoOAuthGuard)
+  async fortyTwoCallback(
+    @Req() req,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const user = req.user;
+    const { accessToken, refreshToken } =
+      await this.authService.fortyTwoSignIn(user);
 
     response.cookie(
       jwtConstants().accessTokenCookieName,

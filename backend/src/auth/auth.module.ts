@@ -7,6 +7,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { FortyTwoStrategy } from './strategies/42OAuth.strategy';
 import { AccessTokenStrategy } from './strategies/accessToken.strategy';
 import { GoogleStrategy } from './strategies/googleOAuth.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
@@ -35,6 +36,7 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     GoogleStrategy,
+    FortyTwoStrategy,
   ],
 })
 export class AuthModule {}
