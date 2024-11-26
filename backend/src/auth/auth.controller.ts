@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Patch,
   Post,
   Req,
   Res,
@@ -12,17 +13,21 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
+import { LoginDto } from 'src/auth/dto/login.dto';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { LoginDto } from 'src/users/dto/login.dto';
 import { UsersService } from 'src/users/users.service';
 import {
   fileMimeTypeFilter,
   fileValidation,
 } from 'src/utils/file-upload.utils';
 import { AuthService } from './auth.service';
+import { UpdatePasswordDto } from './dto/updatePassword.dto';
 import { FortyTwoOAuthGuard } from './guards/fortytwo-oauth.guards';
 import { GoogleOAuthGuard } from './guards/google-oauth.guards';
-import { JwtRefreshAuthGuard } from './guards/jwt-auth.guards';
+import {
+  JwtAccessAuthGuard,
+  JwtRefreshAuthGuard,
+} from './guards/jwt-auth.guards';
 import { jwtConstants } from './jwt.constant';
 
 @Controller('auth')
@@ -94,6 +99,22 @@ export class AuthController {
       jwtConstants().refreshTokenCookieConfig,
     );
     return 'Tokens successfully refreshed !';
+  }
+
+  @Patch('updatePassword')
+  @UseGuards(JwtAccessAuthGuard)
+  async updatePassword(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Req() req,
+  ) {
+    const user = req.user;
+    await this.authService.updatePassword(
+      user.id,
+      updatePasswordDto.currentPassword,
+      updatePasswordDto.newPassword,
+    );
+
+    return 'Password successfully changed !';
   }
 
   @Get('google')

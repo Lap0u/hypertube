@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from 'src/auth/dto/login.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
-import { LoginDto } from 'src/users/dto/login.dto';
 import { UsersService } from 'src/users/users.service';
 import { v4 as uuidv4 } from 'uuid';
 import { jwtConstants } from './jwt.constant';
@@ -23,7 +23,7 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async validateUser(loginDto: LoginDto) {
+  async validateUserByName(loginDto: LoginDto) {
     const { username, password } = loginDto;
     let user = null;
     if (username) {
@@ -39,14 +39,44 @@ export class AuthService {
     return user;
   }
 
-  async signIn(loginDto: LoginDto) {
-    let user = await this.validateUser(loginDto);
+  async validateUserById(userId: number, password: string) {
+    let user = null;
+    if (userId) {
+      user = await this.usersService.findUserById(userId);
+    }
+    if (
+      !user ||
+      !password ||
+      !(await bcrypt.compare(password, user.password))
+    ) {
+      throw new UnauthorizedException();
+    }
+    return user;
+  }
 
-    const payload = { sub: user.id, username: user.username };
+  async validatePassword(password: string, cryptedPassword: string) {
+    if (!password || !(await bcrypt.compare(password, cryptedPassword))) {
+      return false;
+    }
+    return true;
+  }
+
+  async signIn(loginDto: LoginDto) {
+    let userExist = await this.usersService.findUserByUsername(
+      loginDto.username,
+    );
+    if (
+      !userExist ||
+      !(await this.validatePassword(loginDto.password, userExist.password))
+    ) {
+      throw new UnauthorizedException();
+    }
+
+    const payload = { sub: userExist.id, username: userExist.username };
 
     const accessToken = await this.createAccessToken(payload);
     const refreshToken = await this.createRefreshToken(payload);
-    this.usersService.updateRefreshToken(user.id, refreshToken);
+    this.usersService.updateRefreshToken(userExist.id, refreshToken);
 
     return {
       accessToken: accessToken,
@@ -111,6 +141,27 @@ export class AuthService {
       accessToken: accessToken,
       refreshToken: refreshToken,
     };
+  }
+
+  async updatePassword(
+    userId: number,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const userExist = await this.usersService.findUserById(userId);
+
+    if (
+      !userExist ||
+      !(await this.validatePassword(currentPassword, userExist.password))
+    ) {
+      throw new UnauthorizedException();
+    }
+    const newHashedPassword: string = await bcrypt.hash(
+      newPassword,
+      this.saltOrRounds,
+    );
+
+    await this.usersService.updatePassword(userId, newHashedPassword);
   }
 
   async googleSignIn(googleUser?: GoogleUser) {
