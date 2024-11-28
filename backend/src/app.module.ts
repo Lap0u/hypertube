@@ -14,6 +14,7 @@ import { YtsService } from './yts/yts.service';
 import { CommentsService } from './comments/comments.service';
 import { CommentsController } from './comments/comments.controller';
 import { CommentsModule } from './comments/comments.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CommentsModule } from './comments/comments.module';
       rootPath: join(__dirname, '..', 'public'),
     }),
     CommentsModule,
+    MailModule,
   ],
   controllers: [AppController, CommentsController],
   providers: [AppService, YtsService, CommentsService],
