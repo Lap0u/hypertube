@@ -12,6 +12,14 @@ export interface GoogleUser {
   refreshToken: string;
 }
 
+export interface FortyTwoUser {
+  email: string;
+  username: string;
+  familyName: string;
+  givenName: string;
+  image: string;
+}
+
 export interface UserInfos {
   username: string;
   password?: string;
