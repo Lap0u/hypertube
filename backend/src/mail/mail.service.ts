@@ -7,19 +7,20 @@ export class MailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      service: 'gmail',
       auth: {
-        user: process.env.GMAIL_ADDRESS,
-        pass: process.env.GMAIL_PASSWORD,
+        type: 'OAuth2',
+        user: process.env.GOOGLE_GMAIL_ADDRESS,
+        pass: process.env.GOOGLE_GMAIL_PASSWORD,
+        clientId: process.env.GOOGLE_NODEMAILER_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_NODEMAILER_CLIENT_SECRET,
+        refreshToken: process.env.GOOGLE_NODEMAILER_REFRESH_TOKEN,
       },
     });
   }
 
   async sendPasswordResetEmail(to: string, token: string) {
-    const resetLink = `http://yourapp.com/reset-password?token=${token}`;
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
     const mailOptions = {
       from: process.env.GMAIL_ADDRESS,
       to: to,

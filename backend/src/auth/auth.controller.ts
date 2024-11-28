@@ -181,8 +181,10 @@ export class AuthController {
   async fotgetPassword(@Body() forgetPasswordDto: ForgetPasswordDto) {
     const { email } = forgetPasswordDto;
     const { token } = await this.authService.createResetPasswordToken(email);
-    await this.mailService.sendPasswordResetEmail(email, token);
-    return 'If your a user is linked with this email he will receive a reset password email';
+    if (token) {
+      await this.mailService.sendPasswordResetEmail(email, token);
+    }
+    return 'If a user is associated with this email, he will receive a reset password email';
   }
 
   @Post('resetPassword')

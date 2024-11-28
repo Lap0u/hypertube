@@ -230,15 +230,25 @@ export class AuthService {
     };
   }
 
-  async resetPassword(token: string, newPassword: string) {
-    const resetPasswordRecord = await this.prisma.resetPasswordToken.findUnique(
-      {
-        where: {
-          token: token,
-        },
+  async getResetPasswordToken(token: string) {
+    return await this.prisma.resetPasswordToken.findUnique({
+      where: {
+        token: token,
       },
-    );
-    if (!resetPasswordRecord) {
+    });
+  }
+
+  async deleteResetPasswordToken(token: string) {
+    await this.prisma.resetPasswordToken.delete({
+      where: {
+        token: token,
+      },
+    });
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const resetPasswordRecord = await this.getResetPasswordToken(token);
+    if (!resetPasswordRecord || resetPasswordRecord.expiredAt < new Date()) {
       throw new BadRequestException();
     }
 
@@ -247,21 +257,18 @@ export class AuthService {
       this.saltOrRounds,
     );
 
-    await this.prisma.user.update({
-      where: {
-        id: resetPasswordRecord.userId,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
+    await this.usersService.updatePassword(
+      resetPasswordRecord.userId,
+      hashedPassword,
+    );
+    await this.deleteResetPasswordToken(token);
   }
 
   async createResetPasswordToken(email: string) {
     const user = await this.usersService.findUserByEmail(email);
 
     if (!user) {
-      throw new BadRequestException();
+      return { token: null };
     }
 
     const token = uuidv4();
