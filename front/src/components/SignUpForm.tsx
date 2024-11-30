@@ -7,18 +7,7 @@ import { signUp } from '../api/signup';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-
-const toastConfig = {
-  position: 'top-right' as const,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'colored' as const,
-  transition: Bounce,
-};
+import { toastConfig } from '../../shared/toastConfig';
 
 const SignUpForm = () => {
   const nav = useNavigate();

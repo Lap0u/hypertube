@@ -4,22 +4,11 @@ import { signIn } from '../api/login';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { toastConfig } from '../../shared/toastConfig';
 
 type Inputs = {
   login: string;
   password: string;
-};
-
-const toastConfig = {
-  position: 'top-right' as const,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'colored' as const,
-  transition: Bounce,
 };
 
 type LoginFormProps = {
