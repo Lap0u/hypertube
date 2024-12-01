@@ -14,17 +14,18 @@ datasource db {
 }
 
 model User {
-  id                Int @id @default(autoincrement())
-  username          String  @unique()
-  email             String  @unique()
-  password          String
-  lastName          String  @default("")
-  firstName         String  @default("")
-  preferredLanguage String  @default("")
-  profilePictureUrl String  @default("")
-  refreshToken      String  @default("")
-  comments          Comment[]
-  createdAt         DateTime @default(now())
+  id                  Int @id @default(autoincrement())
+  username            String  @unique()
+  email               String  @unique()
+  password            String?
+  lastName            String  @default("")
+  firstName           String  @default("")
+  preferredLanguage   String  @default("")
+  profilePictureUrl   String  @default("")
+  refreshToken        String  @default("")
+  comments            Comment[]
+  resetPasswordTokens ResetPasswordToken[]
+  createdAt           DateTime @default(now())
 }
 
 model Comment {
@@ -42,4 +43,11 @@ model Movie {
   imdbId    String @unique()
   title     String
   comments  Comment[]
+}
+
+model ResetPasswordToken {
+  token     String  @unique()
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  expiredAt DateTime
 }

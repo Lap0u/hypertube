@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import Page404 from './page/404.tsx';
 import Test from './page/test.tsx';
 import Movie from './page/Movie.tsx';
+import Stream from './page/Stream.tsx';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: '/test',
     element: <Test />,
+  },
+  {
+    path: '/stream',
+    element: <Stream />,
   },
   {
     path: '*',
