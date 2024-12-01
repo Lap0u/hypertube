@@ -28,13 +28,13 @@ export class StreamService {
           );
         }
         
-        engine.on('download', () => {
-          this.logger.log('download');
-        });
+        // engine.on('download', () => {
+        //   this.logger.log('download');
+        // });
         
-        engine.on('upload', () => {
-          this.logger.log('upload');
-        });
+        // engine.on('upload', () => {
+        //   this.logger.log('upload');
+        // });
         
         engine.on('idle', () => {
           this.logger.log('idle');
