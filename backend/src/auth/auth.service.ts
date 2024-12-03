@@ -271,8 +271,22 @@ export class AuthService {
       return { token: null };
     }
 
-    const token = uuidv4();
     const now = new Date();
+
+    const pendingResetPasswordTokens =
+      await this.prisma.resetPasswordToken.findMany({
+        where: {
+          expiredAt: {
+            gt: now,
+          },
+        },
+      });
+
+    if (pendingResetPasswordTokens.length !== 0) {
+      return { token: null };
+    }
+
+    const token = uuidv4();
     const expirationDate = new Date(now.getTime() + 60 * 60 * 1000);
     return await this.prisma.resetPasswordToken.create({
       data: {
