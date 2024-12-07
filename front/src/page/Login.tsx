@@ -14,9 +14,13 @@ const Login = () => {
     if (location.state?.toLogin !== undefined) {
       setToLogin(location.state.toLogin);
     }
-  }, [location.state?.toLogin]);
+    if (location.state?.login !== undefined) {
+      setLogin(location.state.login);
+    }
+  }, [location.state?.toLogin, location.state?.login]);
 
   const [toLogin, setToLogin] = useState<boolean>(true);
+  const [login, setLogin] = useState<string>('');
   return (
     <div
       className='w-100 bg-mainBlack bg-cover py-8 min-h-screen
@@ -25,8 +29,8 @@ const Login = () => {
       <MainTitle />
       <div className='flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm'>
         {toLogin ? (
-          <div className='flex justify-center items-center flex-col gap-8'>
-            <LoginForm />
+          <div className="flex justify-center items-center flex-col gap-8">
+            <LoginForm login={login} />
             <p onClick={() => setToLogin((prev) => !prev)}>
               No account yet?{' '}
               <span className='hover:text-secYellow cursor-pointer'>
