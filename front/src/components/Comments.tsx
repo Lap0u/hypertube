@@ -37,7 +37,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
 
       {commentsList.length > 0 &&
         commentsList.map((comments, index) => {
-          return <div key={index}>{comments}</div>;
+          return <div key={index}>{comments.content}</div>;
         })}
     </div>
   );

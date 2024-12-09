@@ -12,6 +12,7 @@ import {
   FaFileAlt,
 } from 'react-icons/fa';
 import { toastConfig } from '../../shared/toastConfig';
+import Comments from './Comments';
 
 type MovieDetailsProps = {
   imdbId: string;
@@ -19,9 +20,9 @@ type MovieDetailsProps = {
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   const [movie, setMovie] = useState<FullMovieDto | null>(null);
-  const [activeTab, setActiveTab] = useState<'summary' | 'cast' | 'crew'>(
-    'summary'
-  );
+  const [activeTab, setActiveTab] = useState<
+    'summary' | 'cast' | 'crew' | 'comments'
+  >('summary');
   const nav = useNavigate();
 
   useEffect(() => {
@@ -114,11 +115,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
             ))}
           </div>
         );
+      case 'comments':
+        return <Comments imdbId={imdbId} />;
     }
   };
 
   return (
-    <div className="w-[60vw] min-h-screen mx-auto bg-white rounded-xl shadow-2xl py-4">
+    <div className="w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
       <div className=" relative z-10 px-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
@@ -146,35 +149,39 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
                 <FaDownload className="mr-2 text-secMarine" /> <p>Torrents</p>
               </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {movie.torrents.map((torrent, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-100 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
-                    onClick={() =>
-                      nav(`/stream/${torrent.hash}`, {
-                        state: { imdbId: movie.imdbId },
-                      })
-                    }>
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        {torrent.quality}
-                      </p>
-                      <p className="text-sm text-gray-600">{torrent.source}</p>
-                      <p className="text-sm text-gray-600">{torrent.size}</p>
+              <div className="flex flex-wrap md:grid-cols-4 gap-4">
+                {movie.torrents
+                  .filter((torrent) => torrent.seeds >= 0)
+                  .map((torrent, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-100 w-52 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
+                      onClick={() =>
+                        nav(`/stream/${torrent.hash}`, {
+                          state: { imdbId: movie.imdbId },
+                        })
+                      }>
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          {torrent.quality}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {torrent.source}
+                        </p>
+                        <p className="text-sm text-gray-600">{torrent.size}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-green-600 flex items-center">
+                          <span className="mr-1">{torrent.seeds}</span>
+                          <FaFileAlt size={16} />
+                        </p>
+                        <p className="text-red-600 flex items-center">
+                          <span className="mr-1">{torrent.peers}</span>
+                          <FaPlayCircle size={16} />
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-green-600 flex items-center">
-                        <span className="mr-1">{torrent.seeds}</span>
-                        <FaFileAlt size={16} />
-                      </p>
-                      <p className="text-red-600 flex items-center">
-                        <span className="mr-1">{torrent.peers}</span>
-                        <FaPlayCircle size={16} />
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -183,10 +190,12 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
 
       <div className="mt-8 px-6">
         <div className="flex border-b border-gray-200">
-          {['summary', 'cast', 'crew'].map((tab) => (
+          {['summary', 'cast', 'crew', 'comments'].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab as 'summary' | 'cast' | 'crew')}
+              onClick={() =>
+                setActiveTab(tab as 'summary' | 'cast' | 'crew' | 'comments')
+              }
               className={`px-4 py-2 font-semibold ${
                 activeTab === tab
                   ? 'text-red-600 border-b-2 border-red-600'
