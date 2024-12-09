@@ -49,7 +49,7 @@ export class MoviesService {
   async getMovie(imdbId: string, language?: string) {
     const details = await this.getMovieDetails(imdbId, language);
     if (!details) {
-      return {};
+      return null;
     }
     const ytsMovieTorrents = await this.ytsService.findTorrents(details.imdbId);
     const apibayTorrents = await this.apibayService.findTorrents(
