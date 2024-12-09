@@ -118,7 +118,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   };
 
   return (
-    <div className="w-[60vw] min-h-screen mx-auto bg-white rounded-xl shadow-2xl py-4">
+    <div className="w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
       <div className=" relative z-10 px-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
@@ -146,35 +146,39 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
                 <FaDownload className="mr-2 text-secMarine" /> <p>Torrents</p>
               </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {movie.torrents.map((torrent, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-100 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
-                    onClick={() =>
-                      nav(`/stream/${torrent.hash}`, {
-                        state: { imdbId: movie.imdbId },
-                      })
-                    }>
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        {torrent.quality}
-                      </p>
-                      <p className="text-sm text-gray-600">{torrent.source}</p>
-                      <p className="text-sm text-gray-600">{torrent.size}</p>
+              <div className="flex flex-wrap md:grid-cols-4 gap-4">
+                {movie.torrents
+                  .filter((torrent) => torrent.seeds >= 10)
+                  .map((torrent, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-100 w-52 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
+                      onClick={() =>
+                        nav(`/stream/${torrent.hash}`, {
+                          state: { imdbId: movie.imdbId },
+                        })
+                      }>
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          {torrent.quality}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {torrent.source}
+                        </p>
+                        <p className="text-sm text-gray-600">{torrent.size}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-green-600 flex items-center">
+                          <span className="mr-1">{torrent.seeds}</span>
+                          <FaFileAlt size={16} />
+                        </p>
+                        <p className="text-red-600 flex items-center">
+                          <span className="mr-1">{torrent.peers}</span>
+                          <FaPlayCircle size={16} />
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-green-600 flex items-center">
-                        <span className="mr-1">{torrent.seeds}</span>
-                        <FaFileAlt size={16} />
-                      </p>
-                      <p className="text-red-600 flex items-center">
-                        <span className="mr-1">{torrent.peers}</span>
-                        <FaPlayCircle size={16} />
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
