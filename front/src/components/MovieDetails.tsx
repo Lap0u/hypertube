@@ -8,7 +8,6 @@ import {
   FaStar,
   FaClock,
   FaDownload,
-  FaArrowLeft,
   FaPlayCircle,
   FaFileAlt,
 } from 'react-icons/fa';
@@ -151,7 +150,8 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                 {movie.torrents.map((torrent, index) => (
                   <div
                     key={index}
-                    className="bg-gray-100 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition">
+                    className="bg-gray-100 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
+                    onClick={() => nav(`/stream/${torrent.hash}`)}>
                     <div>
                       <p className="font-semibold text-gray-800">
                         {torrent.quality}
