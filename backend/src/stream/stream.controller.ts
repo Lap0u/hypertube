@@ -8,11 +8,12 @@ export class StreamController {
 
   @Get('')
   async streamVideo(
-    @Query('magnetLink') magnetLink: string,
+    @Query('hash') hash: string,
     @Res() res: Response,
   ) {
+	console.log(hash)
     try {
-      const stream = await this.streamService.streamTorrent(magnetLink, false);
+      const stream = await this.streamService.streamTorrent(hash, false);
 
       res.set({
         'Content-Type': 'video/mp4', // Adjust based on your use case
