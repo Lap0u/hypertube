@@ -32,9 +32,9 @@ export class StreamService {
         //   this.logger.log('download');
         // });
         
-        // engine.on('upload', () => {
-        //   this.logger.log('upload');
-        // });
+        engine.on('upload', () => {
+          this.logger.log('upload');
+        });
         
         engine.on('idle', () => {
           this.logger.log('idle');
@@ -43,7 +43,7 @@ export class StreamService {
         this.logger.log(`Streaming file: ${file.name} (size: ${file.length})`);
         if (!dl) {
           this.logger.log('Streaming ...');
-          resolve(file.createReadStream({start:0, end:300}));
+          resolve(file.createReadStream());
         } else {
           this.logger.log('Downloading ...');
           resolve(file.select());

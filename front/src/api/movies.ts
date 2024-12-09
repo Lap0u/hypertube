@@ -238,41 +238,41 @@ export type movieQueryParams = {
 export const getMovies = async (
   params: movieQueryParams
 ): Promise<MoviesResponseType> => {
-  return {
-    status: 200,
-    data: moviesMockData,
-    message: '',
-  };
-  // return axios
-  //   .get(`${API_URL}/movies`, { params })
-  //   .then((response) => {
-  //     return { status: response.status, data: response.data, message: '' };
-  //   })
-  //   .catch((error) => {
-  //     return {
-  //       status: error.response.status,
-  //       data: [],
-  //       message: error.response.data.message,
-  //     };
-  //   });
+  // return {
+  //   status: 200,
+  //   data: moviesMockData,
+  //   message: '',
+  // };
+  return axios
+    .get(`${API_URL}/movies`, { params })
+    .then((response) => {
+      return { status: response.status, data: response.data, message: '' };
+    })
+    .catch((error) => {
+      return {
+        status: error.response.status,
+        data: [],
+        message: error.response.data.message,
+      };
+    });
 };
 
 export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
-  return {
-    status: 200,
-    data: movieMockData,
-    message: '',
-  };
-  // return axios
-  //   .get(`${API_URL}/movies/${imdbId}`)
-  //   .then((response) => {
-  //     return { status: response.status, data: response.data, message: '' };
-  //   })
-  //   .catch((error) => {
-  //     return {
-  //       status: error.response.status,
-  //       data: null,
-  //       message: error.response.data.message,
-  //     };
-  //   });
+  // return {
+  //   status: 200,
+  //   data: movieMockData,
+  //   message: '',
+  // };
+  return axios
+    .get(`${API_URL}/movies/${imdbId}`)
+    .then((response) => {
+      return { status: response.status, data: response.data, message: '' };
+    })
+    .catch((error) => {
+      return {
+        status: error.response.status,
+        data: null,
+        message: error.response.data.message,
+      };
+    });
 };
