@@ -151,7 +151,11 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                   <div
                     key={index}
                     className="bg-gray-100 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
-                    onClick={() => nav(`/stream/${torrent.hash}`)}>
+                    onClick={() =>
+                      nav(`/stream/${torrent.hash}`, {
+                        state: { imdbId: movie.imdbId },
+                      })
+                    }>
                     <div>
                       <p className="font-semibold text-gray-800">
                         {torrent.quality}
