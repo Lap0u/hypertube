@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     element: <Test />,
   },
   {
-    path: '/stream',
+    path: '/stream/:torrentHash',
     element: <Stream />,
   },
   {
