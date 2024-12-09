@@ -3,7 +3,7 @@ import { API_URL } from '../../shared/constants';
 
 export const downloadMovie = (torrentHash: string) => {
   return axios
-    .post(`${API_URL}/metTonAddresseIciThomas?hash=${torrentHash}`, {
+    .get(`${API_URL}/metTonAddresseIciThomas?hash=${torrentHash}`, {
       withCredentials: true,
     })
     .then((response) => {
