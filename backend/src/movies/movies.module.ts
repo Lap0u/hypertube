@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ApibayModule } from 'src/apibay/apibay.module';
 import { CommentsModule } from 'src/comments/comments.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
@@ -8,7 +8,13 @@ import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
 
 @Module({
-  imports: [PrismaModule, YtsModule, TmdbModule, ApibayModule, CommentsModule],
+  imports: [
+    PrismaModule,
+    YtsModule,
+    TmdbModule,
+    ApibayModule,
+    forwardRef(() => CommentsModule),
+  ],
   controllers: [MoviesController],
   providers: [MoviesService],
   exports: [MoviesService],

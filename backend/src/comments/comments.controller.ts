@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { CommentsService } from './comments.service';
@@ -16,9 +24,16 @@ export class CommentsController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAccessAuthGuard)
-  postComments(@Query() postCommentsDto: PostCommentsDto, @Req() req) {
+  async postComments(@Query() postCommentsDto: PostCommentsDto, @Req() req) {
     const authorId = req.user.id;
     const { movieId, content } = postCommentsDto;
-    return this.commentsService.addComment(movieId, authorId, content);
+    const comment = await this.commentsService.addComment(
+      movieId,
+      authorId,
+      content,
+    );
+    if (!comment) {
+      throw new BadRequestException('Movie imdb id not appear in our database');
+    }
   }
 }

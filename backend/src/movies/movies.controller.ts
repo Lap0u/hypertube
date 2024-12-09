@@ -15,8 +15,12 @@ export class MoviesController {
   ) {}
 
   @Get()
-  getMovies(@Query() params: GetMoviesDto) {
-    return this.movieService.getMovies(params);
+  async getMovies(@Query() params: GetMoviesDto) {
+    const movie = await this.movieService.getMovies(params);
+    if (!movie) {
+      return {};
+    }
+    return movie;
   }
 
   @Get(`/:imdbId`)
