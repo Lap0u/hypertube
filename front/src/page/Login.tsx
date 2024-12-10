@@ -25,7 +25,6 @@ const Login = () => {
     <div
       className="w-100 bg-mainBlack bg-cover py-8 min-h-screen
      text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
-      <MainTitle />
       <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
         {toLogin ? (
           <div className="flex justify-center items-center flex-col gap-8">

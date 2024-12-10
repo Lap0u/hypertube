@@ -7,8 +7,7 @@ import Footer from '../components/Footer';
 const Home = () => {
   const nav = useNavigate();
   return (
-    <div className="w-100 bg-black min-g-screen bg-cover min-h-screen">
-      <MainTitle />
+    <div className="w-100 bg-mainBlack min-g-screen bg-cover min-h-screen">
       <div
         className="
      text-white grid grid-cols-2 px-48   justify-center items-center text-3xl bg-bottom gap-24">

@@ -12,6 +12,7 @@ import Movie from './page/Movie.tsx';
 import Stream from './page/Stream.tsx';
 import RootLayout from './components/RootLayout.tsx';
 import UsersPage from './page/Users.tsx';
+import Search from './page/Search.tsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/search',
+        element: <Search />,
       },
       {
         path: '/users',

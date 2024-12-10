@@ -65,7 +65,6 @@ const Profile = () => {
 
   return (
     <div className="w-screen min-g-screen flex justify-center items-center bg-mainBlack flex-col min-h-screen">
-      <MainTitle />
       <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
         <form
           className="flex flex-col gap-y-8 justify-center items-center"

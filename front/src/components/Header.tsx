@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../shared/constants';
 import Cookies from 'js-cookie';
+import MainTitle from './MainTitle';
 
 const Header = () => {
   const nav = useNavigate();
@@ -10,14 +11,13 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full  text-white bg-black flex justify-between p-4 items-center border-b-2 border-red-600">
+    <div className="w-full  text-white bg-mainBlack flex justify-between p-4 items-center border-b-2 border-red-600">
       <div className="flex justify-between items-center gap-64 w-full">
-        <img
-          className="w-12 h-12 hover:cursor-pointer "
-          src="/netflix.jpg"
-          alt="netflix-logo"
-          onClick={() => nav('/')}
-        />
+        <div
+          className="custom-font text-[4rem] text-red-600"
+          onClick={() => nav('/')}>
+          H
+        </div>
         <div className="flex gap-12 items-center">
           <div
             className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
