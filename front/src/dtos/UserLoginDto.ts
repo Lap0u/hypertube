@@ -3,3 +3,9 @@ export type UserLoginDto = {
   email: string;
   password: string;
 };
+
+export type UserDto = {
+  id: number;
+  username: string;
+  profilePictureUrl: string;
+};

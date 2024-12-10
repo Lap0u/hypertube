@@ -10,39 +10,50 @@ import Page404 from './page/404.tsx';
 import Test from './page/test.tsx';
 import Movie from './page/Movie.tsx';
 import Stream from './page/Stream.tsx';
+import RootLayout from './components/RootLayout.tsx';
+import UsersPage from './page/Users.tsx';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/library',
-    element: <Library />,
-  },
-  {
-    path: '/profile',
-    element: <Profile />,
-  },
-  {
-    path: '/movie/:imdbId',
-    element: <Movie />,
-  },
-  {
-    path: '/test',
-    element: <Test />,
-  },
-  {
-    path: '/stream/:torrentHash',
-    element: <Stream />,
-  },
-  {
-    path: '*',
-    element: <Page404 />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/users',
+        element: <UsersPage />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/library',
+        element: <Library />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
+      {
+        path: '/movie/:imdbId',
+        element: <Movie />,
+      },
+      {
+        path: '/test',
+        element: <Test />,
+      },
+      {
+        path: '/stream/:torrentHash',
+        element: <Stream />,
+      },
+      {
+        path: '*',
+        element: <Page404 />,
+      },
+    ],
   },
 ]);
 
