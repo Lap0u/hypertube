@@ -15,8 +15,8 @@ export class StreamController {
       const stream = await this.streamService.streamTorrent(hash, false);
 
       res.set({
-        'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
-        // 'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
+        // 'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
+        'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
         'Transfer-Encoding': 'chunked',
       });
 

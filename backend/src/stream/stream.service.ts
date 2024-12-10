@@ -32,11 +32,13 @@ export class StreamService {
 		if (!dl) {
 			if (isMkv) {
 				this.mylogger.debug("MKV TO MP4")
+				const { PassThrough } = require('stream')
 				let pathOutput = `/tmp/mkv_to_mp4_file/${file.name.replace('.mkv', '.mp4')}`
-				var outStream = fs.createWriteStream(pathOutput);
+  				const outStream = new PassThrough(pathOutput);
 				ffmpeg(file.createReadStream())
+				.inputFormat('matroska') // Specify MKV input format if necessary
 				.outputFormat('mp4') // Convert to MP4 format
-				.outputOptions('-movflags frag_keyframe+empty_moov') // Make the MP4 streamable
+				.outputOptions('-movflags +faststart') // Make the MP4 streamable
 				.on('start', () => {
 				console.log('FFmpeg processing started');
 				})
@@ -49,7 +51,7 @@ export class StreamService {
 				outStream.end(); // Signal the end of the stream
 				})
 				.pipe(outStream, { end: true }); // Pipe FFmpeg output to the MP4 stream
-				resolve(outStream)
+				resolve(outStream);
 			}
 			else {
 				this.mylogger.log(`Streaming ${file.name}...`);
@@ -65,9 +67,9 @@ export class StreamService {
 	//   this.mylogger.log('download');
 	// });
 	
-	engine.on('upload', () => {
-	  this.mylogger.log('Upload to browser');
-	});
+	// engine.on('upload', () => {
+	//   this.mylogger.log('Upload to browser');
+	// });
 	
 	engine.on('idle', () => {
 	  this.mylogger.log('File DL done');
@@ -82,4 +84,4 @@ export class StreamService {
   }
 }
 
-// 3FBFACC87CC7108B60BB64D5C3A38FBB8226B21E
+// mp4:3FBFACC87CC7108B60BB64D5C3A38FBB8226B21E
