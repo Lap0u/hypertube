@@ -3,7 +3,6 @@ type AvatarProps = {
 };
 
 const Avatar = ({ preview }: AvatarProps) => {
-  console.log(preview);
   return (
     <>
       {preview && (

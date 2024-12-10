@@ -14,6 +14,9 @@ import { YtsService } from './yts/yts.service';
 import { CommentsService } from './comments/comments.service';
 import { CommentsController } from './comments/comments.controller';
 import { CommentsModule } from './comments/comments.module';
+import { StreamService } from './stream/stream.service';
+import { StreamController } from './stream/stream.controller';
+import { StreamModule } from './stream/stream.module';
 import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -29,9 +32,10 @@ import { MailModule } from './mail/mail.module';
       rootPath: join(__dirname, '..', 'public'),
     }),
     CommentsModule,
+    StreamModule,
     MailModule,
   ],
-  controllers: [AppController, CommentsController],
-  providers: [AppService, YtsService, CommentsService],
+  controllers: [AppController, CommentsController, StreamController],
+  providers: [AppService, YtsService, CommentsService, StreamService],
 })
 export class AppModule {}

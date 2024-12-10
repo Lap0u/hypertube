@@ -8,9 +8,6 @@ type ResponseType = {
 };
 
 export const updateUser = async (formData: FormData): Promise<ResponseType> => {
-  const access_token = Cookies.get(ACCESS_TOKEN);
-  console.log('a_token', ACCESS_TOKEN, access_token);
-
   return axios
     .patch(`${API_URL}/users/me`, formData, {
       headers: {
@@ -19,11 +16,9 @@ export const updateUser = async (formData: FormData): Promise<ResponseType> => {
       withCredentials: true,
     })
     .then((response) => {
-      console.log(response);
       return { status: response.status, data: response.data };
     })
     .catch((error) => {
-      console.error(error);
       return {
         status: error.response.status,
         data: error.response.data.message,

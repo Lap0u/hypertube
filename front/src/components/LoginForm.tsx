@@ -3,25 +3,20 @@ import Button from './Button';
 import { signIn } from '../api/login';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { toastConfig } from '../../shared/toastConfig';
 
 type Inputs = {
   login: string;
   password: string;
 };
 
-const toastConfig = {
-  position: 'top-right' as const,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'colored' as const,
-  transition: Bounce,
+type LoginFormProps = {
+  login: string;
 };
 
-const LoginForm = () => {
+const LoginForm = ({ login }: LoginFormProps) => {
+  const nav = useNavigate();
   const {
     register,
     handleSubmit,
@@ -35,9 +30,9 @@ const LoginForm = () => {
       password,
     };
     const response = await signIn(formData);
-    console.log('login response', response);
     if (response?.status === 201) {
       toast.success(response.data, toastConfig);
+      nav('/library');
     } else {
       toast.error(response.data || 'An error occurred', toastConfig);
     }
@@ -48,6 +43,7 @@ const LoginForm = () => {
       className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center"
       onSubmit={handleSubmit(onSubmit)}>
       <input
+        defaultValue={login}
         className="px-4 py-2 text-mainYellow rounded-sm"
         placeholder="john"
         {...register('login')}
