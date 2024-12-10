@@ -11,12 +11,12 @@ export class StreamController {
     @Query('hash') hash: string,
     @Res() res: Response,
   ) {
-	console.log(hash)
     try {
       const stream = await this.streamService.streamTorrent(hash, false);
 
       res.set({
-        'Content-Type': 'video/mp4', // Adjust based on your use case
+        'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
+        // 'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
         'Transfer-Encoding': 'chunked',
       });
 
@@ -32,6 +32,11 @@ export class StreamController {
 //     @Query('magnetLink') magnetLink: string,
 //     @Res() res: Response,
 //   ) {
+
+	// res.set({
+	// 	'Content-Type': 'application/octet-stream', // Adjust based on your use case
+	// 	'Transfer-Encoding': 'chunked',
+	//   });
 //     return this.streamService.streamTorrent(magnetLink, true);
 //   }
 }
