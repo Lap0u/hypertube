@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserDto } from '../dtos/UserLoginDto';
 import { getUsers } from '../api/user';
+import { API_URL } from '../../shared/constants';
 
 const UsersPage = () => {
   const [users, setUsers] = useState<UserDto[]>([]);
@@ -22,10 +23,14 @@ const UsersPage = () => {
       )}
       {users.map((user) => {
         return (
-          <div className="flex gap-x-12 items-center">
+          <div key={user.id} className="flex gap-x-12 items-center">
             <img
-              className="w-24 h-24"
-              src={user.profilePictureUrl || '/user-default-white.png'}
+              className="w-24 h-24 rounded-full"
+              src={
+                user.profilePictureUrl
+                  ? API_URL + user.profilePictureUrl
+                  : '/user-default-white.png'
+              }
               alt=""
             />
             <div className="text-white">{user.username}</div>

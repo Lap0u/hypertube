@@ -75,24 +75,16 @@ const Profile = () => {
                 type="text"
                 className="px-4 py-2 text-mainYellow rounded-sm"
                 placeholder="username*"
-                {...register('username', { required: true })}
+                {...register('username', { required: false })}
               />
-              {errors.username && (
-                <span className="text-xl mt-[-12px] text-red-600">
-                  This field is required
-                </span>
-              )}
+
               <input
                 type="text"
                 className="px-4 py-2 text-mainYellow rounded-sm"
                 placeholder="firstName"
                 {...register('firstName', { required: false })}
               />
-              {errors.firstName && (
-                <span className="text-xl mt-[-12px] text-red-600">
-                  This field is required
-                </span>
-              )}
+
               <input
                 type="text"
                 className="px-4 py-2 text-mainYellow rounded-sm"
@@ -110,7 +102,7 @@ const Profile = () => {
                 type="email"
                 className="px-4 py-2 text-mainYellow rounded-sm"
                 placeholder="email*"
-                {...register('email', { required: true })}
+                {...register('email', { required: false })}
               />
               {errors.email && (
                 <span className="text-xl mt-[-12px] text-red-600">
@@ -121,13 +113,9 @@ const Profile = () => {
                 type="password"
                 className="px-4 py-2 text-mainYellow rounded-sm"
                 placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;*"
-                {...register('password', { required: true })}
+                {...register('password', { required: false })}
               />
-              {errors.password && (
-                <span className="text-xl mt-[-12px] text-red-600">
-                  This field is required
-                </span>
-              )}
+
               <input
                 type="file"
                 className="hidden"
@@ -139,7 +127,7 @@ const Profile = () => {
               <Avatar preview={preview} />
             </div>
           </div>
-          <Button secondary={true} text="Upload image" onClick={uploadImage} />
+          <Button secondary={false} text="Upload image" onClick={uploadImage} />
           {errors.profilePicture && (
             <span className="text-xl mt-[-12px] text-red-600">
               {errors.profilePicture.message}

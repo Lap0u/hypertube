@@ -1,9 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import MainTitle from './MainTitle';
+import { UserDto } from '../dtos/UserLoginDto';
+import { useEffect, useState } from 'react';
+import { getMe } from '../api/user';
+import { API_URL } from '../../shared/constants';
 
 const Header = () => {
   const nav = useNavigate();
-
+  const [user, setUser] = useState<UserDto | null>(null);
+  useEffect(() => {
+    const fetchMe = async () => {
+      const response = await getMe();
+      if (response.status === 401) return;
+      setUser(response.data);
+    };
+    fetchMe();
+  }, []);
+  console.log(user);
   const logout = () => {
     alert('CALL API');
   };
@@ -37,18 +50,26 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-8 items-center w-full justify-end">
-          <div className=" rounded-md px-8 py-2">Bonjour Clement</div>
+          <div className=" rounded-md px-8 py-2">Bonjour {user?.username}</div>
           <img
             onClick={() => nav('/profile')}
             className="rounded-full border-red-500 w-8 h-8 hover:cursor-pointer"
-            src="/user-default-white.png"
+            src={API_URL + user?.profilePictureUrl || '/user-default-white.png'}
             alt=""
           />
-          <div
-            className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
-            onClick={() => logout()}>
-            Logout
-          </div>
+          {user === null ? (
+            <div
+              className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
+              onClick={() => nav('/login')}>
+              Login
+            </div>
+          ) : (
+            <div
+              className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
+              onClick={() => logout()}>
+              Logout
+            </div>
+          )}
         </div>
       </div>
     </div>
