@@ -15,6 +15,11 @@ const UsersPage = () => {
 
   return (
     <div className="bg-mainBlack w-screen h-screen flex flex-col justify-start items-start pl-32 pt-32 gap-y-12">
+      {users.length === 0 && (
+        <div className="text-4xl text-white text-center w-100">
+          Aucun utilisateur existant.
+        </div>
+      )}
       {users.map((user) => {
         return (
           <div className="flex gap-x-12 items-center">

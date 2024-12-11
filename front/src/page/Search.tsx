@@ -20,9 +20,11 @@ const Search = () => {
     const queryParam: movieQueryParams = {
       page: page + 1,
       limit: 20,
-      order_by: 'desc',
-      sort_by: 'download_count',
-      query_term: '',
+      order_by: orderBy,
+      sort_by: sortField,
+      query_term: searchField,
+      minimum_rating: minRating,
+      genre: genre,
     };
     setMovies([...movies, ...nextMovies]);
     const response = await getMovies(queryParam);
@@ -65,7 +67,6 @@ const Search = () => {
     <div
       className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
      text-white flex justify-start items-center text-3xl bg-bottom flex-col gap-12">
-      <MainTitle />
       <div className="flex flex-col items-center gap-y-8">
         <div className="flex gap-x-8 w-full">
           <input
@@ -77,7 +78,7 @@ const Search = () => {
             placeholder="Rechercher..."
             value={searchField}
           />
-          <Button text="Rechercher" onClick={() => console.log('lol')} />
+          <Button text="Rechercher" onClick={() => refreshMovies()} />
         </div>
         <MovieFilterSelects
           onSortFieldChange={setSortField}

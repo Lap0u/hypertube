@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../shared/constants';
-import Cookies from 'js-cookie';
 import MainTitle from './MainTitle';
 
 const Header = () => {

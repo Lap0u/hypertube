@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { API_URL } from '../../shared/constants';
 import { FullMovieDto, MovieDto } from '../dtos/MovieDto';
+import {
+  GenreField,
+  MinRatingField,
+  OrderByField,
+  SortMovieField,
+} from '../../shared/enum';
 
 const moviesMockData: MovieDto[] = [
   {
@@ -229,10 +235,10 @@ export type movieQueryParams = {
   page: number;
   limit?: number;
   query_term?: string;
-  genre?: string;
-  minimum_rating?: number;
-  sort_by?: string;
-  order_by: 'asc' | 'desc';
+  genre?: GenreField;
+  minimum_rating?: MinRatingField;
+  sort_by?: SortMovieField;
+  order_by: OrderByField;
 };
 
 export const getMovies = async (
