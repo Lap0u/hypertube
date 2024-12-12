@@ -20,9 +20,16 @@ export const getComments = (imdbId: string) => {
 
 export const postComments = (imdbId: string, content: string) => {
   return axios
-    .post(`${API_URL}/comments?movieId=${imdbId}&content=${content}`, {
-      withCredentials: true,
-    })
+    .post(
+      `${API_URL}/comments?movieId=${imdbId}&content=${content}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     .then((response) => {
       return { status: response.status, data: response.data };
     })

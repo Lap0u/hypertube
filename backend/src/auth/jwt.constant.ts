@@ -7,10 +7,13 @@ export const jwtConstants = () => ({
     httpOnly: true,
     sameSite: true,
     maxAge: 900000,
+    withCrendentials: true
   },
   refreshTokenCookieConfig: {
     httpOnly: true,
     sameSite: true,
     maxAge: 604800000,
+    withCrendentials: true
+
   },
 });
