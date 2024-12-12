@@ -35,5 +35,6 @@ export class CommentsController {
     if (!comment) {
       throw new BadRequestException('Movie imdb id not appear in our database');
     }
+    return 'Comment successfully posted!';
   }
 }

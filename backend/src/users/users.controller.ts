@@ -71,7 +71,7 @@ export class UsersController {
     const user = req.user;
     delete dto.profilePicture;
     const profilePictureUrl = profilePicture
-      ? `/uploads/${profilePicture.filename}`
+      ? `${process.env.VITE_API_URL}/uploads/${profilePicture.filename}`
       : null;
     await this.usersService.updateUser(user.id, dto, profilePictureUrl);
     return 'User successfully updated !';
