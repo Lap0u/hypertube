@@ -6,9 +6,9 @@ import { start } from 'repl';
 @Injectable()
 export class StreamService {
   private readonly mylogger = new Logger(StreamService.name);
+  private userEngines = new Map<string, torrentStream>();
 
-
-  async streamTorrent(hash: string, dl: boolean): Promise<Readable> {
+  async streamTorrent(hash: string, userID: string, dl: boolean): Promise<Readable> {
     return new Promise((resolve, reject) => {
       let magnetLink =
         'magnet:?xt=urn:btih:' +
@@ -28,6 +28,7 @@ export class StreamService {
 				break
 			}
 		}
+		this.userEngines.set(userID, hash)
 		this.mylogger.debug(file.name)
 		if (!dl) {
 			if (isMkv) {

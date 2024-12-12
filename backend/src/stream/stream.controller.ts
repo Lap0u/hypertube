@@ -1,18 +1,23 @@
-import { Controller, Get, Header, Param, Query, Res } from '@nestjs/common';
+import { Controller, Get, Header, Param, Post, Query, Res, UseGuards, Req } from '@nestjs/common';
+// import { StreamService, StopEngine } from './stream.service';
 import { StreamService } from './stream.service';
 import { Response } from 'express';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 
 @Controller('stream')
 export class StreamController {
   constructor(private readonly streamService: StreamService) {}
 
   @Get('')
+  @UseGuards(JwtAccessAuthGuard)
   async streamVideo(
     @Query('hash') hash: string,
+    @Req() req,
     @Res() res: Response,
   ) {
     try {
-      const stream = await this.streamService.streamTorrent(hash, false);
+      // console.log(req.user.id)
+      const stream = await this.streamService.streamTorrent(hash, req.user.id, false);
 
       res.set({
         // 'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
@@ -26,6 +31,16 @@ export class StreamController {
       res.status(500).send('Failed to stream the file.');
     }
   }
+
+  // @Post('')
+  // @UseGuards(JwtAccessAuthGuard)
+  // leaveOrReloadPage(
+  //   @Query('hash') hash: string,
+  //   @Req() req
+  // ) {
+  //   const user = req.user
+  //   StopEngine(hash, user)
+  // }
 
 //   @Get('Download')
 //   async downloadVideo(
