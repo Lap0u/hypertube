@@ -56,7 +56,7 @@ export class AuthController {
     fileValidation(profilePicture);
 
     const profilePictureUrl = profilePicture
-      ? `/uploads/${profilePicture.filename}`
+      ? `${process.env.VITE_API_URL}/uploads/${profilePicture.filename}`
       : '';
     delete createUserDto.profilePicture;
 

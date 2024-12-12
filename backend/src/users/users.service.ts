@@ -41,6 +41,8 @@ export class UsersService {
         id: true,
         username: true,
         profilePictureUrl: true,
+        firstName: true,
+        lastName: true,
       },
     });
   }
