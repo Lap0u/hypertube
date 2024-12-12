@@ -15,6 +15,17 @@ import {
 import MovieFilterSelects from '../components/MovieFilter';
 
 const Search = () => {
+  const [movies, setMovies] = useState<MovieDto[]>([]);
+  const [nextMovies, setNextMovies] = useState<MovieDto[]>([]);
+  const [searchField, setSearchField] = useState<string>('');
+  const [sortField, setSortField] = useState<SortMovieField>(
+    SortMovieField.TITLE
+  );
+  const [orderBy, setOrderBy] = useState<OrderByField>(OrderByField.ASC);
+  const [minRating, setMinRating] = useState<MinRatingField>(
+    MinRatingField.ZERO
+  );
+  const [genre, setGenre] = useState<GenreField>(GenreField.ALL);
   const [page, setPage] = useState(1);
   const refreshMovies = async () => {
     const queryParam: movieQueryParams = {
@@ -52,17 +63,45 @@ const Search = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   });
-  const [movies, setMovies] = useState<MovieDto[]>([]);
-  const [nextMovies, setNextMovies] = useState<MovieDto[]>([]);
-  const [searchField, setSearchField] = useState<string>('');
-  const [sortField, setSortField] = useState<SortMovieField>(
-    SortMovieField.TITLE
-  );
-  const [orderBy, setOrderBy] = useState<OrderByField>(OrderByField.ASC);
-  const [minRating, setMinRating] = useState<MinRatingField>(
-    MinRatingField.ZERO
-  );
-  const [genre, setGenre] = useState<GenreField>(GenreField.ALL);
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const queryParam: movieQueryParams = {
+        page: page,
+        limit: 20,
+        order_by: orderBy,
+        sort_by: sortField,
+        query_term: searchField,
+        minimum_rating: minRating,
+        genre: genre,
+      };
+      const response = await getMovies(queryParam);
+      if (response.status === 200) {
+        setMovies(response.data);
+      } else {
+        toast.error(response.message || 'An error occurred', toastConfig);
+      }
+    };
+    fetchMovies();
+    const fetchNewMovies = async () => {
+      const queryParam: movieQueryParams = {
+        page: page + 1,
+        limit: 20,
+        order_by: orderBy,
+        sort_by: sortField,
+        query_term: searchField,
+        minimum_rating: minRating,
+        genre: genre,
+      };
+      setPage(page + 1);
+      const response = await getMovies(queryParam);
+      if (response.status === 200) {
+        setNextMovies(response.data);
+      } else {
+        toast.error(response.message || 'An error occurred', toastConfig);
+      }
+    };
+    fetchNewMovies();
+  }, [genre, minRating, sortField, orderBy, searchField]);
   return (
     <div
       className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
