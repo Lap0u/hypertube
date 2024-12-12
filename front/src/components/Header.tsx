@@ -34,18 +34,22 @@ const Header = () => {
             <div
               className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
               onClick={() => nav('/library')}>
-              Librairie
+              Films populaires
             </div>
-            <div
-              className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
-              onClick={() => nav('/search')}>
-              Recherche
-            </div>
-            <div
-              className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
-              onClick={() => nav('/users')}>
-              Utilisateurs
-            </div>
+            {user && (
+              <div
+                className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer"
+                onClick={() => nav('/search')}>
+                Recherche
+              </div>
+            )}
+            {user && (
+              <div
+                className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer mr-32"
+                onClick={() => nav('/users')}>
+                Utilisateurs
+              </div>
+            )}
             <MainTitle />
           </div>
         </div>
@@ -54,7 +58,11 @@ const Header = () => {
           <img
             onClick={() => nav('/profile')}
             className="rounded-full border-red-500 w-8 h-8 hover:cursor-pointer"
-            src={API_URL + user?.profilePictureUrl || '/user-default-white.png'}
+            src={
+              user?.profilePictureUrl
+                ? API_URL + user?.profilePictureUrl
+                : '/user-default-white.png'
+            }
             alt=""
           />
           {user === null ? (
