@@ -1,5 +1,4 @@
-import { Controller, Get, Header, Param, Post, Query, Res, UseGuards, Req } from '@nestjs/common';
-// import { StreamService, StopEngine } from './stream.service';
+import { Controller, Get, Header, Param, Post, Query, Res, UseGuards, Req, BadRequestException } from '@nestjs/common';
 import { StreamService } from './stream.service';
 import { Response } from 'express';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
@@ -9,15 +8,16 @@ export class StreamController {
   constructor(private readonly streamService: StreamService) {}
 
   @Get('')
-  @UseGuards(JwtAccessAuthGuard)
+  // @UseGuards(JwtAccessAuthGuard)
   async streamVideo(
     @Query('hash') hash: string,
-    @Req() req,
+    @Query('userId') userId: string,
     @Res() res: Response,
   ) {
+    console.log("Controller :", userId)
     try {
       // console.log(req.user.id)
-      const stream = await this.streamService.streamTorrent(hash, req.user.id, false);
+      const stream = await this.streamService.streamTorrent(hash, userId, false);
 
       res.set({
         // 'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
@@ -32,15 +32,22 @@ export class StreamController {
     }
   }
 
-  // @Post('')
+  @Post('stopEngine')
   // @UseGuards(JwtAccessAuthGuard)
-  // leaveOrReloadPage(
-  //   @Query('hash') hash: string,
-  //   @Req() req
-  // ) {
-  //   const user = req.user
-  //   StopEngine(hash, user)
-  // }
+  async leaveOrReloadPage(
+    @Query('hash') hash: string,
+    @Query('userId') userId: string,
+    @Res({passthrough: true}) res : Response
+  ) {
+    try {
+      console.debug("try to stop the engine controller")
+      await this.streamService.stopEngine(hash, userId)
+    } catch (error) {
+      console.error('Error stopping engine:', error);
+      throw new BadRequestException("Failed to stop engine")
+    }
+    return 'Engine Succesfully stoped'
+  }
 
 //   @Get('Download')
 //   async downloadVideo(
