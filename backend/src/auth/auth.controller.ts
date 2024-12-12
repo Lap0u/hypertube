@@ -85,6 +85,24 @@ export class AuthController {
     return 'User successfully signed in !';
   }
 
+  @Post('signOut')
+  @UseGuards(JwtAccessAuthGuard)
+  async signOut(
+    @Req() request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.signOut(request.user.id);
+    response.clearCookie(
+      process.env.ACCESS_TOKEN_NAME,
+      jwtConstants().accessTokenCookieConfig,
+    );
+    response.clearCookie(
+      process.env.REFRESH_TOKEN_NAME,
+      jwtConstants().refreshTokenCookieConfig,
+    );
+    return 'User successfully signed out!';
+  }
+
   @ApiBearerAuth()
   @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')

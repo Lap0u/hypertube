@@ -99,6 +99,17 @@ export class AuthService {
     return user;
   }
 
+  async signOut(userId: number) {
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        refreshToken: '',
+      },
+    });
+  }
+
   async createAccessToken(payload: { sub: number; username: string }) {
     const date = Date.now();
     return this.jwtService.sign(
