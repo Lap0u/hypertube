@@ -15,6 +15,7 @@ export class CommentsService {
         author: {
           select: {
             username: true,
+            profilePictureUrl: true,
           },
         },
       },
@@ -30,6 +31,7 @@ export class CommentsService {
         author: {
           select: {
             username: true,
+            profilePictureUrl: true,
           },
         },
       },
@@ -45,6 +47,7 @@ export class CommentsService {
         author: {
           select: {
             username: true,
+            profilePictureUrl: true,
           },
         },
       },
