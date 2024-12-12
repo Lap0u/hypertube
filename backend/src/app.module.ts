@@ -5,16 +5,16 @@ import { ApibayModule } from './apibay/apibay.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CommentsController } from './comments/comments.controller';
+import { CommentsModule } from './comments/comments.module';
+import { CommentsService } from './comments/comments.service';
+import { MailModule } from './mail/mail.module';
 import { MoviesModule } from './movies/movies.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TmdbModule } from './tmdb/tmdb.module';
 import { UsersModule } from './users/users.module';
 import { YtsModule } from './yts/yts.module';
 import { YtsService } from './yts/yts.service';
-import { CommentsService } from './comments/comments.service';
-import { CommentsController } from './comments/comments.controller';
-import { CommentsModule } from './comments/comments.module';
-import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -35,3 +35,8 @@ import { MailModule } from './mail/mail.module';
   providers: [AppService, YtsService, CommentsService],
 })
 export class AppModule {}
+// export class AppModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer.apply(LoggerMiddleware).forRoutes('*');
+//   }
+// }
