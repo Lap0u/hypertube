@@ -10,13 +10,28 @@ export class CommentsService {
   ) {}
 
   async getComments() {
-    return await this.prisma.comment.findMany();
+    return await this.prisma.comment.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
   }
 
   async getUserComments(authorId: number) {
     return await this.prisma.comment.findMany({
       where: {
         authorId,
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
   }
@@ -25,6 +40,13 @@ export class CommentsService {
     return await this.prisma.comment.findMany({
       where: {
         movieId,
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
   }
