@@ -28,7 +28,7 @@ const UsersPage = () => {
               className="w-24 h-24 rounded-full"
               src={
                 user.profilePictureUrl
-                  ? API_URL + user.profilePictureUrl
+                  ? user.profilePictureUrl
                   : '/user-default-white.png'
               }
               alt=""

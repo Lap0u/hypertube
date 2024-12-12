@@ -4,6 +4,7 @@ import { UserDto } from '../dtos/UserLoginDto';
 import { useEffect, useState } from 'react';
 import { getMe } from '../api/user';
 import { API_URL } from '../../shared/constants';
+import { globalInstance, protectedInstance } from '../api/axios';
 
 const Header = () => {
   const nav = useNavigate();
@@ -18,7 +19,20 @@ const Header = () => {
   }, []);
   console.log(user);
   const logout = () => {
-    alert('CALL API');
+    protectedInstance
+      .post('/auth/signOut')
+      .then((response) => {
+        console.log('res me', response);
+        if (response.status === 201) nav('/');
+        return { status: response.status, data: response.data };
+      })
+      .catch((error) => {
+        console.log('err', error);
+        return {
+          status: error.response.status,
+          data: error.response.data.message,
+        };
+      });
   };
 
   return (
@@ -54,16 +68,12 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-8 items-center w-full justify-end">
-          <div className=" rounded-md pl-8 py-2">
-            Bonjour{' '}
-            {user !== null ? user?.username.slice(0, 8) + '...' : 'Anonymous  '}
-          </div>
           <img
             onClick={() => user && nav('/profile')}
             className="rounded-full border-red-500 w-8 h-8 hover:cursor-pointer"
             src={
               user?.profilePictureUrl && user?.profilePictureUrl !== ''
-                ? API_URL + user?.profilePictureUrl
+                ? user?.profilePictureUrl
                 : '/user-default-white.png'
             }
             alt=""
