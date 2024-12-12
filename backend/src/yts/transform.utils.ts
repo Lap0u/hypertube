@@ -3,7 +3,7 @@ import { MovieDetails } from 'src/types/movies.types';
 
 export const transformYtsGetMovieResponse = (response: AxiosResponse) => {
   const data = response.data.data;
-  if (data.movie_count == 0) {
+  if (data.movie_count == 0 || !data.movies) {
     return [];
   }
 
