@@ -142,11 +142,11 @@ export class AuthService {
   }
 
   async refreshTokens(user) {
-    const payload = { sub: user.sub, username: user.username };
+    const payload = { sub: user.id, username: user.username };
 
     const accessToken = await this.createAccessToken(payload);
     const refreshToken = await this.createRefreshToken(payload);
-    this.usersService.updateRefreshToken(user.sub, refreshToken);
+    this.usersService.updateRefreshToken(user.id, refreshToken);
 
     return {
       accessToken: accessToken,
