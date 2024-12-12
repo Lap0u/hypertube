@@ -6,7 +6,7 @@ export const jwtConstants = () => ({
   accessTokenCookieConfig: {
     httpOnly: true,
     sameSite: true,
-    maxAge: 0,
+    maxAge: 900000,
     withCrendentials: true
   },
   refreshTokenCookieConfig: {
