@@ -10,18 +10,8 @@ import { updateUser } from '../api/user';
 import { ACCESS_TOKEN } from '../../shared/constants';
 import { useNavigate } from 'react-router-dom';
 import MainTitle from '../components/MainTitle';
+import { toastConfig } from '../../shared/toastConfig';
 
-const toastConfig = {
-  position: 'top-right' as const,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'colored' as const,
-  transition: Bounce,
-};
 const Profile = () => {
   //a remettre quand le cookie sera bien set
   // const nav = useNavigate();
@@ -53,7 +43,6 @@ const Profile = () => {
       formData.append('profilePicture', file);
     }
     const response = await updateUser(formData);
-    console.log('form resp', response);
     if (response?.status === 200) {
       toast.success(response.data, toastConfig);
     } else {

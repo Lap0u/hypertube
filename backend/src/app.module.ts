@@ -15,6 +15,9 @@ import { TmdbModule } from './tmdb/tmdb.module';
 import { UsersModule } from './users/users.module';
 import { YtsModule } from './yts/yts.module';
 import { YtsService } from './yts/yts.service';
+import { StreamService } from './stream/stream.service';
+import { StreamController } from './stream/stream.controller';
+import { StreamModule } from './stream/stream.module';
 
 @Module({
   imports: [
@@ -29,10 +32,11 @@ import { YtsService } from './yts/yts.service';
       rootPath: join(__dirname, '..', 'public'),
     }),
     CommentsModule,
+    StreamModule,
     MailModule,
   ],
-  controllers: [AppController, CommentsController],
-  providers: [AppService, YtsService, CommentsService],
+  controllers: [AppController, CommentsController, StreamController],
+  providers: [AppService, YtsService, CommentsService, StreamService],
 })
 export class AppModule {}
 // export class AppModule {

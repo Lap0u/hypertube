@@ -6,20 +6,12 @@ import { SignUpData } from '../dtos/SignupData';
 import { signUp } from '../api/signup';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const toastConfig = {
-  position: 'top-right' as const,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'colored' as const,
-  transition: Bounce,
-};
+import { useNavigate } from 'react-router-dom';
+import { toastConfig } from '../../shared/toastConfig';
 
 const SignUpForm = () => {
+  const nav = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -42,8 +34,11 @@ const SignUpForm = () => {
       formData.append('profilePicture', file);
     }
     const response = await signUp(formData);
-    console.log('form resp', response);
     if (response?.status === 201) {
+      nav('/login', {
+        replace: true,
+        state: { toLogin: true, login: data.username },
+      });
       toast.success(response.data, toastConfig);
     } else {
       toast.error(response?.data || 'An error occurred', toastConfig);
