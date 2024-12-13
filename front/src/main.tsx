@@ -15,6 +15,7 @@ import UsersPage from './page/Users.tsx';
 import Search from './page/Search.tsx';
 import ForgetPassword from './page/ForgetPassword.tsx';
 import UpdatePassword from './page/UpdatePassword.tsx';
+import AppContextProvider from './components/AppContextProvider.tsx';
 
 const router = createBrowserRouter([
   {
@@ -61,7 +62,7 @@ const router = createBrowserRouter([
         element: <UpdatePassword />,
       },
       {
-        path: '/stream/:torrentHash',
+        path: '/stream/:torrentHash/:imdbId',
         element: <Stream />,
       },
       {
@@ -74,7 +75,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <ToastContainer />
+    <AppContextProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </AppContextProvider>
   </StrictMode>
 );

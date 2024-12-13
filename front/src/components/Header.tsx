@@ -1,29 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import MainTitle from './MainTitle';
-import { UserDto } from '../dtos/UserLoginDto';
-import { useEffect, useState } from 'react';
-import { getMe } from '../api/user';
-import { API_URL } from '../../shared/constants';
-import { globalInstance, protectedInstance } from '../api/axios';
+import { useContext } from 'react';
+import { protectedInstance } from '../api/axios';
+import { AppContext } from './AppContextProvider';
 
 const Header = () => {
   const nav = useNavigate();
-  const [user, setUser] = useState<UserDto | null>(null);
-  useEffect(() => {
-    const fetchMe = async () => {
-      const response = await getMe();
-      if (response.status === 401) return;
-      setUser(response.data);
-    };
-    fetchMe();
-  }, []);
-  console.log(user);
+  const { user, setUser } = useContext(AppContext);
+  console.log('user head', user);
   const logout = () => {
     protectedInstance
       .post('/auth/signOut')
       .then((response) => {
         console.log('res me', response);
-        if (response.status === 201) nav('/');
+        if (response.status === 201) {
+          setUser(undefined);
+          nav('/');
+        }
         return { status: response.status, data: response.data };
       })
       .catch((error) => {
@@ -72,13 +65,13 @@ const Header = () => {
             onClick={() => user && nav('/profile')}
             className="rounded-full border-red-500 w-8 h-8 hover:cursor-pointer"
             src={
-              user?.profilePictureUrl && user?.profilePictureUrl !== ''
+              user && user?.profilePictureUrl && user?.profilePictureUrl !== ''
                 ? user?.profilePictureUrl
                 : '/user-default-white.png'
             }
             alt=""
           />
-          {user === null ? (
+          {user === undefined ? (
             <div
               className=" bg-red-600 rounded-md px-8 py-2 hover:bg-red-700 hover:cursor-pointer text-nowrap"
               onClick={() => nav('/login')}>

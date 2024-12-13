@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getMovie } from '../api/movies';
 import { FullMovieDto } from '../dtos/MovieDto';
 import { toast } from 'react-toastify';
@@ -13,28 +13,20 @@ import {
 } from 'react-icons/fa';
 import { toastConfig } from '../../shared/toastConfig';
 import Comments from './Comments';
-import { UserDto } from '../dtos/UserLoginDto';
-import { getMe } from '../api/user';
+import { AppContext } from './AppContextProvider';
 
 type MovieDetailsProps = {
   imdbId: string;
 };
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
+  const { user } = useContext(AppContext);
   const [movie, setMovie] = useState<FullMovieDto | null>(null);
   const [activeTab, setActiveTab] = useState<
     'summary' | 'cast' | 'crew' | 'comments'
   >('summary');
   const nav = useNavigate();
-  const [user, setUser] = useState<UserDto | null>(null);
-  useEffect(() => {
-    const fetchMe = async () => {
-      const response = await getMe();
-      if (response.status === 401) return;
-      setUser(response.data);
-    };
-    fetchMe();
-  }, []);
+
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -126,7 +118,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
           </div>
         );
       case 'comments':
-        return <Comments imdbId={imdbId} user={user} />;
+        return <Comments imdbId={imdbId} />;
     }
   };
 
@@ -170,9 +162,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                           key={index}
                           className="bg-gray-100 w-52 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
                           onClick={() =>
-                            nav(`/stream/${torrent.hash}`, {
-                              state: { imdbId: movie.imdbId },
-                            })
+                            nav(`/stream/${torrent.hash}/${movie.imdbId}`)
                           }>
                           <div>
                             <p className="font-semibold text-gray-800">
