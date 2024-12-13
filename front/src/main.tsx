@@ -14,6 +14,7 @@ import RootLayout from './components/RootLayout.tsx';
 import UsersPage from './page/Users.tsx';
 import Search from './page/Search.tsx';
 import ForgetPassword from './page/ForgetPassword.tsx';
+import UpdatePassword from './page/UpdatePassword.tsx';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: '/forget-password/:token',
         element: <ForgetPassword />,
+      },
+      {
+        path: '/update-password',
+        element: <UpdatePassword />,
       },
       {
         path: '/stream/:torrentHash',
