@@ -22,7 +22,7 @@ export class MailService {
   async sendPasswordResetEmail(to: string, token: string) {
     const resetLink = `http://localhost:3000/reset-password?token=${token}`;
     const mailOptions = {
-      from: process.env.GMAIL_ADDRESS,
+      from: process.env.GOOGLE_GMAIL_ADDRESS,
       to: to,
       subject: 'Password Reset Request',
       html: `<p>You requested a password reset. Click the link below to reset your password:</p><p><a href="${resetLink}">Reset Password</a></p>`,
