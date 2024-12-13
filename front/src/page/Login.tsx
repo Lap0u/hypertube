@@ -5,8 +5,10 @@ import { useLocation } from 'react-router-dom';
 import { API_URL } from '../../shared/constants';
 import Footer from '../components/Footer';
 import LoginForm from '../components/LoginForm';
-import MainTitle from '../components/MainTitle';
 import SignUpForm from '../components/SignUpForm';
+import { forgetPassword } from '../api/password';
+import { toast } from 'react-toastify';
+import { toastConfig } from '../../shared/toastConfig';
 
 const Login = () => {
   const location = useLocation();
@@ -18,7 +20,17 @@ const Login = () => {
       setLogin(location.state.login);
     }
   }, [location.state?.toLogin, location.state?.login]);
-
+  const resetPassword = async () => {
+    const email = prompt('Please enter your email');
+    if (!email) return;
+    const response = await forgetPassword(email);
+    if (response.status === 201) {
+      console.log(response);
+      toast.success(response.data, toastConfig);
+    } else {
+      toast.error(response.data || 'An error occurred', toastConfig);
+    }
+  };
   const [toLogin, setToLogin] = useState<boolean>(true);
   const [login, setLogin] = useState<string>('');
   return (
@@ -33,6 +45,12 @@ const Login = () => {
               No account yet?{' '}
               <span className="hover:text-secYellow cursor-pointer">
                 Sign-up.
+              </span>
+            </p>
+            <p onClick={() => resetPassword()}>
+              Forgot password?{' '}
+              <span className="hover:text-secYellow cursor-pointer">
+                Reset password.
               </span>
             </p>
           </div>
