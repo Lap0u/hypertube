@@ -6,9 +6,9 @@ import { start } from 'repl';
 @Injectable()
 export class StreamService {
 private readonly mylogger = new Logger(StreamService.name);
-private userEngines = new Map<string, torrentStream>();
+private userEngines = new Map<string, torrentStream>(); // userEngines[pageId]
 
-async streamTorrent(hash: string, userId: string, dl: boolean): Promise<Readable> {
+async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable> {
 	return new Promise((resolve, reject) => {
 	let magnetLink =
 		'magnet:?xt=urn:btih:' +
@@ -28,7 +28,8 @@ async streamTorrent(hash: string, userId: string, dl: boolean): Promise<Readable
 				break
 			}
 		}
-		this.userEngines.set(userId, engine)
+		this.userEngines.set(hash, pageId)
+		this.mylogger.log(`Streaming ${file.name}...`);
 		if (!dl) {
 			if (isMkv) {
 				this.mylogger.debug("MKV TO MP4")
@@ -53,8 +54,7 @@ async streamTorrent(hash: string, userId: string, dl: boolean): Promise<Readable
 				.pipe(outStream, { end: true }); // Pipe FFmpeg output to the MP4 stream
 				resolve(outStream);
 			}
-			else { 
-				this.mylogger.log(`Streaming ${file.name}...`);
+			else {
 				resolve(file.createReadStream());
 			}
 		} else { // ici gerer les telechargements
@@ -62,15 +62,7 @@ async streamTorrent(hash: string, userId: string, dl: boolean): Promise<Readable
 			resolve(file.select());
 		}
 	});
-	
-	// engine.on('download', () => {
-	//   this.mylogger.log('download');
-	// });
-	
-	// engine.on('upload', () => {
-	//   this.mylogger.log('Upload to browser');
-	// });
-	
+
 	engine.on('idle', () => {
 	this.mylogger.log('File DL done');
 	});
@@ -83,15 +75,11 @@ async streamTorrent(hash: string, userId: string, dl: boolean): Promise<Readable
 	});
 }
 
-async stopEngine(hash: string, userId: string) {
-	this.mylogger.log("JE SUIS ICI")
-	this.mylogger.log(Array.from(this.userEngines.keys()),userId, hash)
-	const engine = this.userEngines.get(userId)
-	engine.files.forEach(file => {
-		console.log(file.name)
-	});
-	engine.destroy()
+async stopEngine(pageId: string) {
+	try {
+		const engine = this.userEngines.get(pageId)
+		engine.destroy()
+		this.mylogger.log(`Stopping Dl and destroy engine`)
+	} catch (error) { this.mylogger.error("Cannot destroy engine", error) }
 }
 }
-
-// mp4:3FBFACC87CC7108B60BB64D5C3A38FBB8226B21E

@@ -8,20 +8,17 @@ export class StreamController {
   constructor(private readonly streamService: StreamService) {}
 
   @Get('')
-  // @UseGuards(JwtAccessAuthGuard)
   async streamVideo(
     @Query('hash') hash: string,
-    @Query('userId') userId: string,
+    @Query('pageId') pageId: string,
     @Res() res: Response,
   ) {
-    console.log("Controller :", userId)
     try {
-      // console.log(req.user.id)
-      const stream = await this.streamService.streamTorrent(hash, userId, false);
+      const stream = await this.streamService.streamTorrent(hash, pageId, false);
 
       res.set({
-        // 'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
-        'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
+        'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
+        // 'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
         'Transfer-Encoding': 'chunked',
       });
 
@@ -33,20 +30,18 @@ export class StreamController {
   }
 
   @Post('stopEngine')
-  // @UseGuards(JwtAccessAuthGuard)
   async leaveOrReloadPage(
     @Query('hash') hash: string,
-    @Query('userId') userId: string,
+    @Query('pageId') pageId: string,
     @Res({passthrough: true}) res : Response
   ) {
     try {
-      console.debug("try to stop the engine controller")
-      await this.streamService.stopEngine(hash, userId)
+      await this.streamService.stopEngine(pageId)
     } catch (error) {
       console.error('Error stopping engine:', error);
       throw new BadRequestException("Failed to stop engine")
     }
-    return 'Engine Succesfully stoped'
+    return 'Engine Succesfully stopped'
   }
 
 //   @Get('Download')
