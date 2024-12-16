@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { getComments, postComments } from '../api/comments';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import { UserDto } from '../dtos/UserLoginDto';
@@ -10,18 +10,21 @@ type CommentsProps = {
 
 const Comments = ({ imdbId }: CommentsProps) => {
   const [commentsList, setCommentsList] = useState<string[]>([]);
+  const [comment, setComment] = useState<string>('');
   const { user } = useContext(AppContext);
-  useEffect(() => {
-    const updateComments = async () => {
-      const comments = await getComments(imdbId);
-      setCommentsList(comments.data);
-    };
-    updateComments();
+
+  const updateComments = useCallback(async () => {
+    const comments = await getComments(imdbId);
+    setCommentsList(comments.data);
   }, [imdbId]);
+  useEffect(() => {
+    updateComments();
+  }, [imdbId, updateComments]);
 
   const postComment = () => {
-    alert('envoi');
-    postComments(imdbId, 'salut');
+    postComments(imdbId, comment);
+    updateComments();
+    setComment('');
   };
 
   return (
@@ -31,6 +34,8 @@ const Comments = ({ imdbId }: CommentsProps) => {
           <input
             className="p-2 rounded-md w-full relative"
             type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             placeholder="Ajouter un commentaire..."></input>
           <FaArrowAltCircleRight
             size={24}
