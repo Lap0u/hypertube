@@ -153,26 +153,30 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
             </div>
             <div className="mt-6 px-6 pb-8">
               {user ? (
-                <>
-                  <div className="flex justify-between">
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                <div className="flex flex-col gap-y-6 justify-center items-center">
+                  <div className="flex justify-between w-full">
+                    <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
                       <FaDownload className="mr-2 text-secMarine" />{' '}
                       <p>Torrents</p>
                     </h2>
-                    <select
-                      value={selectedQuality}
-                      onChange={(e) =>
-                        setSelectedQuality(e.target.value as MovieQuality)
-                      }>
-                      {Object.values(MovieQuality).map((field) => (
-                        <option key={field} value={field}>
-                          {field.charAt(0).toUpperCase() +
-                            field.slice(1).replace('_', ' ')}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="flex justify-end gap-x-4 items-center">
+                      <div className="text-mainBlack">Quality: </div>
+                      <select
+                        className="bg-mainBlack p-2 "
+                        value={selectedQuality}
+                        onChange={(e) =>
+                          setSelectedQuality(e.target.value as MovieQuality)
+                        }>
+                        {Object.values(MovieQuality).map((field) => (
+                          <option key={field} value={field}>
+                            {field.charAt(0).toUpperCase() +
+                              field.slice(1).replace('_', ' ')}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap md:grid-cols-4 gap-4">
+                  <div className="flex flex-wrap md:grid-cols-4 gap-4 justify-center">
                     {movie.torrents
                       .filter((torrent) => torrent.seeds >= 0)
                       .filter((torrent) =>
@@ -211,7 +215,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                         </div>
                       ))}
                   </div>
-                </>
+                </div>
               ) : (
                 <h2 className="text-mainBlack">
                   <a className="hover:text-mainYellow" href="/login">
