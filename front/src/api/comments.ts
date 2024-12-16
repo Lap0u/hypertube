@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { API_URL } from '../../shared/constants';
+import { CommentDto } from '../dtos/CommentsDto';
 
-export const getComments = (imdbId: string) => {
+type commentResponse = { status: number; data: CommentDto[] };
+
+export const getComments = (imdbId: string): Promise<commentResponse> => {
   return axios
     .get(`${API_URL}/movies/${imdbId}/comments`, {
       withCredentials: true,
