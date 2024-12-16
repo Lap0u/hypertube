@@ -14,6 +14,7 @@ import {
 import { toastConfig } from '../../shared/toastConfig';
 import Comments from './Comments';
 import { AppContext } from './AppContextProvider';
+import { MovieQuality } from '../../shared/enum';
 
 type MovieDetailsProps = {
   imdbId: string;
@@ -22,6 +23,9 @@ type MovieDetailsProps = {
 const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   const { user } = useContext(AppContext);
   const [movie, setMovie] = useState<FullMovieDto | null>(null);
+  const [selectedQuality, setSelectedQuality] = useState<MovieQuality>(
+    MovieQuality.ALL
+  );
   const [activeTab, setActiveTab] = useState<
     'summary' | 'cast' | 'crew' | 'comments'
   >('summary');
@@ -150,13 +154,32 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
             <div className="mt-6 px-6 pb-8">
               {user ? (
                 <>
-                  <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                    <FaDownload className="mr-2 text-secMarine" />{' '}
-                    <p>Torrents</p>
-                  </h2>
+                  <div className="flex justify-between">
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                      <FaDownload className="mr-2 text-secMarine" />{' '}
+                      <p>Torrents</p>
+                    </h2>
+                    <select
+                      value={selectedQuality}
+                      onChange={(e) =>
+                        setSelectedQuality(e.target.value as MovieQuality)
+                      }>
+                      {Object.values(MovieQuality).map((field) => (
+                        <option key={field} value={field}>
+                          {field.charAt(0).toUpperCase() +
+                            field.slice(1).replace('_', ' ')}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="flex flex-wrap md:grid-cols-4 gap-4">
                     {movie.torrents
                       .filter((torrent) => torrent.seeds >= 0)
+                      .filter((torrent) =>
+                        selectedQuality === MovieQuality.ALL
+                          ? 1
+                          : torrent.quality === selectedQuality
+                      )
                       .map((torrent, index) => (
                         <div
                           key={index}

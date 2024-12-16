@@ -9,6 +9,16 @@ export enum SortMovieField {
   DATE_ADDED = 'date_added',
 }
 
+export enum MovieQuality {
+  ALL = 'All',
+  HD720P = '720p',
+  HD1080P = '1080p',
+  HD2160P = '2160p',
+  THREED = '3D',
+  HD4k = '4K',
+  UNKNOWN = 'Unknown',
+}
+
 export enum OrderByField {
   ASC = 'asc',
   DESC = 'desc',
