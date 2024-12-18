@@ -12,6 +12,7 @@ import {
   SortMovieField,
 } from '../../shared/enum';
 import MovieFilterSelects from '../components/MovieFilter';
+import { set } from 'react-hook-form';
 
 const Search = () => {
   const [movies, setMovies] = useState<MovieDto[]>([]);
@@ -26,9 +27,9 @@ const Search = () => {
   );
   const [genre, setGenre] = useState<GenreField>(GenreField.ALL);
   const [page, setPage] = useState(1);
-  const refreshMovies = async () => {
+  const refreshMovies = async (resetPage = false) => {
     const queryParam: movieQueryParams = {
-      page: page + 1,
+      page: resetPage ? 1 : page,
       limit: 20,
       order_by: orderBy,
       sort_by: sortField,
@@ -40,7 +41,7 @@ const Search = () => {
     const response = await getMovies(queryParam);
     if (response.status === 200) {
       setNextMovies(response.data);
-      setPage(page + 1);
+      setPage(resetPage ? 1 : page + 1);
     } else {
       toast.error(response.message || 'An error occurred', toastConfig);
     }
@@ -109,6 +110,7 @@ const Search = () => {
         <div className="flex gap-x-8 w-full">
           <input
             onChange={(e) => {
+              setPage(1);
               setSearchField(e.target.value);
             }}
             className="text-black rounded-xl p-4 w-full"
@@ -116,13 +118,14 @@ const Search = () => {
             placeholder="Rechercher..."
             value={searchField}
           />
-          <Button text="Rechercher" onClick={() => refreshMovies()} />
+          <Button text="Rechercher" onClick={() => refreshMovies(true)} />
         </div>
         <MovieFilterSelects
           onSortFieldChange={setSortField}
           onOrderChange={setOrderBy}
           onMinRatingChange={setMinRating}
           onGenreChange={setGenre}
+          resetPage={() => setPage(1)}
         />
       </div>
       <MovieGallery movies={movies} />
