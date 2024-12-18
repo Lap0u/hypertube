@@ -15,6 +15,8 @@ import { toastConfig } from '../../shared/toastConfig';
 import Comments from './Comments';
 import { AppContext } from './AppContextProvider';
 import { MovieQuality } from '../../shared/enum';
+import Crew from './Crew';
+import Cast from './Cast';
 
 type MovieDetailsProps = {
   imdbId: string;
@@ -83,44 +85,9 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
           </div>
         );
       case 'cast':
-        return (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-            {movie.cast.map((member, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center bg-white p-3 rounded-lg shadow-md transition hover:scale-105">
-                <img
-                  src={
-                    member.pictureUrl.includes('originalnull')
-                      ? '/user-default.png'
-                      : member.pictureUrl
-                  }
-                  alt={member.name}
-                  className="w-24 h-24 rounded-full object-cover border-2 border-blue-100"
-                />
-                <p className="mt-2 font-semibold text-gray-800">
-                  {member.name}
-                </p>
-                <p className="text-sm text-gray-500"></p>
-              </div>
-            ))}
-          </div>
-        );
+        return <Cast CastList={movie.cast} />;
       case 'crew':
-        return (
-          <div className="grid grid-cols-2 gap-4 p-4 space-y-2">
-            {movie.crew.map((member, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
-                <div>
-                  <p className="font-semibold text-gray-800">{member.name}</p>
-                  <p className="text-sm text-gray-600">{member.job}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        );
+        return <Crew CrewList={movie.crew} />;
       case 'comments':
         return <Comments imdbId={imdbId} />;
     }

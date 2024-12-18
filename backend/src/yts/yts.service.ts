@@ -15,6 +15,7 @@ export class YtsService {
 
   async getMovies(params: GetMoviesDto) {
     try {
+      if (params.genre === 'All') params.genre = ''
       const response = await this.ytsClient.get('/list_movies.json', {
         params,
       });
