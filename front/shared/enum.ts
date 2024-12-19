@@ -19,6 +19,21 @@ export enum MovieQuality {
   UNKNOWN = 'Unknown',
 }
 
+export enum Languages {
+  ENGLISH = 'EN',
+  GERMAN = 'GER',
+  FRENCH = 'FR',
+  ITALIAN = 'IT',
+  SPANISH = 'SP',
+  RUSSIAN = 'RU',
+  CHINESE = 'CH',
+  JAPANESE = 'JAP',
+  KOREAN = 'KOR',
+  ARABIC = 'AR',
+  TURKISH = 'TUR',
+  HINDI = 'HI',
+}
+
 export enum OrderByField {
   ASC = 'asc',
   DESC = 'desc',
