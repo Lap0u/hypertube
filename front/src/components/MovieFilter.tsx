@@ -12,7 +12,7 @@ const MovieFilterSelects = ({
   onGenreChange,
 }) => {
   return (
-    <div className="flex gap-x-32">
+    <div className="flex flex-col md:flex-row gap-y-4 gap-x-32">
       {/* Genre Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
