@@ -18,7 +18,6 @@ export class StreamController {
 
       res.set({
         'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
-        // 'Content-Type': 'video/x-matroska', // Adjust based on your use case -> mkv
         'Transfer-Encoding': 'chunked',
       });
 
@@ -31,7 +30,7 @@ export class StreamController {
 
   @Post('stopEngine')
   async leaveOrReloadPage(
-    @Query('hash') hash: string,
+    // @Query('hash') hash: string,
     @Query('pageId') pageId: string,
     @Res({passthrough: true}) res : Response
   ) {

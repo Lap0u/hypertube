@@ -28,7 +28,7 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 				break
 			}
 		}
-		this.userEngines.set(hash, pageId)
+		this.userEngines.set(pageId, engine)
 		this.mylogger.log(`Streaming ${file.name}...`);
 		if (!dl) {
 			if (isMkv) {
@@ -37,9 +37,15 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 				let pathOutput = `/tmp/mkv_to_mp4_file/${file.name.replace('.mkv', '.mp4')}`
 				const outStream = new PassThrough(pathOutput);
 				ffmpeg(file.createReadStream())
-				.inputFormat('matroska') // Specify MKV input format if necessary
-				.outputFormat('mp4') // Convert to MP4 format
-				.outputOptions('-movflags +faststart') // Make the MP4 streamable
+				.videoCodec('libx265') // Ensure H.264 video codec
+				.audioCodec('mp2') // Ensure AAC audio codec
+				.outputOptions([
+				  '-movflags frag_keyframe+empty_moov', // For fragmented MP4
+				//   '-preset veryfast', // Optimize transcoding speed
+				//   '-crf 23', // Maintain a balance between quality and performance
+				])
+				.format("mp4")
+				// .outputOptions('-movflags +faststart') // Make the MP4 streamable
 				.on('start', () => {
 				console.log('FFmpeg processing started');
 				})

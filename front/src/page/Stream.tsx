@@ -16,14 +16,13 @@ const Stream = () => {
  
     const handleUnload = () => {
       console.log('User is leaving the page');
-      navigator.sendBeacon(`${API_URL}/stream/stopEngine?hash=${torrentHash}&pageId=${pageId}`)
+      navigator.sendBeacon(`${API_URL}/stream/stopEngine?pageId=${pageId}`)
     };
 
     return () => {
       handleUnload()
       }
   }, []);
-  console.log("1212")
   return (
     <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center">
       <MainTitle />
