@@ -35,9 +35,9 @@ const Login = () => {
   const [login, setLogin] = useState<string>('');
   return (
     <div
-      className="w-100 bg-mainBlack bg-cover py-8 min-h-screen
-     text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
-      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
+      className="w-100 bg-mainBlack bg-cover py-2 md:py-8
+     text-white flex justify-center items-center text-xl md:text-3xl bg-bottom flex-col gap-12">
+      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 md:p-8 p-2 backdrop-blur-sm">
         {toLogin ? (
           <div className="flex justify-center items-center flex-col gap-8">
             <LoginForm login={login} />
@@ -78,7 +78,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

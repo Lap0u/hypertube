@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 const Home = () => {
   const nav = useNavigate();
   return (
-    <div className="w-screen bg-mainBlack min-g-screen bg-cover min-h-screen">
+    <div className="w-screen bg-mainBlack min-g-screen bg-cover ">
       <div
         className="
      text-white md:grid grid-cols-2 px-4 md:px-48   flex  flex-col justify-center items-center text-3xl bg-bottom gap-12 md:gap-24">
@@ -33,7 +33,6 @@ const Home = () => {
             }></Button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

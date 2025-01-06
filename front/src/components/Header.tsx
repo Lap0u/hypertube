@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <div className="bg-mainBlack">
-      <MobileHeader />
+      <MobileHeader user={user} logout={logout} />
       <div className="hidden md:block pb-8 w-full bg-mainBlack">
         <div className="w-full  text-white bg-mainBlack flex justify-between p-4 items-center border-b-2 border-red-600">
           <div className="flex justify-between items-center gap-64 w-full">

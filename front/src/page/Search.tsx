@@ -112,7 +112,7 @@ const Search = () => {
             onChange={(e) => {
               setSearchField(e.target.value);
             }}
-            className="text-black rounded-xl p-4 w-full"
+            className="text-mainBlack rounded-xl p-4 w-full"
             type="text"
             placeholder="Rechercher..."
             value={searchField}
