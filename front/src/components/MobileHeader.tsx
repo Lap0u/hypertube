@@ -26,7 +26,7 @@ const MobileHeader = ({ user, logout }: MobileHeaderProps) => {
         <MainTitle />
         {visible && (
           <ImCross
-            className="absolute right-2 top-0"
+            className="absolute right-4 top-0 hover:cursor-pointer"
             size={20}
             onClick={() => setVisible(false)}
           />
@@ -35,33 +35,50 @@ const MobileHeader = ({ user, logout }: MobileHeaderProps) => {
       {visible && (
         <div className="w-full absolute bg-mainBlack pb-4 z-40">
           <div className="flex flex-col items-start">
-            <div className="py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap ">
+            <div
+              className="py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
+              onClick={() => {
+                nav('/library');
+                setVisible(false);
+              }}>
               Films populaires
             </div>
             {user && (
               <div
                 className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
-                onClick={() => nav('/search')}>
+                onClick={() => {
+                  nav('/search');
+                  setVisible(false);
+                }}>
                 Recherche
               </div>
             )}
             {user && (
               <div
                 className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap  mr-32"
-                onClick={() => nav('/users')}>
+                onClick={() => {
+                  nav('/users');
+                  setVisible(false);
+                }}>
                 Utilisateurs
               </div>
             )}
             {user === undefined ? (
               <div
                 className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
-                onClick={() => nav('/login')}>
+                onClick={() => {
+                  nav('/login');
+                  setVisible(false);
+                }}>
                 Login
               </div>
             ) : (
               <div
                 className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
-                onClick={() => logout()}>
+                onClick={() => {
+                  logout();
+                  setVisible(false);
+                }}>
                 Logout
               </div>
             )}
