@@ -10,6 +10,7 @@ type MovieFilterSelectsProps = {
   onOrderChange: (order: OrderByField) => void;
   onMinRatingChange: (rating: MinRatingField) => void;
   onGenreChange: (genre: GenreField) => void;
+  setPage: (page: number) => void;
   desktop: boolean;
 };
 
@@ -18,6 +19,7 @@ const MovieFilterSelects = ({
   onOrderChange,
   onMinRatingChange,
   onGenreChange,
+  setPage,
   desktop,
 }: MovieFilterSelectsProps) => {
   const styles = desktop === true ? 'hidden md:flex' : 'flex md:hidden';
@@ -26,7 +28,10 @@ const MovieFilterSelects = ({
       {/* Genre Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
-        onChange={(e) => onGenreChange(e.target.value as GenreField)}>
+        onChange={(e) => {
+          onGenreChange(e.target.value as GenreField);
+          setPage(1);
+        }}>
         {Object.values(GenreField).map((genre) => (
           <option key={genre} value={genre}>
             {genre === '' ? 'All' : genre}
@@ -36,7 +41,10 @@ const MovieFilterSelects = ({
       {/* Sort Movie Field Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
-        onChange={(e) => onSortFieldChange(e.target.value as SortMovieField)}>
+        onChange={(e) => {
+          onSortFieldChange(e.target.value as SortMovieField);
+          setPage(1);
+        }}>
         {Object.values(SortMovieField).map((field) => (
           <option key={field} value={field}>
             {field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
@@ -47,7 +55,10 @@ const MovieFilterSelects = ({
       {/* Order By Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
-        onChange={(e) => onOrderChange(e.target.value as OrderByField)}>
+        onChange={(e) => {
+          onOrderChange(e.target.value as OrderByField);
+          setPage(1);
+        }}>
         {Object.values(OrderByField).map((order) => (
           <option key={order} value={order}>
             {order.toUpperCase()}
@@ -58,7 +69,10 @@ const MovieFilterSelects = ({
       {/* Minimum Rating Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
-        onChange={(e) => onMinRatingChange(e.target.value as MinRatingField)}>
+        onChange={(e) => {
+          onMinRatingChange(e.target.value as MinRatingField);
+          setPage(1);
+        }}>
         {Object.values(MinRatingField).map((rating) => (
           <option key={rating} value={rating}>
             {rating} +

@@ -112,6 +112,7 @@ const Search = () => {
           <input
             onChange={(e) => {
               setSearchField(e.target.value);
+              setPage(1);
             }}
             className="text-mainBlack rounded-xl p-4 w-full"
             type="text"
@@ -129,6 +130,7 @@ const Search = () => {
           onOrderChange={setOrderBy}
           onMinRatingChange={setMinRating}
           onGenreChange={setGenre}
+          setPage={setPage}
           desktop={true}
         />
         {visible && (
@@ -137,6 +139,7 @@ const Search = () => {
             onOrderChange={setOrderBy}
             onMinRatingChange={setMinRating}
             onGenreChange={setGenre}
+            setPage={setPage}
             desktop={false}
           />
         )}
