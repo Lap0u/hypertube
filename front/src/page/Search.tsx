@@ -113,7 +113,7 @@ const Search = () => {
             onChange={(e) => {
               setSearchField(e.target.value);
             }}
-            className="text-mainBlack rounded-xl p-4"
+            className="text-mainBlack rounded-xl p-4 w-full"
             type="text"
             placeholder="Rechercher..."
             value={searchField}
@@ -121,14 +121,23 @@ const Search = () => {
           <Button
             text="FILTRES"
             onClick={() => setVisible((visible) => !visible)}
+            mobile={true}
           />
         </div>
+        <MovieFilterSelects
+          onSortFieldChange={setSortField}
+          onOrderChange={setOrderBy}
+          onMinRatingChange={setMinRating}
+          onGenreChange={setGenre}
+          desktop={true}
+        />
         {visible && (
           <MovieFilterSelects
             onSortFieldChange={setSortField}
             onOrderChange={setOrderBy}
             onMinRatingChange={setMinRating}
             onGenreChange={setGenre}
+            desktop={false}
           />
         )}
       </div>
