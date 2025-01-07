@@ -17,7 +17,7 @@ export class StreamController {
       const stream = await this.streamService.streamTorrent(hash, pageId, false);
 
       res.set({
-        'Content-Type': 'video/mp4', // Adjust based on your use case -> mp4
+        'Content-Type': 'video/webm', // Adjust based on your use case -> mp4
         'Transfer-Encoding': 'chunked',
       });
 
