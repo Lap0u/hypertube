@@ -37,15 +37,15 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 				let pathOutput = `/tmp/mkv_to_mp4_file/${file.name.replace('.mkv', '.mp4')}`
 				const outStream = new PassThrough(pathOutput);
 				ffmpeg(file.createReadStream())
-				.videoCodec('libx265') // Ensure H.264 video codec
-				.audioCodec('mp2') // Ensure AAC audio codec
+				.videoCodec('libx264') // Ensure H.264 video codec
+				.audioCodec('aac') // Ensure AAC audio codec
 				.outputOptions([
 				  '-movflags frag_keyframe+empty_moov', // For fragmented MP4
-				//   '-preset veryfast', // Optimize transcoding speed
-				//   '-crf 23', // Maintain a balance between quality and performance
+				  '-preset veryfast', // Optimize transcoding speed
+				  '-crf 23', // Maintain a balance between quality and performance
+          '-threads 0' // tell to ffmpeg to automatically decide which number of threads use
 				])
 				.format("mp4")
-				// .outputOptions('-movflags +faststart') // Make the MP4 streamable
 				.on('start', () => {
 				console.log('FFmpeg processing started');
 				})
