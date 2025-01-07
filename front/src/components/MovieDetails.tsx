@@ -74,7 +74,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
     switch (activeTab) {
       case 'summary':
         return (
-          <div className="p-4 text-gray-700 text-2xl">
+          <div className="p-4 text-gray-700 md:text-2xl">
             <p>{movie.summary}</p>
           </div>
         );
@@ -123,15 +123,15 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   };
 
   return (
-    <div className="w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
-      <div className=" relative z-10 px-6">
+    <div className="w-[90vw] md:w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
+      <div className=" relative z-10 md:px-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
             src={movie.posterUrl}
             alt={movie.title}
             className="w-48 h-72 rounded-lg shadow-lg border-4 border-white"
           />
-          <div className="flex flex-col">
+          <div className="text-xl flex flex-col">
             <div className="text-center md:text-left">
               <h1 className="text-4xl font-bold text-gray-900">
                 {movie.title}
@@ -154,28 +154,36 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                     <FaDownload className="mr-2 text-secMarine" />{' '}
                     <p>Torrents</p>
                   </h2>
-                  <div className="flex flex-wrap md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {movie.torrents
                       .filter((torrent) => torrent.seeds >= 0)
                       .map((torrent, index) => (
                         <div
                           key={index}
-                          className="bg-gray-100 w-52 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
+                          className="bg-gray-100 md:w-52 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition hover:cursor-pointer"
                           onClick={() =>
                             nav(`/stream/${torrent.hash}/${movie.imdbId}`)
                           }>
-                          <div>
+                          <div className="flex flex-col items-center w-full">
                             <p className="font-semibold text-gray-800">
                               {torrent.quality}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className="hidden md:block text-sm text-gray-600">
                               {torrent.source}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className=" hidden md:block text-sm text-gray-600">
                               {torrent.size}
                             </p>
+                            <p className="md:hidden text-green-600 flex items-center">
+                              <span className="mr-1">{torrent.seeds}</span>
+                              <FaFileAlt size={16} />
+                            </p>
+                            <p className="md:hidden text-red-600 flex items-center">
+                              <span className="mr-1">{torrent.peers}</span>
+                              <FaPlayCircle size={16} />
+                            </p>
                           </div>
-                          <div className="text-right">
+                          <div className="hidden md:block text-right">
                             <p className="text-green-600 flex items-center">
                               <span className="mr-1">{torrent.seeds}</span>
                               <FaFileAlt size={16} />
@@ -202,7 +210,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
         </div>
       </div>
 
-      <div className="mt-8 px-6">
+      <div className="mt-8 px-6 text-sm">
         <div className="flex border-b border-gray-200">
           {['summary', 'cast', 'crew', 'comments'].map((tab) => (
             <button

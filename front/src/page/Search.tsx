@@ -15,6 +15,7 @@ import {
 import MovieFilterSelects from '../components/MovieFilter';
 
 const Search = () => {
+  const [visible, setVisible] = useState(false);
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [nextMovies, setNextMovies] = useState<MovieDto[]>([]);
   const [searchField, setSearchField] = useState<string>('');
@@ -117,14 +118,19 @@ const Search = () => {
             placeholder="Rechercher..."
             value={searchField}
           />
-          <Button text="Rechercher" onClick={() => refreshMovies()} />
+          <Button
+            text="FILTRES"
+            onClick={() => setVisible((visible) => !visible)}
+          />
         </div>
-        <MovieFilterSelects
-          onSortFieldChange={setSortField}
-          onOrderChange={setOrderBy}
-          onMinRatingChange={setMinRating}
-          onGenreChange={setGenre}
-        />
+        {visible && (
+          <MovieFilterSelects
+            onSortFieldChange={setSortField}
+            onOrderChange={setOrderBy}
+            onMinRatingChange={setMinRating}
+            onGenreChange={setGenre}
+          />
+        )}
       </div>
       <MovieGallery movies={movies} />
     </div>
