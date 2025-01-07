@@ -2,9 +2,10 @@ type Buttonprops = {
   text: string;
   onClick: () => void;
   secondary?: boolean;
+  mobile?: boolean;
 };
 
-const Button = ({ text, onClick, secondary }: Buttonprops) => {
+const Button = ({ text, onClick, secondary, mobile }: Buttonprops) => {
   let styles = '';
   if (secondary == true) {
     styles =
@@ -12,6 +13,9 @@ const Button = ({ text, onClick, secondary }: Buttonprops) => {
   } else {
     styles =
       'text-xl md:text-5xl bg-secYellow hover:bg-secMarine hover:text-secYellow';
+  }
+  if (mobile) {
+    styles += ' md:hidden';
   }
   return (
     <button

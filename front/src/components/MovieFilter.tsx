@@ -3,16 +3,26 @@ import {
   OrderByField,
   MinRatingField,
   GenreField,
-} from '../../shared/enum'; // Update path as needed
+} from '../../shared/enum';
+
+type MovieFilterSelectsProps = {
+  onSortFieldChange: (field: SortMovieField) => void;
+  onOrderChange: (order: OrderByField) => void;
+  onMinRatingChange: (rating: MinRatingField) => void;
+  onGenreChange: (genre: GenreField) => void;
+  desktop: boolean;
+};
 
 const MovieFilterSelects = ({
   onSortFieldChange,
   onOrderChange,
   onMinRatingChange,
   onGenreChange,
-}) => {
+  desktop,
+}: MovieFilterSelectsProps) => {
+  const styles = desktop === true ? 'hidden md:flex' : 'flex md:hidden';
   return (
-    <div className="flex flex-col md:flex-row gap-y-4 gap-x-32">
+    <div className={`flex-col md:flex-row gap-y-4 gap-x-32  ${styles}`}>
       {/* Genre Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"
