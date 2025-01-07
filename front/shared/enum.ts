@@ -28,7 +28,7 @@ export enum MinRatingField {
 }
 
 export enum GenreField {
-  ALL = 'All',
+  ALL = '',
   ACTION = 'Action',
   ADVENTURE = 'Adventure',
   ANIMATION = 'Animation',

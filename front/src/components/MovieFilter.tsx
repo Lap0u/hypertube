@@ -29,7 +29,7 @@ const MovieFilterSelects = ({
         onChange={(e) => onGenreChange(e.target.value as GenreField)}>
         {Object.values(GenreField).map((genre) => (
           <option key={genre} value={genre}>
-            {genre}
+            {genre === '' ? 'All' : genre}
           </option>
         ))}
       </select>
