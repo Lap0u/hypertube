@@ -58,3 +58,21 @@ export class GetMoviesDto {
   @IsString()
   order_by?: string;
 }
+
+export class GetPopularMoviesDto {
+  @ApiPropertyOptional({ description: 'Page number', default: 1, minimum: 1 })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  page: number = 1;
+
+  @ApiPropertyOptional({
+    description: 'Limit of movies per page',
+    default: 20,
+    minimum: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  limit: number = 20;
+}
