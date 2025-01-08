@@ -4,6 +4,7 @@ export type MovieDto = {
   posterUrl: string;
   releaseDate: string;
   imdbRating: number;
+  watched: boolean | undefined;
 };
 
 // Cast DTO
