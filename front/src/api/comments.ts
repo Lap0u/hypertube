@@ -1,9 +1,8 @@
-import axios from 'axios';
-import { API_URL } from '../../shared/constants';
+import { protectedInstance } from './axios';
 
 export const getComments = (imdbId: string) => {
-  return axios
-    .get(`${API_URL}/movies/${imdbId}/comments`, {
+  return protectedInstance
+    .get(`/movies/${imdbId}/comments`, {
       withCredentials: true,
     })
     .then((response) => {
@@ -19,9 +18,9 @@ export const getComments = (imdbId: string) => {
 };
 
 export const postComments = (imdbId: string, content: string) => {
-  return axios
+  return protectedInstance
     .post(
-      `${API_URL}/comments?movieId=${imdbId}&content=${content}`,
+      `/comments?movieId=${imdbId}&content=${content}`,
       {},
       {
         withCredentials: true,

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import MainTitle from '../components/MainTitle';
+import { useContext, useEffect, useState } from 'react';
 import { MovieDto } from '../dtos/MovieDto';
 import { toastConfig } from '../../shared/toastConfig';
 import { toast } from 'react-toastify';
@@ -13,8 +12,10 @@ import {
   SortMovieField,
 } from '../../shared/enum';
 import MovieFilterSelects from '../components/MovieFilter';
+import { AppContext } from '../components/AppContextProvider';
 
 const Search = () => {
+  const { user } = useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [nextMovies, setNextMovies] = useState<MovieDto[]>([]);
@@ -39,7 +40,7 @@ const Search = () => {
       genre: genre,
     };
     setMovies([...movies, ...nextMovies]);
-    const response = await getMovies(queryParam);
+    const response = await getMovies(queryParam, user);
     if (response.status === 200) {
       setNextMovies(response.data);
       setPage(page + 1);
@@ -75,7 +76,7 @@ const Search = () => {
         minimum_rating: minRating,
         genre: genre,
       };
-      const response = await getMovies(queryParam);
+      const response = await getMovies(queryParam, user);
       if (response.status === 200) {
         setMovies(response.data);
       } else {
@@ -94,7 +95,7 @@ const Search = () => {
         genre: genre,
       };
       setPage(page + 1);
-      const response = await getMovies(queryParam);
+      const response = await getMovies(queryParam, user);
       if (response.status === 200) {
         setNextMovies(response.data);
       } else {

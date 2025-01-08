@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { API_URL } from '../../shared/constants';
 import { FullMovieDto, MovieDto } from '../dtos/MovieDto';
 import {
   GenreField,
@@ -7,6 +5,8 @@ import {
   OrderByField,
   SortMovieField,
 } from '../../shared/enum';
+import { UserDto } from '../dtos/UserLoginDto';
+import { globalInstance, protectedInstance } from './axios';
 
 type MoviesResponseType = {
   status: number;
@@ -31,15 +31,26 @@ export type movieQueryParams = {
 };
 
 export const getMovies = async (
-  params: movieQueryParams
+  params: movieQueryParams,
+  user: UserDto | undefined
 ): Promise<MoviesResponseType> => {
-  // return {
-  //   status: 200,
-  //   data: moviesMockData,
-  //   message: '',
-  // };
-  return axios
-    .get(`${API_URL}/movies`, { params })
+  console.log('getUs', user);
+  if (user) {
+    return protectedInstance
+      .get(`/movies`, { params })
+      .then((response) => {
+        return { status: response.status, data: response.data, message: '' };
+      })
+      .catch((error) => {
+        return {
+          status: error.response.status,
+          data: [],
+          message: error.response.data.message,
+        };
+      });
+  }
+  return globalInstance
+    .get(`/movies/popular`)
     .then((response) => {
       return { status: response.status, data: response.data, message: '' };
     })
@@ -53,8 +64,8 @@ export const getMovies = async (
 };
 
 export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
-  return axios
-    .get(`${API_URL}/movies/${imdbId}`)
+  return globalInstance
+    .get(`/movies/${imdbId}`)
     .then((response) => {
       return { status: response.status, data: response.data, message: '' };
     })
