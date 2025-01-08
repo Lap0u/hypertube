@@ -123,7 +123,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
+    <div className="w-[90vw] lg:w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
       <div className=" relative z-10 md:px-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
@@ -154,7 +154,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                     <FaDownload className="mr-2 text-secMarine" />{' '}
                     <p>Torrents</p>
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {movie.torrents
                       .filter((torrent) => torrent.seeds >= 0)
                       .map((torrent, index) => (
@@ -210,7 +210,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
         </div>
       </div>
 
-      <div className="mt-8 px-2 text-sm">
+      <div className="mt-8 px-2 text-sm md:text-2xl">
         <div className="flex border-b border-gray-200">
           {['summary', 'cast', 'crew', 'comments'].map((tab) => (
             <button

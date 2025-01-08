@@ -108,7 +108,7 @@ const Search = () => {
       className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
      text-white flex justify-start items-center text-3xl bg-bottom flex-col gap-12">
       <div className="flex flex-col items-center gap-y-8">
-        <div className="flex flex-col md:flex-row gap-y-4 gap-x-8 w-[80%]">
+        <div className="flex flex-col lg:flex-row gap-y-4 gap-x-8 w-[80%]">
           <input
             onChange={(e) => {
               setSearchField(e.target.value);

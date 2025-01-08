@@ -9,7 +9,7 @@ type MovieGalleryType = {
 const MovieGallery = ({ movies }: MovieGalleryType) => {
   const nav = useNavigate();
   return (
-    <div className="flex flex-col gap-y-8 md:grid md:grid-cols-4 px-8 md:px-48 md:gap-12">
+    <div className="flex flex-col gap-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 px-8 md:px-24 lg:px-48 md:gap-12">
       {movies.map((movie: MovieDto) => {
         return (
           <div
