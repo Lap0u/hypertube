@@ -210,7 +210,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
         </div>
       </div>
 
-      <div className="mt-8 px-6 text-sm">
+      <div className="mt-8 px-2 text-sm">
         <div className="flex border-b border-gray-200">
           {['summary', 'cast', 'crew', 'comments'].map((tab) => (
             <button
