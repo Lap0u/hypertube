@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as torrentStream from 'torrent-stream';
 import { Readable } from 'stream';
-import { start } from 'repl';
 
 @Injectable()
 export class StreamService {
@@ -18,7 +17,6 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 
 	engine.on('ready', () => {
 		let ffmpeg = require('fluent-ffmpeg');
-		let fs = require('fs')
 		let file: any
 		let isMkv = false
 		// engine.files.forEach(element => {
@@ -31,39 +29,47 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 				break
 			}
 		}
-		this.userEngines.set(pageId, engine)
 		this.mylogger.log(`Streaming ${file.name}...`);
 		if (!dl) {
 			if (isMkv) {
-				this.mylogger.debug("MKV TO MP4")
+				this.mylogger.log("MKV TO MP4")
 				const { PassThrough } = require('stream')
 				let pathOutput = `/tmp/mkv_to_mp4_file/${file.name.replace('.mkv', '.webm')}`
 				const outStream = new PassThrough(pathOutput);
-				// this.mylogger.debug(`/tmp/torrent/${file.path.replace(/(["\s'$`\\])/g, '\\$1')}`)
-				ffmpeg(file.createReadStream())
-				// .videoCodec('libx264') // Ensure H.264 video codec
-				// .audioCodec('aac') // Ensure AAC audio codec
+				var command = ffmpeg(file.createReadStream())
 				.outputOptions([
-				//   `-vf "subtitles='/tmp/torrent/${file.path}'"`,
-				//   '-movflags frag_keyframe+empty_moov', // For fragmented MP4
-				  '-preset ultrafast', // Optimize transcoding speed
+					'-preset ultrafast', // Optimize transcoding speed
+					'-threads 0',
+					'-speed 8',
+					'-vf scale=1280:720'
 				])
+				.audioBitrate(128)
+				.audioCodec("libvorbis")
+				.audioChannels(2)
 				.format("webm")
 				.on('start', () => {
-				console.log('FFmpeg processing started');
+					this.mylogger.log('FFmpeg processing started');
 				})
 				.on('error', (err) => {
-				console.error('An error occurred: ' + err.message);
-				outStream.destroy(err); // End the stream on error
+					if (command.ffmpegProc) {
+						command.ffmpegProc.kill('SIGTERM'); // Use SIGKILL if necessary
+						this.mylogger.log('FFmpeg process terminated due to an error');
+					}
+					// command.end()
+					engine.destroy(); // End the stream on error
+					this.mylogger.error('An error occurred: ' + err.message);
 				})
 				.on('end', () => {
-				console.log('FFmpeg processing finished');
-				outStream.end(); // Signal the end of the stream
+					engine.destroy(); // End the incoming stream
+					outStream.end(); // Signal the end of the stream
+					this.mylogger.log('FFmpeg processing finished');
 				})
-				.pipe(outStream, { end: true }); // Pipe FFmpeg output to the MP4 stream
+				.pipe(outStream, { end: true }); // Pipe FFmpeg output to stream
+				this.userEngines.set(pageId, outStream)
 				resolve(outStream);
 			}
 			else {
+				this.userEngines.set(pageId, engine)
 				resolve(file.createReadStream());
 			}
 		} else { // ici gerer les telechargements

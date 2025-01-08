@@ -30,8 +30,7 @@ export class StreamController {
 
   @Post('stopEngine')
   async leaveOrReloadPage(
-    // @Query('hash') hash: string,
-    @Query('pageId') pageId: string,
+      @Query('pageId') pageId: string,
     @Res({passthrough: true}) res : Response
   ) {
     try {
