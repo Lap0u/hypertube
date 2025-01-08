@@ -1,6 +1,5 @@
-import axios from 'axios';
-import { API_URL } from '../../shared/constants';
 import { UserLoginDto } from '../dtos/UserLoginDto';
+import { protectedInstance } from './axios';
 
 type ResponseType = {
   status: number;
@@ -8,8 +7,8 @@ type ResponseType = {
 };
 
 export const signIn = async (formData: UserLoginDto): Promise<ResponseType> => {
-  return axios
-    .post(`${API_URL}/auth/signIn`, formData, {
+  return protectedInstance
+    .post(`/auth/signIn`, formData, {
       withCredentials: true,
     })
     .then((response) => {
