@@ -53,12 +53,12 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-screen min-g-screen flex justify-center items-center bg-mainBlack flex-col min-h-screen">
-      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
+    <div className="text-xl md:text-3xl w-screen  flex justify-center items-center bg-mainBlack flex-col min-h-screen">
+      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-2 md:p-8 backdrop-blur-sm">
         <form
           className="flex flex-col gap-y-8 justify-center items-center"
           onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex gap-x-16 justify-center items-start">
+          <div className="flex flex-col md:flex-row gap-x-4 justify-center items-start">
             <div className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center">
               <input
                 type="text"

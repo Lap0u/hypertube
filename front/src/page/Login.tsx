@@ -3,7 +3,6 @@ import { FaGoogle } from 'react-icons/fa';
 import { Si42 } from 'react-icons/si';
 import { useLocation } from 'react-router-dom';
 import { API_URL } from '../../shared/constants';
-import Footer from '../components/Footer';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
 import { forgetPassword } from '../api/password';
@@ -35,7 +34,7 @@ const Login = () => {
   const [login, setLogin] = useState<string>('');
   return (
     <div
-      className="w-100 bg-mainBlack bg-cover py-2 md:py-8
+      className="bg-mainBlack bg-cover py-2 md:py-8
      text-white flex justify-center items-center text-xl md:text-3xl bg-bottom flex-col gap-12">
       <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 md:p-8 p-2 backdrop-blur-sm">
         {toLogin ? (

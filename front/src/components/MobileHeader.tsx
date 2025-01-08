@@ -73,14 +73,24 @@ const MobileHeader = ({ user, logout }: MobileHeaderProps) => {
                 Login
               </div>
             ) : (
-              <div
-                className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
-                onClick={() => {
-                  logout();
-                  setVisible(false);
-                }}>
-                Logout
-              </div>
+              <>
+                <div
+                  className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
+                  onClick={() => {
+                    nav('/profile');
+                    setVisible(false);
+                  }}>
+                  Profile
+                </div>
+                <div
+                  className=" py-3 boder-b-white border-b-[1px] pl-4 w-full h-full hover:bg-red-700 hover:cursor-pointer text-nowrap "
+                  onClick={() => {
+                    logout();
+                    setVisible(false);
+                  }}>
+                  Logout
+                </div>
+              </>
             )}
           </div>
         </div>
