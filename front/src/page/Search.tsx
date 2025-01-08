@@ -15,6 +15,7 @@ import {
 import MovieFilterSelects from '../components/MovieFilter';
 
 const Search = () => {
+  const [visible, setVisible] = useState(false);
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [nextMovies, setNextMovies] = useState<MovieDto[]>([]);
   const [searchField, setSearchField] = useState<string>('');
@@ -107,24 +108,41 @@ const Search = () => {
       className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
      text-white flex justify-start items-center text-3xl bg-bottom flex-col gap-12">
       <div className="flex flex-col items-center gap-y-8">
-        <div className="flex gap-x-8 w-full">
+        <div className="flex flex-col lg:flex-row gap-y-4 gap-x-8 w-[80%]">
           <input
             onChange={(e) => {
               setSearchField(e.target.value);
+              setPage(1);
             }}
-            className="text-black rounded-xl p-4 w-full"
+            className="text-mainBlack rounded-xl p-4 w-full"
             type="text"
             placeholder="Rechercher..."
             value={searchField}
           />
-          <Button text="Rechercher" onClick={() => refreshMovies()} />
+          <Button
+            text="FILTRES"
+            onClick={() => setVisible((visible) => !visible)}
+            mobile={true}
+          />
         </div>
         <MovieFilterSelects
           onSortFieldChange={setSortField}
           onOrderChange={setOrderBy}
           onMinRatingChange={setMinRating}
           onGenreChange={setGenre}
+          setPage={setPage}
+          desktop={true}
         />
+        {visible && (
+          <MovieFilterSelects
+            onSortFieldChange={setSortField}
+            onOrderChange={setOrderBy}
+            onMinRatingChange={setMinRating}
+            onGenreChange={setGenre}
+            setPage={setPage}
+            desktop={false}
+          />
+        )}
       </div>
       <MovieGallery movies={movies} />
     </div>

@@ -15,7 +15,7 @@ const UsersPage = () => {
   }, []);
 
   return (
-    <div className="bg-mainBlack w-screen h-screen flex flex-col justify-start items-start pl-32 pt-32 gap-y-12">
+    <div className="bg-mainBlack flex flex-col justify-start items-start md:pl-32 pt-8 md:pt-32 gap-y-12">
       {users.length === 0 && (
         <div className="text-4xl text-white text-center w-100">
           Aucun utilisateur existant.
@@ -23,7 +23,7 @@ const UsersPage = () => {
       )}
       {users.map((user) => {
         return (
-          <div key={user.id} className="flex gap-x-12 items-center">
+          <div key={user.id} className="flex gap-x-12 items-center md:text-3xl">
             <img
               className="w-24 h-24 rounded-full"
               src={

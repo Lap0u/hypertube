@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { getComments, postComments } from '../api/comments';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
-import { UserDto } from '../dtos/UserLoginDto';
 import { AppContext } from './AppContextProvider';
 
 type CommentsProps = {
@@ -25,7 +24,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-md bg-slate-400 text-black w-[70%] p-6">
+    <div className="flex flex-col gap-4 rounded-md bg-slate-400 text-mainBlack w-full p-2 md:p-6">
       {user ? (
         <div className="w-full relative flex justify-center items-center">
           <input
