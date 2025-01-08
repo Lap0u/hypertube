@@ -16,7 +16,7 @@ const MobileHeader = ({ user, logout }: MobileHeaderProps) => {
   const nav = useNavigate();
 
   return (
-    <div className="md:hidden py-4 w-full bg-mainBlack text-white ">
+    <div className="lg:hidden md:text-2xl py-4 w-full bg-mainBlack text-white ">
       <div className="w-full pb-4 relative border-b-white border-b-2 flex flex-col justify-center items-center h-full">
         <TiThMenu
           className="absolute left-2"

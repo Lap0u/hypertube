@@ -22,9 +22,9 @@ const MovieFilterSelects = ({
   setPage,
   desktop,
 }: MovieFilterSelectsProps) => {
-  const styles = desktop === true ? 'hidden md:flex' : 'flex md:hidden';
+  const styles = desktop === true ? 'hidden lg:flex' : 'flex lg:hidden';
   return (
-    <div className={`flex-col md:flex-row gap-y-4 gap-x-32  ${styles}`}>
+    <div className={`flex-col lg:flex-row gap-y-4 gap-x-32  ${styles}`}>
       {/* Genre Select */}
       <select
         className="bg-mainBlack p-2 border-2 border-red-600"

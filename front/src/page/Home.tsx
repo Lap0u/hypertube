@@ -10,10 +10,10 @@ const Home = () => {
     <div className="w-screen bg-mainBlack min-g-screen bg-cover ">
       <div
         className="
-     text-white md:grid grid-cols-2 px-4 md:px-48   flex  flex-col justify-center items-center text-3xl bg-bottom gap-12 md:gap-24">
-        <h2 className="md:text-[86px] md:leading-[6rem] uppercase font-bold title-font ">
+     text-white lg:grid grid-cols-2 px-4 lg:px-48   flex  flex-col justify-center items-center text-3xl bg-bottom gap-12 lg:gap-24">
+        <h2 className="md:text-[60px] lg:text-[86px] md:leading-[6rem] uppercase font-bold title-font ">
           Regardez des{' '}
-          <span className="line-through decoration-red-600 decoration-[8px] md:decoration[16px]  title-font">
+          <span className="line-through decoration-red-600 decoration-[8px] lg:decoration[16px]  title-font">
             milliers
           </span>
           &ensp;

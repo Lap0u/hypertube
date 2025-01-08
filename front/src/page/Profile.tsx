@@ -58,7 +58,7 @@ const Profile = () => {
         <form
           className="flex flex-col gap-y-8 justify-center items-center"
           onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col md:flex-row gap-x-4 justify-center items-start">
+          <div className="flex flex-col lg:flex-row gap-x-4 justify-center items-start">
             <div className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center">
               <input
                 type="text"

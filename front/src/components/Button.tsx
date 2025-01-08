@@ -15,7 +15,7 @@ const Button = ({ text, onClick, secondary, mobile }: Buttonprops) => {
       'text-xl md:text-5xl bg-secYellow hover:bg-secMarine hover:text-secYellow';
   }
   if (mobile) {
-    styles += ' md:hidden';
+    styles += ' lg:hidden';
   }
   return (
     <button
