@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { API_URL } from '../../shared/constants';
+import { protectedInstance } from './axios';
 
 export const downloadMovie = (torrentHash: string) => {
-  return axios
+  return protectedInstance
     .get(`${API_URL}/metTonAddresseIciThomas?hash=${torrentHash}`, {
       withCredentials: true,
     })

@@ -14,8 +14,8 @@ type UserResponse = {
 };
 
 export const updateUser = async (formData: FormData): Promise<UserResponse> => {
-  return axios
-    .patch(`${API_URL}/users/me`, formData, {
+  return protectedInstance
+    .patch(`/users/me`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -33,8 +33,8 @@ export const updateUser = async (formData: FormData): Promise<UserResponse> => {
 };
 
 export const getUsers = async (): Promise<MultiUserResponse> => {
-  return axios
-    .get(`${API_URL}/users`, {
+  return protectedInstance
+    .get(`/users`, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
