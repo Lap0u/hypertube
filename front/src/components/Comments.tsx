@@ -2,13 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { getComments, postComments } from '../api/comments';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import { AppContext } from './AppContextProvider';
+import { CommentsDto } from '../dtos/CommentsDto';
 
 type CommentsProps = {
   imdbId: string;
 };
 
 const Comments = ({ imdbId }: CommentsProps) => {
-  const [commentsList, setCommentsList] = useState<string[]>([]);
+  const [commentsList, setCommentsList] = useState<CommentsDto[]>([]);
+  const [currentComment, setCurrentComment] = useState<string>('');
   const { user } = useContext(AppContext);
   useEffect(() => {
     const updateComments = async () => {
@@ -18,9 +20,14 @@ const Comments = ({ imdbId }: CommentsProps) => {
     updateComments();
   }, [imdbId]);
 
-  const postComment = () => {
-    alert('envoi');
-    postComments(imdbId, 'salut');
+  const postComment = async () => {
+    if (!currentComment) return;
+    const resp = await postComments(imdbId, currentComment);
+    if (resp.status === 201) {
+      const comments = await getComments(imdbId);
+      setCommentsList(comments.data);
+      setCurrentComment('');
+    }
   };
 
   return (
@@ -30,6 +37,8 @@ const Comments = ({ imdbId }: CommentsProps) => {
           <input
             className="p-2 rounded-md w-full relative"
             type="text"
+            value={currentComment}
+            onChange={(e) => setCurrentComment(e.target.value)}
             placeholder="Ajouter un commentaire..."></input>
           <FaArrowAltCircleRight
             size={24}
@@ -47,7 +56,21 @@ const Comments = ({ imdbId }: CommentsProps) => {
       )}
       {commentsList.length > 0 &&
         commentsList.map((comments, index) => {
-          return <div key={index}>{comments.content}</div>;
+          return (
+            <div className="flex" key={index}>
+              <img
+                className="w-16 h-16 rounded-full mr-4"
+                src={comments.author.profilePictureUrl}
+                alt=""
+              />
+              <div className="gap-y-2 flex flex-col justify-center items-start">
+                <p className="text-xl text-slate-900 opacity-90">
+                  {comments.author.username}
+                </p>
+                <p>{comments.content}</p>
+              </div>
+            </div>
+          );
         })}
     </div>
   );

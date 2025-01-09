@@ -1,11 +1,20 @@
+import { CommentsDto } from '../dtos/CommentsDto';
 import { protectedInstance } from './axios';
 
-export const getComments = (imdbId: string) => {
+type CommentsResponse = {
+  status: number;
+  data: CommentsDto[];
+};
+
+export const getComments = async (
+  imdbId: string
+): Promise<CommentsResponse> => {
   return protectedInstance
     .get(`/movies/${imdbId}/comments`, {
       withCredentials: true,
     })
     .then((response) => {
+      console.log('comm', response.data);
       return { status: response.status, data: response.data };
     })
     .catch((error) => {
@@ -17,7 +26,7 @@ export const getComments = (imdbId: string) => {
     });
 };
 
-export const postComments = (imdbId: string, content: string) => {
+export const postComments = async (imdbId: string, content: string) => {
   return protectedInstance
     .post(
       `/comments?movieId=${imdbId}&content=${content}`,

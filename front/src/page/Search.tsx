@@ -145,7 +145,7 @@ const Search = () => {
           />
         )}
       </div>
-      <MovieGallery movies={movies} />
+      <MovieGallery movies={movies} page={page} />
     </div>
   );
 };
