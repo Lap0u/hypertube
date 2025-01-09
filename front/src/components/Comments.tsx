@@ -21,6 +21,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
   }, [imdbId]);
 
   const postComment = async () => {
+    if (!currentComment) return;
     const resp = await postComments(imdbId, currentComment);
     if (resp.status === 201) {
       const comments = await getComments(imdbId);
