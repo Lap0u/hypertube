@@ -13,16 +13,19 @@ const Stream = () => {
   const imdbId = location.state.imdbId;
   const pageId = uuidv4()
   useEffect(() => {
- 
     const handleUnload = () => {
       console.log('User is leaving the page');
       navigator.sendBeacon(`${API_URL}/stream/stopEngine?pageId=${pageId}`)
     };
 
+    window.addEventListener('unload', handleUnload);
+
+
     return () => {
       handleUnload()
+      window.removeEventListener('unload', handleUnload);
       }
-  }, []);
+  }, [pageId]);
   return (
     <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center">
       <MainTitle />
