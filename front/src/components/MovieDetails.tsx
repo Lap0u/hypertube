@@ -14,6 +14,8 @@ import {
 import { toastConfig } from '../../shared/toastConfig';
 import Comments from './Comments';
 import { AppContext } from './AppContextProvider';
+import Cast from './Cast';
+import Crew from './Crew';
 
 type MovieDetailsProps = {
   imdbId: string;
@@ -50,7 +52,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
 
   if (!movie) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="w-[90vw] lg:w-[70vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
         <div className="text-center">
           <div className="animate-spin w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Loading movie details...</p>
@@ -79,51 +81,16 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
           </div>
         );
       case 'cast':
-        return (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-            {movie.cast.map((member, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center bg-white p-3 rounded-lg shadow-md transition hover:scale-105">
-                <img
-                  src={
-                    member.pictureUrl.includes('originalnull')
-                      ? '/user-default.png'
-                      : member.pictureUrl
-                  }
-                  alt={member.name}
-                  className="w-24 h-24 rounded-full object-cover border-2 border-blue-100"
-                />
-                <p className="mt-2 font-semibold text-gray-800">
-                  {member.name}
-                </p>
-                <p className="text-sm text-gray-500"></p>
-              </div>
-            ))}
-          </div>
-        );
+        return <Cast cast={movie.cast} />;
       case 'crew':
-        return (
-          <div className="grid grid-cols-2 gap-4 p-4 space-y-2">
-            {movie.crew.map((member, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
-                <div>
-                  <p className="font-semibold text-gray-800">{member.name}</p>
-                  <p className="text-sm text-gray-600">{member.job}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        );
+        return <Crew crew={movie.crew} />;
       case 'comments':
         return <Comments imdbId={imdbId} />;
     }
   };
 
   return (
-    <div className="w-[90vw] lg:w-[60vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
+    <div className="w-[90vw] lg:w-[70vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
       <div className=" relative z-10 md:px-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
