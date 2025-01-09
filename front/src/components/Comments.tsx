@@ -54,7 +54,21 @@ const Comments = ({ imdbId }: CommentsProps) => {
       )}
       {commentsList.length > 0 &&
         commentsList.map((comments, index) => {
-          return <div key={index}>{comments.content}</div>;
+          return (
+            <div className="flex" key={index}>
+              <img
+                className="w-16 h-16 rounded-full mr-4"
+                src={comments.author.profilePictureUrl}
+                alt=""
+              />
+              <div className="gap-y-2 flex flex-col justify-center items-start">
+                <p className="text-xl text-slate-900 opacity-90">
+                  {comments.author.username}
+                </p>
+                <p>{comments.content}</p>
+              </div>
+            </div>
+          );
         })}
     </div>
   );
