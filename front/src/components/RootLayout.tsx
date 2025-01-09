@@ -3,9 +3,11 @@ import Header from './Header';
 import Footer from './Footer';
 const RootLayout = () => {
   return (
-    <div className="w-full min-h-screen bg-mainBlack relative">
+    <div className="flex flex-col min-h-screen bg-mainBlack">
       <Header />
-      <Outlet /> {/* This is where child routes will be rendered */}
+      <main className="flex-grow">
+        <Outlet /> {/* This is where child routes will be rendered */}
+      </main>
       <Footer />
     </div>
   );

@@ -9,6 +9,7 @@ type CommentsProps = {
 
 const Comments = ({ imdbId }: CommentsProps) => {
   const [commentsList, setCommentsList] = useState<string[]>([]);
+  const [currentComment, setCurrentComment] = useState<string>('');
   const { user } = useContext(AppContext);
   useEffect(() => {
     const updateComments = async () => {
@@ -18,9 +19,13 @@ const Comments = ({ imdbId }: CommentsProps) => {
     updateComments();
   }, [imdbId]);
 
-  const postComment = () => {
-    alert('envoi');
-    postComments(imdbId, 'salut');
+  const postComment = async () => {
+    const resp = await postComments(imdbId, currentComment);
+    if (resp.status === 201) {
+      const comments = await getComments(imdbId);
+      setCommentsList(comments.data);
+      setCurrentComment('');
+    }
   };
 
   return (
@@ -30,6 +35,8 @@ const Comments = ({ imdbId }: CommentsProps) => {
           <input
             className="p-2 rounded-md w-full relative"
             type="text"
+            value={currentComment}
+            onChange={(e) => setCurrentComment(e.target.value)}
             placeholder="Ajouter un commentaire..."></input>
           <FaArrowAltCircleRight
             size={24}
