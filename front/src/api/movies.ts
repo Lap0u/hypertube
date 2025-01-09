@@ -7,6 +7,7 @@ import {
 } from '../../shared/enum';
 import { UserDto } from '../dtos/UserLoginDto';
 import { globalInstance, protectedInstance } from './axios';
+import { getMe } from './user';
 
 type MoviesResponseType = {
   status: number;
@@ -34,7 +35,6 @@ export const getMovies = async (
   params: movieQueryParams,
   user: UserDto | undefined
 ): Promise<MoviesResponseType> => {
-  console.log('getUs', user);
   if (user) {
     return protectedInstance
       .get(`/movies`, { params })
@@ -50,7 +50,7 @@ export const getMovies = async (
       });
   }
   return globalInstance
-    .get(`/movies/popular`)
+    .get(`/movies/popular`, { params })
     .then((response) => {
       return { status: response.status, data: response.data, message: '' };
     })
