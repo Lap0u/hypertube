@@ -1,11 +1,54 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as torrentStream from 'torrent-stream';
-import { Readable } from 'stream';
+import { PassThrough, Readable } from 'stream';
+import { spawn } from 'child_process';
+import { createReadStream } from 'fs';
 
 @Injectable()
 export class StreamService {
 private readonly mylogger = new Logger(StreamService.name);
 private userEngines = new Map<string, torrentStream>(); // userEngines[pageId]
+
+// startFfmpeg(inputStream : Readable, pathOutput: string) {
+//     const args = [
+//         '-i', 'pipe:0',        // Use stdin (pipe:0) as input
+//         '-preset', 'ultrafast',
+//         '-threads', '0',
+//         '-speed', '8',
+//         '-vf', 'scale=1280:720',
+//         '-c:a', 'libvorbis',
+//         '-b:a', '128k',
+//         '-ac', '2',
+//         '-f', 'webm',
+//         pathOutput,            // Output file
+//         '-y'
+//     ];
+
+//     const ffmpegProcess = spawn('ffmpeg', args);
+
+//     // Pipe the input stream to the ffmpeg process
+//     inputStream.pipe(ffmpegProcess.stdin);
+
+//     // Handle stdout and stderr for debugging
+//     ffmpegProcess.stdout.on('data', (data) => {
+//         this.mylogger.log(`FFmpeg stdout: ${data}`);
+//     });
+
+//     ffmpegProcess.stderr.on('data', (data) => {
+//         this.mylogger.error(`FFmpeg stderr: ${data}`);
+//     });
+
+//     // Handle process exit
+//     ffmpegProcess.on('close', (code) => {
+//         this.mylogger.log(`FFmpeg process exited with code ${code}`);
+//     });
+
+//     ffmpegProcess.on('error', (err) => {
+//         this.mylogger.error(`FFmpeg error: ${err.message}`);
+//     });
+
+//     return ffmpegProcess;
+// }
 
 async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable> {
 	return new Promise((resolve, reject) => {
@@ -51,11 +94,7 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 					this.mylogger.log('FFmpeg processing started');
 				})
 				.on('error', (err) => {
-					if (command.ffmpegProc) {
-						command.ffmpegProc.kill('SIGTERM'); // Use SIGKILL if necessary
-						this.mylogger.log('FFmpeg process terminated due to an error');
-					}
-					// command.end()
+					command.end()
 					engine.destroy(); // End the stream on error
 					this.mylogger.error('An error occurred: ' + err.message);
 				})
@@ -65,7 +104,11 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 					this.mylogger.log('FFmpeg processing finished');
 				})
 				.pipe(outStream, { end: true }); // Pipe FFmpeg output to stream
-				this.userEngines.set(pageId, outStream)
+
+				command.on('start', (cmdLine, process) => {
+					this.mylogger.debug(Object.keys(process))
+				})
+				this.userEngines.set(pageId, process)
 				resolve(outStream);
 			}
 			else {
@@ -83,7 +126,7 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 	});
 
 	engine.on('error', (error) => {
-		this.mylogger.error('Error :', error.message);
+		this.mylogger.error('Engine Error :', error.message);
 		engine.destroy();
 		reject(error);
 	});
@@ -93,7 +136,10 @@ async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable
 async stopEngine(pageId: string) {
 	try {
 		const engine = this.userEngines.get(pageId)
-		engine.destroy()
+		// engine[0].destroy()
+		// engine.destroy()
+		engine.kill()
+		// engine[1].kill("SIGKILL")
 		this.mylogger.log(`Stopping Dl and destroy engine`)
 	} catch (error) { this.mylogger.error("Cannot destroy engine", error) }
 }
