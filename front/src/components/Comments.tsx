@@ -2,13 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import { getComments, postComments } from '../api/comments';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import { AppContext } from './AppContextProvider';
+import { CommentsDto } from '../dtos/CommentsDto';
 
 type CommentsProps = {
   imdbId: string;
 };
 
 const Comments = ({ imdbId }: CommentsProps) => {
-  const [commentsList, setCommentsList] = useState<string[]>([]);
+  const [commentsList, setCommentsList] = useState<CommentsDto[]>([]);
   const [currentComment, setCurrentComment] = useState<string>('');
   const { user } = useContext(AppContext);
   useEffect(() => {
