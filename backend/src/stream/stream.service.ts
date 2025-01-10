@@ -3,49 +3,60 @@ import * as torrentStream from 'torrent-stream';
 import { PassThrough, Readable } from 'stream';
 import { spawn } from 'child_process';
 import { createWriteStream } from 'fs';
-import e from 'express';
+import { kill } from 'process';
+import passport from 'passport';
 
 @Injectable()
 export class StreamService {
-private readonly mylogger = new Logger(StreamService.name);
-private userEngines = new Map<string, torrentStream>(); // userEngines[pageId]
+	private readonly mylogger = new Logger(StreamService.name);
+	private userEngines = new Map<string, torrentStream>(); // userEngines[pageId]
+	
+	startFfmpeg(inputStream : Readable, pageId: string) {
+		const args = [
+			'-i', 'pipe:0',        // Use stdin (pipe:0) as input
+			'-preset', 'ultrafast',
+			'-threads', '0',
+			'-speed', '8',
+			'-vf', 'scale=1280:720',
+			'-f', 'webm',
+			'pipe:1',            // Output file
+			'-y'
+		];
+		
+		const ffmpegProcess = spawn('ffmpeg', args);
+		let outStream = new PassThrough()
+		ffmpegProcess.stdout.pipe(outStream)
+		
+		// Pipe the input stream to the ffmpeg process
+		inputStream.pipe(ffmpegProcess.stdin);
+		
+		ffmpegProcess.on('close', (code) => {
 
-startFfmpeg(inputStream : Readable) {
-    const args = [
-        '-i', 'pipe:0',        // Use stdin (pipe:0) as input
-        '-preset', 'ultrafast',
-        '-threads', '0',
-        '-speed', '8',
-        '-vf', 'scale=1280:720',
-        '-c:a', 'libvorbis',
-        '-b:a', '128k',
-        '-ac', '2',
-        '-f', 'webm',
-        'pipe:1',            // Output file
-        '-y'
-    ];
+			this.mylogger.log(`FFmpeg process exited with code ${code}`);
+		});
+		outStream.on('close', () =>{
+			this.mylogger.log("stream closed")
+		})
+		outStream.on('error', (err) => {
+			this.mylogger.error("Error on output stream")
+		})
+		this.userEngines.set(pageId, [outStream, ffmpegProcess])
 
-    const ffmpegProcess = spawn('ffmpeg', args);
+		// Handle stdout and stderr for debugging
+		// ffmpegProcess.stdout.on('data', (data) => {
+		//     this.mylogger.log(`FFmpeg stdout: ${data}`);
+		// });
 
-    // Pipe the input stream to the ffmpeg process
-    inputStream.pipe(ffmpegProcess.stdin);
+		// ffmpegProcess.stderr.on('data', (data) => {
+		// 	this.mylogger.debug(`FFmpeg stderr: ${data}`);
+		// });
 
-    // Handle stdout and stderr for debugging
-    ffmpegProcess.stdout.on('data', (data) => {
-        this.mylogger.log(`FFmpeg stdout: ${data}`);
-    });
+		// Handle process exit
+		ffmpegProcess.on('error', (err) => {
+		this.mylogger.error(`FFmpeg error: ${err.message}`);
+		});
 
-    ffmpegProcess.stderr.on('data', (data) => {
-        this.mylogger.debug(`FFmpeg stderr: ${data}`);
-    });
-
-    // Handle process exit
-    
-    ffmpegProcess.on('error', (err) => {
-      this.mylogger.error(`FFmpeg error: ${err.message}`);
-    });
-    
-    return ffmpegProcess;
+		return outStream;
   }
 
   async streamTorrent(hash: string, pageId: string, dl: boolean): Promise<Readable> {
@@ -60,9 +71,9 @@ startFfmpeg(inputStream : Readable) {
       let ffmpeg = require('fluent-ffmpeg');
       let file: any
       let isMkv = false
-      // engine.files.forEach(element => {
-        // 	this.mylogger.debug(element.name)
-        // });
+      engine.files.forEach(element => {
+        	this.mylogger.debug(element.name)
+        });
         for (let i = 0; engine.files[i] != undefined ; i++ ){
           if (engine.files[i].name.endsWith(".mp4") || engine.files[i].name.endsWith(".mkv")) {
             file = engine.files[i]
@@ -76,31 +87,16 @@ startFfmpeg(inputStream : Readable) {
             this.mylogger.log("MKV TO MP4")
             let pathOutput = `/tmp/mkv_to_mp4_file/${file.name.replace('.mkv', '.webm')}`
             const inputStream = file.createReadStream()
-            const ffmpegProcess = this.startFfmpeg(inputStream)
-            let outStream = new PassThrough()
-            ffmpegProcess.stdout.pipe(outStream)
+            const outStream = this.startFfmpeg(inputStream, pageId)
             const writeStream = createWriteStream(pathOutput);
             outStream.pipe(writeStream)
-            ffmpegProcess.on('close', (code) => {
-                outStream.end()
-                this.mylogger.log(`FFmpeg process exited with code ${code}`);
-            });
-            outStream.on('close', () =>{
-              this.mylogger.debug("CLOSE THE STREAM")
-              // ffmpegProcess.stdout.unpipe(outStream);
-              // ffmpegProcess.stderr.unpipe();
-              // outStream.end();
-              // engine.destroy();
-              // ffmpegProcess.kill("SIGTERM")
-            })
-            this.userEngines.set(pageId, [outStream, ffmpegProcess])
-				resolve(outStream);
+			resolve(outStream);
 			}
 			else {
-				this.userEngines.set(pageId, engine)
+				this.userEngines.set(pageId, [engine])
 				resolve(file.createReadStream());
 			}
-		} else { // ici gerer les telechargements
+		} else {
 			this.mylogger.log(`Downloading ${file.name}...`);
 			resolve(file.select());
 		}
@@ -121,10 +117,15 @@ startFfmpeg(inputStream : Readable) {
 async stopEngine(pageId: string) {
 	try {
 		const engine = this.userEngines.get(pageId)
-    engine[1].stdout.unpipe(engine[0]);
-    engine[1].stderr.unpipe();
-    engine[1].kill("SIGTERM")
+		engine[1].stdin.pause();
+		engine[1].stdin.destroy()
+		engine[1].stdout.unpipe(engine[0]);
+		engine[1].stdout.destroy()
+		engine[1].stderr.unpipe();
+		engine[1].stderr.destroy();
 		engine[0].end()
+		engine[0].destroy()
+		engine[1].kill("SIGKILL")
 		this.mylogger.log(`Stopping Dl and destroy engine`)
 	} catch (error) { this.mylogger.error("Cannot destroy engine", error) }
 }
