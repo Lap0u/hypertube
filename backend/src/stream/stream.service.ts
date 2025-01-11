@@ -93,7 +93,7 @@ export class StreamService {
 			resolve(outStream);
 			}
 			else {
-				this.userEngines.set(pageId, [engine])
+				this.userEngines.set(pageId, [engine, null])
 				resolve(file.createReadStream());
 			}
 		} else {
@@ -117,16 +117,18 @@ export class StreamService {
 async stopEngine(pageId: string) {
 	try {
 		const engine = this.userEngines.get(pageId)
-		engine[1].stdin.pause();
-		engine[1].stdin.destroy()
-		engine[1].stdout.unpipe(engine[0]);
-		engine[1].stdout.destroy()
-		engine[1].stderr.unpipe();
-		engine[1].stderr.destroy();
-		engine[0].end()
+    if (engine[1]) {
+      engine[1].stdin.pause();
+      engine[1].stdin.destroy()
+      engine[1].stdout.unpipe(engine[0]);
+      engine[1].stdout.destroy()
+      engine[1].stderr.unpipe();
+      engine[1].stderr.destroy();
+    }
 		engine[0].destroy()
-		engine[1].kill("SIGKILL")
-		this.mylogger.log(`Stopping Dl and destroy engine`)
+    if (engine[1]) {
+		  engine[1].kill("SIGKILL")
+    } this.mylogger.log(`Stopping Dl and destroy engine`)
 	} catch (error) { this.mylogger.error("Cannot destroy engine", error) }
 }
 }
