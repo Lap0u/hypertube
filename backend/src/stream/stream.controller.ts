@@ -1,7 +1,9 @@
 import { Controller, Get, Header, Param, Post, Query, Res, UseGuards, Req, BadRequestException } from '@nestjs/common';
 import { StreamService } from './stream.service';
 import { Response } from 'express';
+import { join } from 'path';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
+import { error } from 'console';
 
 @Controller('stream')
 export class StreamController {
@@ -25,6 +27,34 @@ export class StreamController {
     } catch (error) {
       console.error('Error streaming file:', error);
       res.status(500).send('Failed to stream the file.');
+    }
+  }
+
+  @Get('subtitles')
+  async getSubtitles(
+    @Query('hash') hash: string,
+    @Query('pageId') pageId: string,
+    @Res() res: Response,
+  ) {
+    console.log("this is a test")
+    try {
+      // Serve the appropriate subtitle file.
+      // Adjust the path to subtitle files based on your use case.
+      // const subtitlePath = join(
+      //   __dirname,
+      //   '../assets/subtitles',
+      //   `${hash}_${pageId}.vtt`,
+      // );
+      throw error
+
+      res.set({
+        'Content-Type': 'text/vtt',
+      });
+
+      // res.sendFile(subtitlePath);
+    } catch (error) {
+      console.error('Error serving subtitle file:', error);
+      res.status(500).send('Failed to serve the subtitle file.');
     }
   }
 

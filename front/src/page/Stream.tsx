@@ -35,7 +35,16 @@ const Stream = () => {
           width="800"
           height="600"
           controls
-          src={`http://localhost:5050/stream?hash=${torrentHash}&pageId=${pageId}`}></video>
+          src={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}`}>
+            <track
+              // src={`${API_URL}/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`}
+              src={`http://localhost:5050/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`}
+              kind="subtitles"
+              srcLang="en"
+              label="English"
+              default
+            />
+          </video>
         <Comments imdbId={imdbId} />
         <Button
           text="Download Movie"
