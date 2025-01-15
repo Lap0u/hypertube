@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { join } from 'path';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { error } from 'console';
+import { console } from 'inspector';
 
 @Controller('stream')
 export class StreamController {
@@ -36,22 +37,17 @@ export class StreamController {
     @Query('pageId') pageId: string,
     @Res() res: Response,
   ) {
-    console.log("this is a test")
+    console.log("HERE")
     try {
       // Serve the appropriate subtitle file.
       // Adjust the path to subtitle files based on your use case.
-      // const subtitlePath = join(
-      //   __dirname,
-      //   '../assets/subtitles',
-      //   `${hash}_${pageId}.vtt`,
-      // );
-      throw error
+      const subtitlePath = await this.streamService.sendSubtitle(hash)
 
       res.set({
         'Content-Type': 'text/vtt',
       });
 
-      // res.sendFile(subtitlePath);
+      res.sendFile(subtitlePath);
     } catch (error) {
       console.error('Error serving subtitle file:', error);
       res.status(500).send('Failed to serve the subtitle file.');

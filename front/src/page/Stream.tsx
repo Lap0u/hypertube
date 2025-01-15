@@ -20,7 +20,7 @@ const Stream = () => {
     const getSubtitles = async () => {
       const response = await downloadSubtitles(torrentHash, pageId);
       if (response.status === 200) {
-        console.log('Subtitles fetched successfully', response.data);
+        console.log('Subtitles fetched successfully');
         setSubtitles(response.data);
       } else {
         toast.error('Failed to fetch subtitles', toastConfig);
@@ -51,7 +51,7 @@ const Stream = () => {
           src={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}`}>
           <track
             // src={`${API_URL}/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`}
-            // src={`http://localhost:5050/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`}
+            src={subtitles}
             kind="subtitles"
             srcLang="en"
             label="English"
