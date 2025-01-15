@@ -3,18 +3,18 @@ import { API_URL } from '../../shared/constants';
 
 export const globalInstance = axios.create({
   baseURL: API_URL,
-  timeout: 1000,
+  timeout: 10000,
 });
 
 export const refreshInstance = axios.create({
   baseURL: `${API_URL}/auth/refresh`,
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
 });
 
 export const protectedInstance = axios.create({
   baseURL: API_URL,
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
 });
 
