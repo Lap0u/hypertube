@@ -63,7 +63,7 @@ const SignUpForm = () => {
       <form
         className="flex flex-col gap-y-8 justify-center items-center"
         onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex gap-x-16 justify-center items-start">
+        <div className="flex flex-col gap-y-4 lg:flex-row md:gap-x-16 justify-center items-start">
           <div className="flex flex-col gap-y-8 px-4 py-8 justify-center items-center">
             <input
               type="text"

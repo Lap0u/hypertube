@@ -7,21 +7,20 @@ import Footer from '../components/Footer';
 const Home = () => {
   const nav = useNavigate();
   return (
-    <div className="w-100 bg-black min-g-screen bg-cover min-h-screen">
-      <MainTitle />
+    <div className="w-screen bg-mainBlack min-g-screen bg-cover ">
       <div
         className="
-     text-white grid grid-cols-2 px-48   justify-center items-center text-3xl bg-bottom gap-24">
-        <h2 className="text-[86px] leading-[6rem] uppercase font-bold title-font ">
+     text-white lg:grid grid-cols-2 px-4 lg:px-48   flex  flex-col justify-center items-center text-3xl bg-bottom gap-12 lg:gap-24">
+        <h2 className="md:text-[60px] lg:text-[86px] md:leading-[6rem] uppercase font-bold title-font ">
           Regardez des{' '}
-          <span className="line-through decoration-red-600 decoration-[16px]  title-font">
+          <span className="line-through decoration-red-600 decoration-[8px] lg:decoration[16px]  title-font">
             milliers
           </span>
           &ensp;
           <span className="text-secYellow title-font">millions </span>
           de films et séries en streaming
         </h2>
-        <div className="flex gap-24 justify-center">
+        <div className="flex gap-12 justify-center">
           <Button
             text="LOGIN"
             onClick={() =>
@@ -34,7 +33,6 @@ const Home = () => {
             }></Button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

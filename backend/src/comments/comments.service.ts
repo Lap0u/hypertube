@@ -1,18 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { MoviesService } from 'src/movies/movies.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CommentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private moviesService: MoviesService,
+  ) {}
 
   async getComments() {
-    return await this.prisma.comment.findMany();
+    return await this.prisma.comment.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+      },
+    });
   }
 
   async getUserComments(authorId: number) {
     return await this.prisma.comment.findMany({
       where: {
         authorId,
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
       },
     });
   }
@@ -22,10 +43,22 @@ export class CommentsService {
       where: {
         movieId,
       },
+      include: {
+        author: {
+          select: {
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+      },
     });
   }
 
   async addComment(movieId: string, authorId: number, content: string) {
+    const movieExist = await this.moviesService.getMovie(movieId);
+    if (!movieExist) {
+      return null;
+    }
     return await this.prisma.comment.create({
       data: {
         content,

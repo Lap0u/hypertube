@@ -14,7 +14,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) =>
-          req.cookies[process.env.REFRESH_TOKEN] ||
+          req.cookies[process.env.REFRESH_TOKEN_NAME] ||
           req.headers['authorization']?.split(' ')[1],
       ]),
       ignoreExpiration: false,
@@ -24,7 +24,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(req: Request, payload: JwtPayload) {
-    const refreshToken = req.get('Authorization').replace('Bearer ', '').trim();
+    const refreshToken = req.cookies[process.env.REFRESH_TOKEN_NAME];
     const user = await this.authService.verifyRefreshToken(
       payload.sub,
       refreshToken,
@@ -32,6 +32,6 @@ export class RefreshTokenStrategy extends PassportStrategy(
     if (!user) {
       throw new UnauthorizedException();
     }
-    return { ...payload, refreshToken };
+    return user;
   }
 }

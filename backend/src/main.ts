@@ -19,6 +19,7 @@ async function bootstrap() {
       bearerFormat: 'JWT',
     })
     .build();
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory);
 

@@ -3,10 +3,11 @@ import { FaGoogle } from 'react-icons/fa';
 import { Si42 } from 'react-icons/si';
 import { useLocation } from 'react-router-dom';
 import { API_URL } from '../../shared/constants';
-import Footer from '../components/Footer';
 import LoginForm from '../components/LoginForm';
-import MainTitle from '../components/MainTitle';
 import SignUpForm from '../components/SignUpForm';
+import { forgetPassword } from '../api/password';
+import { toast } from 'react-toastify';
+import { toastConfig } from '../../shared/toastConfig';
 
 const Login = () => {
   const location = useLocation();
@@ -18,15 +19,24 @@ const Login = () => {
       setLogin(location.state.login);
     }
   }, [location.state?.toLogin, location.state?.login]);
-
+  const resetPassword = async () => {
+    const email = prompt('Please enter your email');
+    if (!email) return;
+    const response = await forgetPassword(email);
+    if (response.status === 201) {
+      console.log(response);
+      toast.success(response.data, toastConfig);
+    } else {
+      toast.error(response.data || 'An error occurred', toastConfig);
+    }
+  };
   const [toLogin, setToLogin] = useState<boolean>(true);
   const [login, setLogin] = useState<string>('');
   return (
     <div
-      className="w-100 bg-mainBlack bg-cover py-8 min-h-screen
-     text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
-      <MainTitle />
-      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 p-8 backdrop-blur-sm">
+      className="bg-mainBlack bg-cover py-2 md:py-8
+     text-white flex justify-center items-center text-xl md:text-3xl bg-bottom flex-col gap-12">
+      <div className="flex flex-col  justify-center items-center border-2 border-secYellow rounded-xl bg-white bg-opacity-20 md:p-8 p-2 backdrop-blur-sm">
         {toLogin ? (
           <div className="flex justify-center items-center flex-col gap-8">
             <LoginForm login={login} />
@@ -34,6 +44,12 @@ const Login = () => {
               No account yet?{' '}
               <span className="hover:text-secYellow cursor-pointer">
                 Sign-up.
+              </span>
+            </p>
+            <p onClick={() => resetPassword()}>
+              Forgot password?{' '}
+              <span className="hover:text-secYellow cursor-pointer">
+                Reset password.
               </span>
             </p>
           </div>
@@ -61,7 +77,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

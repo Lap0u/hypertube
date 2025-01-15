@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MainTitle from '../components/MainTitle';
 import { MovieDto } from '../dtos/MovieDto';
 import { toastConfig } from '../../shared/toastConfig';
 import { toast } from 'react-toastify';
 import { getMovies, movieQueryParams } from '../api/movies';
 import MovieGallery from '../components/MovieGallery';
+import { OrderByField, SortMovieField } from '../../shared/enum';
+import { AppContext } from '../components/AppContextProvider';
 
 const Library = () => {
   const [page, setPage] = useState(1);
+  const { user } = useContext(AppContext);
   const refreshMovies = async () => {
     const queryParam: movieQueryParams = {
       page: page + 1,
       limit: 20,
-      order_by: 'desc',
-      sort_by: 'download_count',
+      order_by: OrderByField.DESC,
+      sort_by: SortMovieField.LIKE_COUNT,
     };
     setMovies([...movies, ...nextMovies]);
-    const response = await getMovies(queryParam);
+    const response = await getMovies(queryParam, user);
     if (response.status === 200) {
       setNextMovies(response.data);
       setPage(page + 1);
@@ -51,10 +54,10 @@ const Library = () => {
       const queryParam: movieQueryParams = {
         page: page,
         limit: 20,
-        order_by: 'desc',
-        sort_by: 'download_count',
+        order_by: OrderByField.DESC,
+        sort_by: SortMovieField.DOWNLOAD_COUNT,
       };
-      const response = await getMovies(queryParam);
+      const response = await getMovies(queryParam, user);
       if (response.status === 200) {
         setMovies(response.data);
       } else {
@@ -66,11 +69,11 @@ const Library = () => {
       const queryParam: movieQueryParams = {
         page: page + 1,
         limit: 20,
-        order_by: 'desc',
-        sort_by: 'download_count',
+        order_by: OrderByField.DESC,
+        sort_by: SortMovieField.DOWNLOAD_COUNT,
       };
       setPage(page + 1);
-      const response = await getMovies(queryParam);
+      const response = await getMovies(queryParam, user);
       if (response.status === 200) {
         setNextMovies(response.data);
       } else {
@@ -84,8 +87,7 @@ const Library = () => {
     <div
       className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
      text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
-      <MainTitle />
-      <MovieGallery movies={movies} />
+      <MovieGallery movies={movies} page={page} />
     </div>
   );
 };

@@ -1,8 +1,6 @@
-import MainTitle from '../components/MainTitle';
-import { API_URL } from '../../shared/constants';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Button from '../components/Button';
-import { downloadMovie } from '../api/downlaod';
+import { downloadMovie } from '../api/download';
 import Comments from '../components/Comments';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -64,6 +62,24 @@ const Stream = () => {
           onClick={() => downloadMovie(torrentHash)}
         />
       </div>
+import VideoPlayer from '../components/VideoPlayer';
+
+const Stream = () => {
+  const { torrentHash, imdbId } = useParams();
+  if (!torrentHash || !imdbId) {
+    return (
+      <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-center items-center">
+        <h1 className="text-white text-4xl">
+          No torrent hash or imdbId provided
+        </h1>
+      </div>
+    );
+  }
+  return (
+    <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center px-2 md:px-32 gap-y-12">
+      <VideoPlayer torrentHash={torrentHash} />
+
+      <Comments imdbId={imdbId} />
     </div>
   );
 };

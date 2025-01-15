@@ -9,13 +9,23 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const message = exception.message.replace(/\n/g, '');
-
+    console.log(exception);
     switch (exception.code) {
       case 'P2002': {
         const status = HttpStatus.CONFLICT;
         const target = exception.meta?.target || 'field';
         const message = `A record with this ${target} already exists. Please use a different value.`;
 
+        response.status(status).json({
+          statusCode: status,
+          message: message,
+        });
+        break;
+      }
+
+      case 'P2003': {
+        const status = HttpStatus.BAD_REQUEST;
+        const message = `Ensure referenced records exist.`;
         response.status(status).json({
           statusCode: status,
           message: message,

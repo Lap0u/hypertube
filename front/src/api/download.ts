@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { API_URL } from '../../shared/constants';
+import { protectedInstance } from './axios';
 
-export const downloadMovie = (torrentHash: string | undefined) => {
-  return axios
-    .post(`${API_URL}/metTonAddresseIciThomas?hash=${torrentHash}`, {
+export const downloadMovie = (torrentHash: string) => {
+  return protectedInstance
+    .get(`${API_URL}/metTonAddresseIciThomas?hash=${torrentHash}`, {
       withCredentials: true,
     })
     .then((response) => {

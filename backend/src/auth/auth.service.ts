@@ -99,6 +99,17 @@ export class AuthService {
     return user;
   }
 
+  async signOut(userId: number) {
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        refreshToken: '',
+      },
+    });
+  }
+
   async createAccessToken(payload: { sub: number; username: string }) {
     const date = Date.now();
     return this.jwtService.sign(
@@ -131,11 +142,11 @@ export class AuthService {
   }
 
   async refreshTokens(user) {
-    const payload = { sub: user.sub, username: user.username };
+    const payload = { sub: user.id, username: user.username };
 
     const accessToken = await this.createAccessToken(payload);
     const refreshToken = await this.createRefreshToken(payload);
-    this.usersService.updateRefreshToken(user.sub, refreshToken);
+    this.usersService.updateRefreshToken(user.id, refreshToken);
 
     return {
       accessToken: accessToken,
@@ -271,8 +282,22 @@ export class AuthService {
       return { token: null };
     }
 
-    const token = uuidv4();
     const now = new Date();
+
+    const pendingResetPasswordTokens =
+      await this.prisma.resetPasswordToken.findMany({
+        where: {
+          expiredAt: {
+            gt: now,
+          },
+        },
+      });
+
+    if (pendingResetPasswordTokens.length !== 0) {
+      return { token: null };
+    }
+
+    const token = uuidv4();
     const expirationDate = new Date(now.getTime() + 60 * 60 * 1000);
     return await this.prisma.resetPasswordToken.create({
       data: {

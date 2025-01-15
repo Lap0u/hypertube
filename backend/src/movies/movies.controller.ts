@@ -1,8 +1,18 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { CommentsService } from 'src/comments/comments.service';
 import { TmdbService } from 'src/tmdb/tmdb.service';
-import { GetMoviesDto } from './dto/getMovies.dto';
+import { SortMovieField } from './dto/enums';
+import { GetMoviesDto, GetPopularMoviesDto } from './dto/getMovies.dto';
 import { PostMovieDto } from './dto/postMovie.dto';
 import { MoviesService } from './movies.service';
 
@@ -15,8 +25,26 @@ export class MoviesController {
   ) {}
 
   @Get()
-  getMovies(@Query() params: GetMoviesDto) {
-    return this.movieService.getMovies(params);
+  @UseGuards(JwtAccessAuthGuard)
+  async getMovies(@Query() params: GetMoviesDto, @Req() req) {
+    const user = req.user;
+    const movie = await this.movieService.getMovies(params, user.id);
+    if (!movie) {
+      return {};
+    }
+    return movie;
+  }
+
+  @Get('popular')
+  async getPopularMovies(@Query() params: GetPopularMoviesDto) {
+    const movie = await this.movieService.getMovies({
+      ...params,
+      sort_by: SortMovieField.DOWNLOAD_COUNT,
+    });
+    if (!movie) {
+      return {};
+    }
+    return movie;
   }
 
   @Get(`/:imdbId`)
@@ -37,5 +65,16 @@ export class MoviesController {
   addMovie(@Query() movieDetails: PostMovieDto) {
     const { imdbId, title } = movieDetails;
     this.movieService.addMovie(imdbId, title);
+  }
+
+  @Post('/:id/watch')
+  @UseGuards(JwtAccessAuthGuard)
+  async watchMovie(@Param('id') movieId: number, @Req() req) {
+    const user = req.user;
+    const watchedMovie = await this.movieService.watchMovie(
+      Number(movieId),
+      user.id,
+    );
+    console.log(watchedMovie);
   }
 }
