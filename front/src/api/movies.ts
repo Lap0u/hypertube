@@ -276,3 +276,29 @@ export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
       };
     });
 };
+
+export const downloadSubtitles = async (
+  torrentHash: string | undefined,
+  pageId: string
+) => {
+  if (!torrentHash) {
+    return {
+      status: 400,
+      data: 'Invalid torrent hash',
+    };
+  }
+  return axios
+    .get(`${API_URL}/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      return { status: response.status, data: response.data };
+    })
+    .catch((error) => {
+      console.error(error);
+      return {
+        status: error.response.status,
+        data: error.response.data.message,
+      };
+    });
+};
