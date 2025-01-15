@@ -74,10 +74,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppContextProvider>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </AppContextProvider>
-  </StrictMode>
+  <AppContextProvider>
+    <RouterProvider router={router} />
+    <ToastContainer />
+  </AppContextProvider>
 );

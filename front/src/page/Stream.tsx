@@ -1,25 +1,24 @@
 import { useParams } from 'react-router-dom';
-import Button from '../components/Button';
-import { downloadMovie } from '../api/download';
+import VideoPlayer from '../components/VideoPlayer';
 import Comments from '../components/Comments';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { toastConfig } from '../../shared/toastConfig';
 import { downloadSubtitles } from '../api/movies';
+import { API_URL } from '../../shared/constants';
 
 const Stream = () => {
-  const { torrentHash } = useParams();
+  const { torrentHash, imdbId } = useParams();
   const [subtitles, setSubtitles] = useState();
-  const location = useLocation();
-  const imdbId = location.state.imdbId;
   const pageId = uuidv4();
   useEffect(() => {
     const getSubtitles = async () => {
       const response = await downloadSubtitles(torrentHash, pageId);
       if (response.status === 200) {
-        console.log('Subtitles fetched successfully');
+        console.log('Subtitles fetched successfully', response.data);
         setSubtitles(response.data);
+
       } else {
         toast.error('Failed to fetch subtitles', toastConfig);
       }
@@ -37,35 +36,6 @@ const Stream = () => {
       window.removeEventListener('unload', handleUnload);
     };
   }, [pageId, torrentHash]);
-  return (
-    <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center">
-      <MainTitle />
-      <div className="flex justify-center gap-x-12 items-start flex-col gap-16">
-        <video
-          className="border border-2 border-white"
-          width="800"
-          height="600"
-          controls
-          src={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}`}>
-          <track
-            // src={`${API_URL}/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`}
-            src={subtitles}
-            kind="subtitles"
-            srcLang="en"
-            label="English"
-            default
-          />
-        </video>
-        <Comments imdbId={imdbId} />
-        <Button
-          text="Download Movie"
-          onClick={() => downloadMovie(torrentHash)}
-        />
-      </div>
-import VideoPlayer from '../components/VideoPlayer';
-
-const Stream = () => {
-  const { torrentHash, imdbId } = useParams();
   if (!torrentHash || !imdbId) {
     return (
       <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-center items-center">
@@ -78,7 +48,6 @@ const Stream = () => {
   return (
     <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center px-2 md:px-32 gap-y-12">
       <VideoPlayer torrentHash={torrentHash} />
-
       <Comments imdbId={imdbId} />
     </div>
   );

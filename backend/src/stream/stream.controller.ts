@@ -47,7 +47,7 @@ export class StreamController {
         'Content-Type': 'text/vtt',
       });
 
-      res.sendFile(subtitlePath);
+      res.send(subtitlePath);
     } catch (error) {
       console.error('Error serving subtitle file:', error);
       res.status(500).send('Failed to serve the subtitle file.');
