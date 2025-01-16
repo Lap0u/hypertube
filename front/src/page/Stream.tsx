@@ -18,7 +18,6 @@ const Stream = () => {
       if (response.status === 200) {
         console.log('Subtitles fetched successfully', response.data);
         setSubtitles(response.data);
-
       } else {
         toast.error('Failed to fetch subtitles', toastConfig);
       }
@@ -47,7 +46,7 @@ const Stream = () => {
   }
   return (
     <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center px-2 md:px-32 gap-y-12">
-      <VideoPlayer torrentHash={torrentHash} />
+      <VideoPlayer torrentHash={torrentHash} pageId={pageId} subtitle={subtitles}/>
       <Comments imdbId={imdbId} />
     </div>
   );

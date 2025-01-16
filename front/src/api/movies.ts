@@ -1,13 +1,13 @@
-import { FullMovieDto, MovieDto } from '../dtos/MovieDto';
+import { FullMovieDto, MovieDto } from "../dtos/MovieDto";
 import {
   GenreField,
   MinRatingField,
   OrderByField,
   SortMovieField,
-} from '../../shared/enum';
-import { UserDto } from '../dtos/UserLoginDto';
-import { globalInstance, protectedInstance } from './axios';
-import { getMe } from './user';
+} from "../../shared/enum";
+import { UserDto } from "../dtos/UserLoginDto";
+import { globalInstance, protectedInstance } from "./axios";
+import { getMe } from "./user";
 
 type MoviesResponseType = {
   status: number;
@@ -39,7 +39,7 @@ export const getMovies = async (
     return protectedInstance
       .get(`/movies`, { params })
       .then((response) => {
-        return { status: response.status, data: response.data, message: '' };
+        return { status: response.status, data: response.data, message: "" };
       })
       .catch((error) => {
         return {
@@ -52,7 +52,7 @@ export const getMovies = async (
   return globalInstance
     .get(`/movies/popular`, { params })
     .then((response) => {
-      return { status: response.status, data: response.data, message: '' };
+      return { status: response.status, data: response.data, message: "" };
     })
     .catch((error) => {
       return {
@@ -67,7 +67,7 @@ export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
   return globalInstance
     .get(`/movies/${imdbId}`)
     .then((response) => {
-      return { status: response.status, data: response.data, message: '' };
+      return { status: response.status, data: response.data, message: "" };
     })
     .catch((error) => {
       return {
@@ -85,11 +85,11 @@ export const downloadSubtitles = async (
   if (!torrentHash) {
     return {
       status: 400,
-      data: 'Invalid torrent hash',
+      data: "Invalid torrent hash",
     };
   }
-  return axios
-    .get(`${API_URL}/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
+  return protectedInstance
+    .get(`/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
       withCredentials: true,
     })
     .then((response) => {
