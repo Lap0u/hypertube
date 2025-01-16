@@ -80,7 +80,7 @@ export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
 
 export const downloadSubtitles = async (
   torrentHash: string | undefined,
-  pageId: string
+  // pageId: string
 ) => {
   if (!torrentHash) {
     return {
@@ -89,7 +89,8 @@ export const downloadSubtitles = async (
     };
   }
   return protectedInstance
-    .get(`/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
+    // .get(`/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
+    .get(`/stream/subtitles?hash=${torrentHash}`, {
       withCredentials: true,
     })
     .then((response) => {

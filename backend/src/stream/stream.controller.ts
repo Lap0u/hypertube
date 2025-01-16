@@ -34,7 +34,7 @@ export class StreamController {
   @Get('subtitles')
   async getSubtitles(
     @Query('hash') hash: string,
-    @Query('pageId') pageId: string,
+    // @Query('pageId') pageId: string,
     @Res() res: Response,
   ) {
     try {

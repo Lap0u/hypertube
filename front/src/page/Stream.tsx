@@ -10,11 +10,11 @@ import { API_URL } from '../../shared/constants';
 
 const Stream = () => {
   const { torrentHash, imdbId } = useParams();
-  const [subtitles, setSubtitles] = useState();
+  const [subtitles , setSubtitles] = useState();
   const pageId = uuidv4();
   useEffect(() => {
     const getSubtitles = async () => {
-      const response = await downloadSubtitles(torrentHash, pageId);
+      const response = await downloadSubtitles(torrentHash);
       if (response.status === 200) {
         console.log('Subtitles fetched successfully', response.data);
         setSubtitles(response.data);

@@ -12,12 +12,13 @@ type SubtitleProps = {
 type VideoPlayerProps = {
   torrentHash: string;
   pageId: string | undefined;
-  subtitle: SubtitleProps[] | undefined | string
+  subtitle: SubtitleProps[]
 };
 
 const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
   const user = useContext(AppContext);
-  if (!subtitle || subtitle=="No subtitle available") return <div>Loading...</div>
+  console.debug((!subtitle))
+  if (!subtitle) return <div>Loading...</div>
   console.log('subtitle', subtitle);
   console.log('pageId', pageId)
   return (
@@ -35,7 +36,7 @@ const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
             crossOrigin: 'anonymous', // Required for subtitles to work properly
           },
           tracks: [
-            {kind: 'subtitles', src: `${API_URL}/${subtitle}`, srcLang: 'en', default: true},
+            {kind: 'subtitles', src: `${API_URL}/${subtitle[0]}`, srcLang: 'en', label: `subtitle_title`, default: true},
             // {kind: 'subtitles', src: `${API_URL}/Superbad.Unrated.2007.Subtitles.YIFY.srt.vtt`, srcLang: 'en', default: true},
           ]
           // [
