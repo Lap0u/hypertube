@@ -105,4 +105,8 @@ export class MoviesService {
 
     return !!watchedMovie;
   }
+
+  async getLastWatchedTime(movieId: number) {
+    const WatchedFilmInfo = await this.prisma.watchedMovie.findMany();
+  }
 }
