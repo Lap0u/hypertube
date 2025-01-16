@@ -18,7 +18,7 @@ import Cast from './Cast';
 import Crew from './Crew';
 
 type MovieDetailsProps = {
-  imdbId: string;
+  imdbId: string | undefined;
 };
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
@@ -32,6 +32,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
+        if (!imdbId) return;
         const response = await getMovie(imdbId);
         if (response.status === 200) {
           setMovie(response.data);

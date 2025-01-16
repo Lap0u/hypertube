@@ -7,7 +7,6 @@ import {
 } from '../../shared/enum';
 import { UserDto } from '../dtos/UserLoginDto';
 import { globalInstance, protectedInstance } from './axios';
-import { getMe } from './user';
 
 type MoviesResponseType = {
   status: number;

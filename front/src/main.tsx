@@ -7,7 +7,6 @@ import Login from './page/Login.tsx';
 import Home from './page/Home.tsx';
 import { ToastContainer } from 'react-toastify';
 import Page404 from './page/404.tsx';
-import Test from './page/test.tsx';
 import Movie from './page/Movie.tsx';
 import Stream from './page/Stream.tsx';
 import RootLayout from './components/RootLayout.tsx';
@@ -50,10 +49,6 @@ const router = createBrowserRouter([
         element: <Movie />,
       },
       {
-        path: '/test',
-        element: <Test />,
-      },
-      {
         path: '/forget-password/:token',
         element: <ForgetPassword />,
       },
@@ -74,10 +69,10 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppContextProvider>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </AppContextProvider>
-  </StrictMode>
+  // <StrictMode>
+  <AppContextProvider>
+    <RouterProvider router={router} />
+    <ToastContainer />
+  </AppContextProvider>
+  // </StrictMode>
 );
