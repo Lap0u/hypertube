@@ -1,8 +1,5 @@
-import { useState } from 'react';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import MainTitle from '../components/MainTitle';
-import Footer from '../components/Footer';
 
 const Home = () => {
   const nav = useNavigate();

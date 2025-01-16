@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { API_URL } from '../../shared/constants';
 import { UserDto } from '../dtos/UserLoginDto';
 import { protectedInstance } from './axios';
 

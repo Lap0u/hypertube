@@ -6,7 +6,7 @@ const RootLayout = () => {
     <div className="flex flex-col min-h-screen bg-mainBlack">
       <Header />
       <main className="flex-grow">
-        <Outlet /> {/* This is where child routes will be rendered */}
+        <Outlet />
       </main>
       <Footer />
     </div>

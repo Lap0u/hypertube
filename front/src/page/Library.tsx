@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import MainTitle from '../components/MainTitle';
 import { MovieDto } from '../dtos/MovieDto';
 import { toastConfig } from '../../shared/toastConfig';
 import { toast } from 'react-toastify';

@@ -1,4 +1,4 @@
-import { globalInstance, protectedInstance } from './axios';
+import { globalInstance } from './axios';
 
 type PasswordResponse = {
   status: number;
