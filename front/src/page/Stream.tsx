@@ -1,6 +1,4 @@
 import { useParams } from 'react-router-dom';
-import Button from '../components/Button';
-import { downloadMovie } from '../api/download';
 import Comments from '../components/Comments';
 import VideoPlayer from '../components/VideoPlayer';
 

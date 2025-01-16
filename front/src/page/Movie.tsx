@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import MainTitle from '../components/MainTitle';
 import MovieDetails from '../components/MovieDetails';
 
 const Movie = () => {

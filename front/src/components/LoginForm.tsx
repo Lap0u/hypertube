@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { toastConfig } from '../../shared/toastConfig';
+import { useContext } from 'react';
+import { AppContext } from './AppContextProvider';
+import { getMe } from '../api/user';
 
 type Inputs = {
   login: string;
@@ -17,6 +20,7 @@ type LoginFormProps = {
 
 const LoginForm = ({ login }: LoginFormProps) => {
   const nav = useNavigate();
+  const { setUser } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -31,8 +35,12 @@ const LoginForm = ({ login }: LoginFormProps) => {
     };
     const response = await signIn(formData);
     if (response?.status === 201) {
-      toast.success(response.data, toastConfig);
-      nav('/library');
+      const userResponse = await getMe();
+      if (userResponse.status === 200) {
+        setUser(userResponse.data);
+        toast.success(response.data, toastConfig);
+        nav('/library');
+      }
     } else {
       toast.error(response.data || 'An error occurred', toastConfig);
     }

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserDto } from '../dtos/UserLoginDto';
 import { getUsers } from '../api/user';
-import { API_URL } from '../../shared/constants';
 
 const UsersPage = () => {
   const [users, setUsers] = useState<UserDto[]>([]);

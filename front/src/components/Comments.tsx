@@ -5,7 +5,7 @@ import { AppContext } from './AppContextProvider';
 import { CommentsDto } from '../dtos/CommentsDto';
 
 type CommentsProps = {
-  imdbId: string;
+  imdbId: string | undefined;
 };
 
 const Comments = ({ imdbId }: CommentsProps) => {
@@ -13,6 +13,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
   const [currentComment, setCurrentComment] = useState<string>('');
   const { user } = useContext(AppContext);
   useEffect(() => {
+    if (!imdbId) return;
     const updateComments = async () => {
       const comments = await getComments(imdbId);
       setCommentsList(comments.data);
@@ -21,7 +22,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
   }, [imdbId]);
 
   const postComment = async () => {
-    if (!currentComment) return;
+    if (!currentComment || !imdbId) return;
     const resp = await postComments(imdbId, currentComment);
     if (resp.status === 201) {
       const comments = await getComments(imdbId);

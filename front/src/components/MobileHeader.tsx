@@ -1,4 +1,3 @@
-import React from 'react';
 import MainTitle from './MainTitle';
 import { TiThMenu } from 'react-icons/ti';
 import { useState } from 'react';
