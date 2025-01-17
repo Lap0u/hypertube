@@ -1,26 +1,41 @@
-import { useContext } from 'react';
 import ReactPlayer from 'react-player';
-import { AppContext } from '../components/AppContextProvider';
 import { API_URL } from '../../shared/constants';
 
-type SubtitleProps = {
+type Subtitle = {
   kind: string;
   src: string;
   srcLang: string;
-}
+  label: string;
+  default: boolean;
+};
 
 type VideoPlayerProps = {
   torrentHash: string;
   pageId: string | undefined;
-  subtitle: SubtitleProps[]
+  subtitle: Subtitle[];
 };
 
+const subtitleMock: Subtitle[] = [
+  {
+    kind: 'subtitles',
+    src: 'Superbad.Unrated.2007.Subtitles.YIFY.srt.vtt',
+    srcLang: 'en',
+    label: `anglais`,
+    default: false,
+  },
+  {
+    kind: 'subtitles',
+    src: 'Spider-Man Homecoming 2017 Russian.srt.vtt',
+    srcLang: 'fr',
+    label: `francais`,
+    default: true,
+  },
+];
+
 const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
-  const user = useContext(AppContext);
-  console.debug((!subtitle))
-  if (!subtitle) return <div>Loading...</div>
+  if (!subtitle) return <div>Loading...</div>;
   console.log('subtitle', subtitle);
-  console.log('pageId', pageId)
+  console.log('pageId', pageId);
   return (
     <div className="flex flex-col justify-center items-center w-100">
       <ReactPlayer
@@ -31,19 +46,14 @@ const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
         controls
         autoPlay
         url={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}`}
-        config={{ file: {
-          attributes: {
-            crossOrigin: 'anonymous', // Required for subtitles to work properly
+        config={{
+          file: {
+            attributes: {
+              crossOrigin: 'anonymous', // Required for subtitles to work properly
+            },
+            tracks: subtitleMock,
           },
-          tracks: [
-            {kind: 'subtitles', src: `${API_URL}/${subtitle[0]}`, srcLang: 'en', label: `subtitle_title`, default: true},
-            // {kind: 'subtitles', src: `${API_URL}/Superbad.Unrated.2007.Subtitles.YIFY.srt.vtt`, srcLang: 'en', default: true},
-          ]
-          // [
-            // {kind: 'subtitles', src: 'subs/subtitles.ja.vtt', srcLang: 'ja'},
-            // {kind: 'subtitles', src: 'subs/subtitles.de.vtt', srcLang: 'de'}
-            // ]
-          }}}
+        }}
       />
     </div>
   );

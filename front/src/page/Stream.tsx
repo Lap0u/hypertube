@@ -10,7 +10,7 @@ import { API_URL } from '../../shared/constants';
 
 const Stream = () => {
   const { torrentHash, imdbId } = useParams();
-  const [subtitles , setSubtitles] = useState();
+  const [subtitles, setSubtitles] = useState();
   const pageId = uuidv4();
   useEffect(() => {
     const getSubtitles = async () => {
@@ -23,6 +23,8 @@ const Stream = () => {
       }
     };
     getSubtitles();
+  }, []);
+  useEffect(() => {
     const handleUnload = () => {
       console.log('User is leaving the page');
       navigator.sendBeacon(`${API_URL}/stream/stopEngine?pageId=${pageId}`);
@@ -46,7 +48,11 @@ const Stream = () => {
   }
   return (
     <div className="bg-mainBlack w-screen min-h-screen flex flex-col justify-start items-center px-2 md:px-32 gap-y-12">
-      <VideoPlayer torrentHash={torrentHash} pageId={pageId} subtitle={subtitles}/>
+      <VideoPlayer
+        torrentHash={torrentHash}
+        pageId={pageId}
+        subtitle={subtitles}
+      />
       <Comments imdbId={imdbId} />
     </div>
   );
