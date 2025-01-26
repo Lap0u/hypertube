@@ -79,18 +79,17 @@ export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
 };
 
 export const downloadSubtitles = async (
-  torrentHash: string | undefined,
-  // pageId: string
+  imdb_id: string | undefined,
+  userId: number | undefined
 ) => {
-  if (!torrentHash) {
+  if (!imdb_id) {
     return {
       status: 400,
       data: "Invalid torrent hash",
     };
   }
   return protectedInstance
-    // .get(`/stream/subtitles?hash=${torrentHash}&pageId=${pageId}`, {
-    .get(`/stream/subtitles?hash=${torrentHash}`, {
+    .get(`/subtitles?imdb_id=${imdb_id}&userId=${userId}`, {
       withCredentials: true,
     })
     .then((response) => {

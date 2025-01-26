@@ -18,6 +18,7 @@ import { YtsService } from './yts/yts.service';
 import { StreamService } from './stream/stream.service';
 import { StreamController } from './stream/stream.controller';
 import { StreamModule } from './stream/stream.module';
+import { SubtitlesModule } from './subtitles/subtitles.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { StreamModule } from './stream/stream.module';
     CommentsModule,
     StreamModule,
     MailModule,
+    SubtitlesModule,
   ],
   controllers: [AppController, CommentsController, StreamController],
   providers: [AppService, YtsService, CommentsService, StreamService],

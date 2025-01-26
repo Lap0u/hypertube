@@ -7,14 +7,16 @@ import { toast } from 'react-toastify';
 import { toastConfig } from '../../shared/toastConfig';
 import { downloadSubtitles } from '../api/movies';
 import { API_URL } from '../../shared/constants';
+// import { getMe } from '../api/user';
 
-const Stream = () => {
+const Stream = async () => {
+  // const  user = await getMe();
   const { torrentHash, imdbId } = useParams();
   const [subtitles, setSubtitles] = useState();
   const pageId = uuidv4();
   useEffect(() => {
     const getSubtitles = async () => {
-      const response = await downloadSubtitles(torrentHash);
+      const response = await downloadSubtitles(imdbId, 1); // choosen language
       if (response.status === 200) {
         console.log('Subtitles fetched successfully', response.data);
         setSubtitles(response.data);

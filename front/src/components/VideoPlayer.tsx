@@ -15,27 +15,17 @@ type VideoPlayerProps = {
   subtitle: Subtitle[];
 };
 
-const subtitleMock: Subtitle[] = [
-  {
-    kind: 'subtitles',
-    src: 'Superbad.Unrated.2007.Subtitles.YIFY.srt.vtt',
-    srcLang: 'en',
-    label: `anglais`,
-    default: false,
-  },
-  {
-    kind: 'subtitles',
-    src: 'Spider-Man Homecoming 2017 Russian.srt.vtt',
-    srcLang: 'fr',
-    label: `francais`,
-    default: true,
-  },
-];
-
 const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
   if (!subtitle) return <div>Loading...</div>;
-  console.log('subtitle', subtitle);
-  console.log('pageId', pageId);
+  console.debug(subtitle)
+  const tracks = subtitle.map(sub => ({
+    kind: sub.kind,
+    src: `${API_URL}/${sub.src}`,
+    srcLang: sub.srcLang,
+    label: sub.label,
+    default: sub.default,
+  }));
+  console.log(tracks);
   return (
     <div className="flex flex-col justify-center items-center w-100">
       <ReactPlayer
@@ -51,7 +41,7 @@ const VideoPlayer = ({ torrentHash, pageId, subtitle }: VideoPlayerProps) => {
             attributes: {
               crossOrigin: 'anonymous', // Required for subtitles to work properly
             },
-            tracks: subtitleMock,
+            tracks: tracks
           },
         }}
       />
