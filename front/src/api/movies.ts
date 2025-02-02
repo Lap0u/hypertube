@@ -101,7 +101,7 @@ export const downloadSubtitles = async (
       withCredentials: true,
     })
     .then((response) => {
-      return { status: response.status, data: response };
+      return response ;
     })
     .catch((error) => {
       console.error(error);
