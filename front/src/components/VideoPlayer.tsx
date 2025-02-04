@@ -1,10 +1,11 @@
 import ReactPlayer from 'react-player';
 import { API_URL } from '../../shared/constants';
-import { useEffect, useState, useContext } from 'react';
-import { AppContext } from './AppContextProvider';
+import { useEffect, useState } from 'react';
 import { downloadSubtitles } from '../api/movies';
 import { toastConfig } from '../../shared/toastConfig';
 import { toast } from 'react-toastify';
+import { AppContext } from '../components/AppContextProvider';
+import { useContext } from 'react';
 
 type Subtitle = {
   kind: string;
@@ -22,10 +23,13 @@ type VideoPlayerProps = {
 
 const VideoPlayer = ({ torrentHash, pageId, imdbId }: VideoPlayerProps) => {
   const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
-  const { user } = useContext(AppContext);
+  const { user, isLoading } = useContext(AppContext);
 
   useEffect(() => {
+    if (isLoading) return; // Wait for context to initialize
+    if (!user) return;
     const getSubtitles = async () => {
+      console.log('fetching subtitles', user);
       const response = await downloadSubtitles(imdbId, user.id); // choosen language
       if (response.status === 200) {
         console.log('Subtitles fetched successfully', response.data);
@@ -34,11 +38,12 @@ const VideoPlayer = ({ torrentHash, pageId, imdbId }: VideoPlayerProps) => {
         toast.error('Failed to fetch subtitles', toastConfig);
       }
     };
-    getSubtitles();
-  }, []);
+    if (user) getSubtitles();
+    console.log('userid', user);
+  }, [imdbId, user, isLoading]);
 
-  console.log("SUBS", subtitles);
-  if (subtitles.length == 0) return <div>loading</div>
+  console.log('SUBS', subtitles);
+  if (subtitles.length == 0) return <div>loading</div>;
   return (
     <div className="flex flex-col justify-center items-center w-100">
       <ReactPlayer
@@ -54,7 +59,7 @@ const VideoPlayer = ({ torrentHash, pageId, imdbId }: VideoPlayerProps) => {
             attributes: {
               crossOrigin: 'anonymous', // Required for subtitles to work properly
             },
-            tracks: subtitles
+            tracks: subtitles,
           },
         }}
       />
