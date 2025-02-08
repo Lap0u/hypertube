@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import Avatar from './Avatar';
 import { SignUpData } from '../dtos/SignupData';
 import { signUp } from '../api/signup';
-import { Bounce, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { toastConfig } from '../../shared/toastConfig';
