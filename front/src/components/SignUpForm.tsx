@@ -115,11 +115,24 @@ const SignUpForm = () => {
               type="password"
               className="px-4 py-2 text-mainYellow rounded-sm"
               placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;*"
-              {...register('password', { required: true })}
+              {...register('password', {
+                required: true,
+                pattern: {
+                  value:
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                  message: 'Your password does not match the pattern',
+                },
+              })}
             />
-            {errors.password && (
+            {errors.password && errors.password.type === 'required' && (
               <span className="text-xl mt-[-12px] text-red-600">
                 This field is required
+              </span>
+            )}
+
+            {errors.password && errors.password.type === 'pattern' && (
+              <span className="text-xl mt-[-12px] text-red-600">
+                Your password does not match the pattern
               </span>
             )}
             <input
