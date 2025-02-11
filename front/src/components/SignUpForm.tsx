@@ -117,8 +117,11 @@ const SignUpForm = () => {
               placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;*"
               {...register('password', {
                 required: true,
-                pattern:
-                  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8  ,}$/,
+                pattern: {
+                  value:
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                  message: 'Your password does not match the pattern',
+                },
               })}
             />
             {errors.password && errors.password.type === 'required' && (
