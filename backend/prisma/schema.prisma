@@ -34,7 +34,7 @@ model Comment {
   author    User @relation(fields: [authorId], references: [id])
   authorId  Int
   content   String
-  // movie     Movie @relation(fields: [movieId], references: [imdbId])
+  movie     Movie @relation(fields: [movieId], references: [imdbId])
   movieId   String
   createAt  DateTime @default(now())
 }
@@ -43,8 +43,9 @@ model Movie {
   id        Int @id @default(autoincrement())
   imdbId    String @unique()
   title     String
+  path      String
   watched   WatchedMovie[] 
-  // comments  Comment[]
+  comments  Comment[]
 }
 
 model WatchedMovie {
