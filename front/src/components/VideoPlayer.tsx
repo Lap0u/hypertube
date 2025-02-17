@@ -53,7 +53,7 @@ const VideoPlayer = ({ torrentHash, pageId, imdbId }: VideoPlayerProps) => {
         muted
         controls
         autoPlay
-        url={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}`}
+        url={`${API_URL}/stream?hash=${torrentHash}&pageId=${pageId}&userId=${user?.id}`}
         config={{
           file: {
             attributes: {
