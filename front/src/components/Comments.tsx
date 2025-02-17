@@ -74,7 +74,7 @@ const Comments = ({ imdbId }: CommentsProps) => {
             <div className="flex" key={index}>
               <img
                 className="w-16 h-16 rounded-full mr-4"
-                src={comments.author.profilePictureUrl}
+                src={comments.author.profilePictureUrl || '/user-default.png'}
                 alt=""
               />
               <div className="gap-y-2 flex flex-col justify-center items-start">

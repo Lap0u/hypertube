@@ -57,7 +57,9 @@ export class UsersService {
         username: true,
         firstName: true,
         lastName: true,
+        email: true,
         profilePictureUrl: true,
+        preferredLanguage: true,
       },
     });
   }

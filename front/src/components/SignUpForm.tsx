@@ -29,7 +29,7 @@ const SignUpForm = () => {
     formData.append('email', data.email);
     formData.append('firstName', data.firstName ?? '');
     formData.append('lastName', data.lastName ?? '');
-    formData.append('preferredLanguage', data.preferredLanguage ?? 'string');
+    formData.append('preferredLanguage', data.preferredLanguage ?? 'en');
     if (file) {
       formData.append('profilePicture', file);
     }

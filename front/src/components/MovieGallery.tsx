@@ -14,9 +14,11 @@ const MovieGallery = ({ movies, page }: MovieGalleryType) => {
       {movies.map((movie: MovieDto, idx) => {
         return (
           <div
-            key={page * 20 + idx}
+            key={idx}
             onClick={() => nav(`/movie/${movie.imdbId}`)}
-            className=" relative group hover:cursor-pointer text-2xl">
+            className={`${
+              page * 20 + idx
+            } relative group hover:cursor-pointer text-2xl`}>
             <div className=" movie_container flex flex-col transition-transform transform group-hover:scale-110 hover:opacity-85 hover:bg-red-600 rounded-xl p-2">
               {movie.watched && (
                 <div className="absolute top-4 left-4 text-sm bg-red-600 text-white px-2 py-1 rounded-lg">
