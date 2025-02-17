@@ -8,17 +8,18 @@ import { AuthModule } from './auth/auth.module';
 import { CommentsController } from './comments/comments.controller';
 import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
+import { CronModule } from './cron/cron.module';
 import { MailModule } from './mail/mail.module';
 import { MoviesModule } from './movies/movies.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { StreamController } from './stream/stream.controller';
+import { StreamModule } from './stream/stream.module';
+import { StreamService } from './stream/stream.service';
+import { SubtitlesModule } from './subtitles/subtitles.module';
 import { TmdbModule } from './tmdb/tmdb.module';
 import { UsersModule } from './users/users.module';
 import { YtsModule } from './yts/yts.module';
 import { YtsService } from './yts/yts.service';
-import { StreamService } from './stream/stream.service';
-import { StreamController } from './stream/stream.controller';
-import { StreamModule } from './stream/stream.module';
-import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CronModule } from './cron/cron.module';
     CommentsModule,
     StreamModule,
     MailModule,
+    SubtitlesModule,
     CronModule,
   ],
   controllers: [AppController, CommentsController, StreamController],

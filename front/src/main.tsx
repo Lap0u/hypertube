@@ -1,20 +1,19 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Library from './page/Library.tsx';
-import Profile from './page/Profile.tsx';
-import Login from './page/Login.tsx';
-import Home from './page/Home.tsx';
 import { ToastContainer } from 'react-toastify';
-import Page404 from './page/404.tsx';
-import Movie from './page/Movie.tsx';
-import Stream from './page/Stream.tsx';
-import RootLayout from './components/RootLayout.tsx';
-import UsersPage from './page/Users.tsx';
-import Search from './page/Search.tsx';
-import ForgetPassword from './page/ForgetPassword.tsx';
-import UpdatePassword from './page/UpdatePassword.tsx';
 import AppContextProvider from './components/AppContextProvider.tsx';
+import RootLayout from './components/RootLayout.tsx';
+import Page404 from './page/404.tsx';
+import ForgetPassword from './page/ForgetPassword.tsx';
+import Home from './page/Home.tsx';
+import Library from './page/Library.tsx';
+import Login from './page/Login.tsx';
+import Movie from './page/Movie.tsx';
+import Profile from './page/Profile.tsx';
+import Search from './page/Search.tsx';
+import Stream from './page/Stream.tsx';
+import UpdatePassword from './page/UpdatePassword.tsx';
+import UsersPage from './page/Users.tsx';
 
 const router = createBrowserRouter([
   {
@@ -69,10 +68,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
   <AppContextProvider>
     <RouterProvider router={router} />
     <ToastContainer />
   </AppContextProvider>
-  // </StrictMode>
 );
