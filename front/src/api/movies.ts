@@ -62,9 +62,12 @@ export const getMovies = async (
     });
 };
 
-export const getMovie = async (imdbId: string): Promise<MovieResponseType> => {
+export const getMovie = async (
+  imdbId: string,
+  preferredLanguage: string | undefined
+): Promise<MovieResponseType> => {
   return globalInstance
-    .get(`/movies/${imdbId}`)
+    .get(`/movies/${imdbId}?language=${preferredLanguage}`)
     .then((response) => {
       return { status: response.status, data: response.data, message: '' };
     })
@@ -101,7 +104,7 @@ export const downloadSubtitles = async (
       withCredentials: true,
     })
     .then((response) => {
-      return response ;
+      return response;
     })
     .catch((error) => {
       console.error(error);

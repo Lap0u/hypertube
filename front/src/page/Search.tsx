@@ -37,8 +37,11 @@ const Search = () => {
       sort_by: sortField,
       query_term: searchField,
       minimum_rating: minRating,
-      genre: genre,
     };
+    if (genre !== GenreField.ALL) {
+      queryParam.genre = genre;
+    }
+
     setMovies([...movies, ...nextMovies]);
     const response = await getMovies(queryParam, user);
     if (response.status === 200) {
@@ -74,8 +77,10 @@ const Search = () => {
         sort_by: sortField,
         query_term: searchField,
         minimum_rating: minRating,
-        genre: genre,
       };
+      if (genre !== GenreField.ALL) {
+        queryParam.genre = genre;
+      }
       const response = await getMovies(queryParam, user);
       if (response.status === 200) {
         setMovies(response.data);

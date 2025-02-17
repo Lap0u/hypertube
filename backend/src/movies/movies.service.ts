@@ -68,11 +68,12 @@ export class MoviesService {
     return { ...details, torrents };
   }
 
-  async addMovie(imdbId: string, title: string) {
+  async addMovie(hash: string, title: string, path: string) {
     const newMovie = await this.prisma.movie.create({
       data: {
-        imdbId,
+        hash,
         title,
+        path,
       },
     });
   }
@@ -86,9 +87,9 @@ export class MoviesService {
     });
   }
 
-  async isWatched(imdbId: string, userId: number) {
+  async isWatched(hash: string, userId: number) {
     const movie = await this.prisma.movie.findUnique({
-      where: { imdbId },
+      where: { hash },
       select: { id: true },
     });
 
@@ -106,7 +107,19 @@ export class MoviesService {
     return !!watchedMovie;
   }
 
-  async getLastWatchedTime(movieId: number) {
-    const WatchedFilmInfo = await this.prisma.watchedMovie.findMany();
+  async movieExists(hash: string): Promise<boolean> {
+    const movie = await this.prisma.movie.findUnique({
+      where: { hash },
+    });
+    return movie !== null;
+  }
+
+  async updateDate(hash: string) {
+    return this.prisma.movie.update({
+      where: { hash },
+      data: {
+        lastViewed: new Date(),
+      },
+    });
   }
 }

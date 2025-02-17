@@ -25,7 +25,6 @@ export class SubtitlesService {
         'en',
       ];
       languages = Array.from(new Set(languages));
-      this.mylogger.debug(languages);
       const response = await lastValueFrom(
         this.httpService.get(`${this.api}subtitles`, {
           headers: {
@@ -48,13 +47,11 @@ export class SubtitlesService {
             movieInfo.attributes.language,
             movieInfo.attributes.files[0].file_id,
           );
-          this.mylogger.debug(movieInfo.attributes.language);
           languages = languages.filter(
             (lang) => lang !== movieInfo.attributes.language,
           );
         }
       });
-      this.mylogger.debug(fileId);
       return fileId;
     } catch (error) {
       this.mylogger.error(`getFileId ${error}`);
@@ -85,7 +82,6 @@ export class SubtitlesService {
         );
         fileId.set(lang, response.data.link);
       }
-      console.log(fileId);
       return fileId;
     } catch (error) {
       this.mylogger.error(`downloadFile: ${error}`);

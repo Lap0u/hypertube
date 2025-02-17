@@ -3,11 +3,15 @@ import * as torrentStream from 'torrent-stream';
 import { PassThrough, Readable } from 'stream';
 import { spawn } from 'child_process';
 import { createWriteStream } from 'fs';
+import { MoviesService } from 'src/movies/movies.service';
 // import { kill } from 'process';
 // import passport from 'passport';
 
 @Injectable()
 export class StreamService {
+  constructor(
+    private readonly movieService: MoviesService,
+  ) {}
 	private readonly mylogger = new Logger(StreamService.name);
 	private userEngines = new Map<string, torrentStream>(); // userEngines[pageId]
 	
@@ -43,15 +47,6 @@ export class StreamService {
 		})
 		this.userEngines.set(pageId, [outStream, ffmpegProcess])
 
-		// Handle stdout and stderr for debugging
-		// ffmpegProcess.stdout.on('data', (data) => {
-		//     this.mylogger.log(`FFmpeg stdout: ${data}`);
-		// });
-
-		// ffmpegProcess.stderr.on('data', (data) => {
-		// 	this.mylogger.debug(`FFmpeg stderr: ${data}`);
-		// });
-
 		// Handle process exit
 		ffmpegProcess.on('error', (err) => {
 		this.mylogger.error(`FFmpeg error: ${err.message}`);
@@ -66,21 +61,24 @@ export class StreamService {
 		'magnet:?xt=urn:btih:' +
 		hash +
 		'&tr=http%3A%2F%2F125.227.35.196%3A6969%2Fannounce&tr=http%3A%2F%2F210.244.71.25%3A6969%2Fannounce&tr=http%3A%2F%2F210.244.71.26%3A6969%2Fannounce&tr=http%3A%2F%2F213.159.215.198%3A6970%2Fannounce&tr=http%3A%2F%2F37.19.5.139%3A6969%2Fannounce&tr=http%3A%2F%2F37.19.5.155%3A6881%2Fannounce&tr=http%3A%2F%2F46.4.109.148%3A6969%2Fannounce&tr=http%3A%2F%2F87.248.186.252%3A8080%2Fannounce&tr=http%3A%2F%2Fasmlocator.ru%3A34000%2F1hfZS1k4jh%2Fannounce&tr=http%3A%2F%2Fbt.evrl.to%2Fannounce&tr=http%3A%2F%2Fbt.rutracker.org%2Fann&tr=https%3A%2F%2Fwww.artikelplanet.nl&tr=http%3A%2F%2Fmgtracker.org%3A6969%2Fannounce&tr=http%3A%2F%2Fpubt.net%3A2710%2Fannounce&tr=http%3A%2F%2Ftracker.baravik.org%3A6970%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.filetracker.pl%3A8089%2Fannounce&tr=http%3A%2F%2Ftracker.grepler.com%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.mg64.net%3A6881%2Fannounce&tr=http%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.torrentyorg.pl%2Fannounce&tr=udp%3A%2F%2F168.235.67.63%3A6969&tr=udp%3A%2F%2F182.176.139.129%3A6969&tr=udp%3A%2F%2F37.19.5.155%3A2710&tr=udp%3A%2F%2F46.148.18.250%3A2710&tr=udp%3A%2F%2F46.4.109.148%3A6969&tr=udp%3A%2F%2Fcomputerbedrijven.bestelinks.nl%2F&tr=udp%3A%2F%2Fcomputerbedrijven.startsuper.nl%2F&tr=udp%3A%2F%2Fcomputershop.goedbegin.nl%2F&tr=udp%3A%2F%2Fc3t.org&tr=udp%3A%2F%2Fallerhandelenlaag.nl&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.publicbt.com%3A80&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969';
-    const engine = torrentStream(magnetLink, { path: '/tmp/torrent' });
+    const engine = torrentStream(magnetLink, { path: `/tmp/torrent/${hash}` });
     
-    engine.on('ready', () => {
+    engine.on('ready', async () =>  {
       const files = engine.files;
-      files.forEach(element => {
-          this.mylogger.debug(element.name)
-        });
+      
       const videoFile = files.find((file) =>
         file.name.match(/\.(mp4|webm|mkv)$/),
       );
+      const exists = await this.movieService.movieExists(hash)
+      if (exists) {
+          this.movieService.updateDate(hash)
+      } else {
+        this.movieService.addMovie(hash, videoFile.name, `/tmp/torrent/${hash}`)
+      }
       let isMkv = false
       this.mylogger.log(`Streaming ${videoFile.name}...`);
       if (videoFile.name.endsWith(".mkv")) {isMkv=true}
       if (isMkv) {
-        this.mylogger.log('MKV TO MP4');
         let pathOutput = `/tmp/mkv_to_mp4_file/${videoFile.name.replace('.mkv', '.webm')}`;
         const inputStream = videoFile.createReadStream();
         const outStream = this.startFfmpeg(inputStream, pageId);
@@ -89,7 +87,6 @@ export class StreamService {
         resolve(outStream);
       }
       else {
-        // this.mylogger.debug(pageId);
         this.userEngines.set(pageId, [engine, undefined]);
         resolve(videoFile.createReadStream());
     }

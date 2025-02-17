@@ -61,11 +61,11 @@ export class MoviesController {
     return this.commentsService.getMovieComments(imdbId);
   }
 
-  @Post()
-  addMovie(@Query() movieDetails: PostMovieDto) {
-    const { imdbId, title } = movieDetails;
-    this.movieService.addMovie(imdbId, title);
-  }
+  // @Post()
+  // addMovie(@Query() movieDetails: PostMovieDto) {
+  //   const { imdbId, title } = movieDetails;
+  //   this.movieService.addMovie(imdbId, title);
+  // }
 
   @Post('/:id/watch')
   @UseGuards(JwtAccessAuthGuard)

@@ -84,7 +84,7 @@ const Library = () => {
 
   return (
     <div
-      className="w-100  bg-cover py-8 min-h-screen bg-mainBlack
+      className="w-100 bg-cover py-8 min-h-screen bg-mainBlack
      text-white flex justify-center items-center text-3xl bg-bottom flex-col gap-12">
       <MovieGallery movies={movies} page={page} />
     </div>
