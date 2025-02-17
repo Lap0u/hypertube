@@ -22,7 +22,7 @@ type MovieDetailsProps = {
 };
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
-  const { user } = useContext(AppContext);
+  const { user, isLoading } = useContext(AppContext);
   const [movie, setMovie] = useState<FullMovieDto | null>(null);
   const [activeTab, setActiveTab] = useState<
     'summary' | 'cast' | 'crew' | 'comments'
@@ -33,7 +33,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
     const fetchMovie = async () => {
       try {
         if (!imdbId) return;
-        const response = await getMovie(imdbId);
+        const response = await getMovie(imdbId, user?.preferredLanguage);
         if (response.status === 200) {
           setMovie(response.data);
         } else {
@@ -51,6 +51,16 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
     fetchMovie();
   }, [imdbId, nav]);
 
+  if (isLoading) {
+    return (
+      <div className="w-[90vw] lg:w-[70vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
+        <div className="text-center">
+          <div className="animate-spin w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading movie details...</p>
+        </div>
+      </div>
+    );
+  }
   if (!movie) {
     return (
       <div className="w-[90vw] lg:w-[70vw] min-h-[80vh] mx-auto bg-white rounded-xl shadow-2xl py-4">
