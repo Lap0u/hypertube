@@ -1,6 +1,8 @@
 import { Controller, Get, Header, Param, Post, Query, Res, UseGuards, Req, BadRequestException } from '@nestjs/common';
 import { StreamService } from './stream.service';
 import { Response } from 'express';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 
 @Controller('stream')
 export class StreamController {
@@ -10,10 +12,12 @@ export class StreamController {
   async streamVideo(
     @Query('hash') hash: string,
     @Query('pageId') pageId: string,
+    @Query('userId') userId: number,
     @Res() res: Response,
   ) {
     try {
-      const stream = await this.streamService.streamTorrent(hash, pageId);
+      userId = Number(userId)
+      const stream = await this.streamService.streamTorrent(hash, pageId, userId);
 
       res.set({
         'Content-Type': 'video/webm', // Adjust based on your use case -> mp4
