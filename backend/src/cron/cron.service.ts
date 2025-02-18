@@ -19,8 +19,8 @@ export class CronService {
     }
   }
 
-  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_10_SECONDS)
   async removeUnwatchedMovies() {
     const unwatchedMovies = await this.movieService.getUnwatchedMovies();
     if (unwatchedMovies.length == 0) return;
