@@ -126,7 +126,7 @@ export class MoviesService {
   async getUnwatchedMovies() {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  
+    // oneMonthAgo.setSeconds(oneMonthAgo.getSeconds() - 1);
     return this.prisma.movie.findMany({
       where: {
         lastViewed: {
