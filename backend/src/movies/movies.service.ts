@@ -68,8 +68,8 @@ export class MoviesService {
     return { ...details, torrents };
   }
 
-  async addMovie(hash: string, title: string, path: string) {
-    const newMovie = await this.prisma.movie.create({
+  async addMovie(hash: string, title: string, path: string, userId: number) {
+    return await this.prisma.movie.create({
       data: {
         hash,
         title,

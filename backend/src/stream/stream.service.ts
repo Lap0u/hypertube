@@ -4,8 +4,6 @@ import { PassThrough, Readable } from 'stream';
 import { spawn } from 'child_process';
 import { createWriteStream } from 'fs';
 import { MoviesService } from 'src/movies/movies.service';
-// import { kill } from 'process';
-// import passport from 'passport';
 
 @Injectable()
 export class StreamService {
@@ -55,7 +53,7 @@ export class StreamService {
 		return outStream;
   }
 
-  async streamTorrent(hash: string, pageId: string): Promise<Readable> {
+  async streamTorrent(hash: string, pageId: string, userId: number): Promise<Readable> {
     return new Promise((resolve, reject) => {
     let magnetLink =
 		'magnet:?xt=urn:btih:' +
@@ -71,9 +69,10 @@ export class StreamService {
       );
       const exists = await this.movieService.movieExists(hash)
       if (exists) {
-          this.movieService.updateDate(hash)
+        await this.movieService.updateDate(hash)
       } else {
-        this.movieService.addMovie(hash, videoFile.name, `/tmp/torrent/${hash}`)
+        const movie = await this.movieService.addMovie(hash, videoFile.name, `/tmp/torrent/${hash}`, userId)
+        await this.movieService.watchMovie(movie.id, userId)
       }
       let isMkv = false
       this.mylogger.log(`Streaming ${videoFile.name}...`);
