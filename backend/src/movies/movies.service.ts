@@ -134,7 +134,8 @@ export class MoviesService {
         },
       },
       select: {
-          id: true
+          id: true,
+          path: true
       }
     });
   }
