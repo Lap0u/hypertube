@@ -116,10 +116,35 @@ export class MoviesService {
 
   async updateDate(hash: string) {
     return this.prisma.movie.update({
-      where: {hash},
+      where: { hash },
       data: {
-        lastViewed: new Date()
+        lastViewed: new Date(),
+      },
+    });
+  }
+
+  async getUnwatchedMovies() {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  
+    return this.prisma.movie.findMany({
+      where: {
+        lastViewed: {
+          lt: oneMonthAgo,
+        },
+      },
+      select: {
+          id: true
+      }
+    });
+  }
+
+  async deleteMovie(id: number) {
+    await this.prisma.movie.delete({
+      where: {
+        id: id
       }
     })
   }
+
 }

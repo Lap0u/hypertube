@@ -307,4 +307,16 @@ export class AuthService {
       },
     });
   }
+
+  async getExpiredResetPasswordTokens() {
+    const currentTime = new Date();
+    const expiredTokens = await this.prisma.resetPasswordToken.findMany({
+      where: {
+        expiredAt: {
+          lt: currentTime,
+        },
+      },
+    });
+    return expiredTokens;
+  }
 }

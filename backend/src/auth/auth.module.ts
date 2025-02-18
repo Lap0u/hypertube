@@ -40,5 +40,6 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
     GoogleStrategy,
     FortyTwoStrategy,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
