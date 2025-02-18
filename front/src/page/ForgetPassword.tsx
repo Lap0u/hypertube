@@ -40,6 +40,10 @@ const ForgetPassword = () => {
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
+            pattern="
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+            
+            "
             className="px-4 py-2 text-mainYellow rounded-sm"
             placeholder="New password"
           />
@@ -47,6 +51,10 @@ const ForgetPassword = () => {
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="px-4 py-2 text-mainYellow rounded-sm"
+            pattern="
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+            
+            "
             placeholder="Confirm password"
           />
           <Button text="Reset" onClick={() => resetPw()} />

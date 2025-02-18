@@ -29,8 +29,7 @@ const LoginForm = ({ login }: LoginFormProps) => {
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const { login, password } = data;
     const formData = {
-      username: login.includes('@') ? '' : login,
-      email: login.includes('@') ? login : '',
+      username: login,
       password,
     };
     const response = await signIn(formData);

@@ -132,9 +132,9 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ imdbId }) => {
                     <FaDownload className="mr-2 text-secMarine" />{' '}
                     <p>Torrents</p>
                   </h2>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4">
                     {movie.torrents
-                      .filter((torrent) => torrent.seeds >= 0)
+                      .filter((torrent) => torrent.seeds >= 10)
                       .map((torrent, index) => (
                         <div
                           key={index}

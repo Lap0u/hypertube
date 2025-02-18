@@ -41,12 +41,20 @@ const UpdatePassword = () => {
             type="password"
             onChange={(e) => setNewPassword(e.target.value)}
             className="px-4 py-2 text-mainYellow rounded-sm"
+            pattern="
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+            
+            "
             placeholder="New password"
           />
           <input
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="px-4 py-2 text-mainYellow rounded-sm"
+            pattern="
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+            
+            "
             placeholder="Confirm password"
           />
           <Button text="Update password" onClick={() => updatePw()} />
