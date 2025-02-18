@@ -67,14 +67,14 @@ export class MoviesController {
   //   this.movieService.addMovie(imdbId, title);
   // }
 
-  @Post('/:id/watch')
-  @UseGuards(JwtAccessAuthGuard)
-  async watchMovie(@Param('id') movieId: number, @Req() req) {
-    const user = req.user;
-    const watchedMovie = await this.movieService.watchMovie(
-      Number(movieId),
-      user.id,
-    );
-    console.log(watchedMovie);
-  }
+  // @Post('/:id/watch')
+  // @UseGuards(JwtAccessAuthGuard)
+  // async watchMovie(@Param('id') movieId: number, @Req() req) {
+  //   const user = req.user;
+  //   const watchedMovie = await this.movieService.watchMovie(
+  //     Number(movieId),
+  //     user.id,
+  //   );
+  //   console.log(watchedMovie);
+  // }
 }

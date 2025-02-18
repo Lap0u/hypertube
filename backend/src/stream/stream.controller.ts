@@ -12,12 +12,13 @@ export class StreamController {
   async streamVideo(
     @Query('hash') hash: string,
     @Query('pageId') pageId: string,
+    @Query('imdbId') imdbId: string,
     @Query('userId') userId: number,
     @Res() res: Response,
   ) {
     try {
       userId = Number(userId)
-      const stream = await this.streamService.streamTorrent(hash, pageId, userId);
+      const stream = await this.streamService.streamTorrent(hash, pageId, userId, imdbId);
 
       res.set({
         'Content-Type': 'video/webm', // Adjust based on your use case -> mp4

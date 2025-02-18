@@ -34,6 +34,7 @@ export const getMovies = async (
   params: movieQueryParams,
   user: UserDto | undefined
 ): Promise<MoviesResponseType> => {
+  console.log('getMovies', user);
   if (user) {
     return protectedInstance
       .get(`/movies`, { params })

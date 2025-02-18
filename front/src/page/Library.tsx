@@ -9,7 +9,7 @@ import { AppContext } from '../components/AppContextProvider';
 
 const Library = () => {
   const [page, setPage] = useState(1);
-  const { user } = useContext(AppContext);
+  const { user, isLoading } = useContext(AppContext);
   const refreshMovies = async () => {
     const queryParam: movieQueryParams = {
       page: page + 1,
@@ -63,7 +63,9 @@ const Library = () => {
         toast.error(response.message || 'An error occurred', toastConfig);
       }
     };
-    fetchMovies();
+    console.log('isLoadingtt', isLoading, user);
+
+    if (!isLoading) fetchMovies();
     const fetchNewMovies = async () => {
       const queryParam: movieQueryParams = {
         page: page + 1,
@@ -79,8 +81,9 @@ const Library = () => {
         toast.error(response.message || 'An error occurred', toastConfig);
       }
     };
-    fetchNewMovies();
-  }, []);
+    console.log('isLoading', isLoading, user);
+    if (!isLoading) fetchNewMovies();
+  }, [isLoading]);
 
   return (
     <div

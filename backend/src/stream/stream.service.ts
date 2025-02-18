@@ -53,7 +53,7 @@ export class StreamService {
 		return outStream;
   }
 
-  async streamTorrent(hash: string, pageId: string, userId: number): Promise<Readable> {
+  async streamTorrent(hash: string, pageId: string, userId: number, imdbId: string): Promise<Readable> {
     return new Promise((resolve, reject) => {
     let magnetLink =
 		'magnet:?xt=urn:btih:' +
@@ -72,7 +72,7 @@ export class StreamService {
         await this.movieService.updateDate(hash)
       } else {
         const movie = await this.movieService.addMovie(hash, videoFile.name, `/tmp/torrent/${hash}`, userId)
-        await this.movieService.watchMovie(movie.id, userId)
+        await this.movieService.watchMovie(movie.id, userId, imdbId)
       }
       let isMkv = false
       this.mylogger.log(`Streaming ${videoFile.name}...`);

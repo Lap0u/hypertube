@@ -78,29 +78,30 @@ export class MoviesService {
     });
   }
 
-  async watchMovie(movieId: number, userId: number) {
+  async watchMovie(movieId: number, userId: number, imdbId: string) {
     const newWatchedMovie = await this.prisma.watchedMovie.create({
       data: {
         movieId,
         userId,
+        imdbId,
       },
     });
   }
 
-  async isWatched(hash: string, userId: number) {
-    const movie = await this.prisma.movie.findUnique({
-      where: { hash },
-      select: { id: true },
-    });
+  async isWatched(imdbId: string, userId: number) {
+    // const movie = await this.prisma.movie.findUnique({
+    //   where: { hash },
+    //   select: { id: true },
+    // });
 
-    if (!movie) {
-      return false;
-    }
+    // if (!movie) {
+    //   return false;
+    // }
 
     const watchedMovie = await this.prisma.watchedMovie.findFirst({
       where: {
         userId,
-        movieId: movie.id,
+        imdbId: imdbId,
       },
     });
 
